@@ -1,0 +1,398 @@
+:root {
+    --transition: 0.6s cubic-bezier(0.4,0,0.2,1);
+    --gradient-product-a: linear-gradient(135deg,#2f80ed,#56ccf2); /* 青系 */
+    --gradient-product-b: linear-gradient(135deg,#f2994a,#f2c94c); /* オレンジ→イエロー例 */
+    --gradient-alt: linear-gradient(135deg,#9b51e0,#eb5757); /* 既存の派生色があれば残す */
+    --bg-dark: #0f111a;
+    --text-light: #f5f5f8;
+    --radius: 8px;
+    font-family: system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;
+  }
+    /* 全体にスクロールスナップを有効化 */
+    html, body {
+        scroll-behavior: smooth; /* すでに入っているならそのまま */
+        scroll-snap-type: y mandatory; /* 縦方向にスナップ */
+    }
+    
+    /* 各セクションをスナップ対象に */
+    .section {
+        scroll-snap-align: start;
+    }
+  
+  
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#080a1f;
+    color: #e8e8f2;
+    line-height:1.5;
+    scroll-behavior: smooth;
+  }
+  .container{
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* Header */
+  .site-header{
+    position: sticky;
+    top:0;
+    z-index: 50;
+    backdrop-filter: blur(10px);
+    background: rgba(15,17,26,0.85);
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+  .site-header .container{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 0.75rem 0;
+  }
+  .logo{
+    font-weight:700;
+    font-size:1.1rem;
+    letter-spacing:1px;
+  }
+  .nav a{
+    margin-left:1rem;
+    text-decoration:none;
+    color: #cfcfe5;
+    font-size:0.9rem;
+    position: relative;
+  }
+  .nav a:hover{
+    color:#fff;
+  }
+  .nav a::after{
+    content:"";
+    position:absolute;
+    left:0; bottom:-3px;
+    width:0%;
+    height:2px;
+    background:#fff;
+    transition: width .3s ease;
+  }
+  .nav a:hover::after{
+    width:100%;
+  }
+  
+  /* Hero */
+  .hero{
+    position: relative;
+    min-height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:0 1rem;
+    background: url('assets/hero.png') center/cover no-repeat fixed;
+  }
+  .hero .overlay{
+    position:absolute;
+    inset:0;
+    background: rgba(0,0,0,0.45);
+  }
+  .hero-content{
+    position: relative;
+    z-index:2;
+    max-width:900px;
+  }
+  .hero h1{
+    font-size:3rem;
+    margin-bottom:0.5rem;
+    letter-spacing:1px;
+  }
+  .hero p{
+    font-size:1.2rem;
+    margin-bottom:1rem;
+  }
+  .cta-button{
+    display:inline-block;
+    padding:0.75rem 1.5rem;
+    background:#ffffff;
+    color:#0f111a;
+    border-radius:999px;
+    font-weight:600;
+    text-decoration:none;
+    transition: transform .25s ease;
+  }
+  .cta-button:hover{
+    transform: translateY(-2px);
+  }
+  
+  /* Section共通 */
+  .section{
+    padding:4rem 0;
+    position: relative;
+  }
+  .fade-up{
+    opacity:0;
+    transform: translateY(20px);
+    transition: opacity var(--transition), transform var(--transition);
+  }
+  .fade-in{
+    opacity:0;
+    transition: opacity var(--transition);
+  }
+  .delay-1{
+    transition-delay:0.2s;
+  }
+  .delay-2{
+    transition-delay:0.4s;
+  }
+  
+  /* Product */
+  .product-inner{
+    display:flex;
+    gap:2rem;
+    align-items:center;
+    flex-wrap: wrap;
+  }
+  .product-media{
+    position: relative;
+    flex:1 1 320px;
+    min-height: 260px;
+    overflow:hidden;
+    border-radius:12px;
+  }
+  .gradient-bg{
+    position:absolute;
+    inset:0;
+    background: var(--gradient);
+    mix-blend-mode: multiply;
+  }
+  .gradient-bg.alt{
+    background: var(--gradient-alt);
+  }
+  .transparent-img{
+    position: relative;
+    width:100%;
+    height:auto;
+    display:block;
+    mix-blend-mode: normal;
+    border-radius:8px;
+    z-index:1;
+  }
+  .product-text{
+    flex:1 1 320px;
+  }
+  
+  /* reverse配置 */
+  .reverse .product-inner{
+    flex-direction: row-reverse;
+  }
+  
+  /* Problem */
+  .problem{
+    padding:5rem 0;
+  }
+  .solid-bg{
+    background: #1f223a;
+  }
+  .problem-inner{
+    display:flex;
+    gap:2rem;
+    align-items:center;
+    flex-wrap: wrap;
+  }
+  .problem-overlay{
+    flex:1 1 300px;
+    position: relative;
+  }
+  .problem-overlay img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:10px;
+  }
+  .problem-text{
+    flex:2 1 400px;
+  }
+  .alt{
+    background:#2a2e55;
+  }
+  
+  /* Footer */
+  .site-footer{
+    background: #0f111a;
+    padding:3rem 0 1rem;
+    font-size:0.9rem;
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+    gap:2rem;
+  }
+  .footer-grid h3{
+    margin-bottom:0.5rem;
+  }
+  .footer-links{
+    list-style:none;
+    padding:0;
+  }
+  .footer-links li{
+    margin-bottom:6px;
+  }
+  .footer-links a{
+    color:#cfcfe5;
+    text-decoration:none;
+  }
+  .footer-links a:hover{
+    text-decoration:underline;
+  }
+  copyright{
+    margin-top:1rem;
+  }
+  .site-footer .copyright{
+    margin-top:2rem;
+    text-align:center;
+    opacity:0.7;
+  }
+  
+  /* Responsive */
+  @media (max-width: 900px){
+    /* モバイルではスナップをオフにして自然なスクロールに */
+    html, body {
+      scroll-snap-type: none;
+    }
+  
+    /* セクションの高さを固定せず内容に合わせる */
+    #hero,
+    #product-1,
+    #product-2,
+    #tech {
+      min-height: auto;
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+      display: block; /* flex でセンターしていた場合はリセット */
+    }
+  
+    .hero h1 {
+      font-size: 2.4rem;
+    }
+    .product-inner {
+      flex-direction: column;
+    }
+    .reverse .product-inner {
+      flex-direction: column;
+    }
+    .nav {
+      display: none;
+    }
+    .site-header .container {
+      flex-wrap: wrap;
+    }
+  }
+  
+  /* ロゴ画像対応 */
+  .logo-wrapper{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    text-decoration:none;
+  }
+  .logo-img{
+    height:36px;
+    width:auto;
+    display:inline-block;
+    object-fit:contain;
+    border-radius:4px;
+  }
+  .logo-text{
+    margin-left:4px;
+    font-weight:700;
+    font-size:1rem;
+    color:#fff;
+    display:inline-block;
+  }
+
+  .tech-img {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  .tech-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* 技術紹介 */
+  .tech{
+    background: #141831;
+  }
+  .tech-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap:2rem;
+    margin-top:1.5rem;
+  }
+  .tech-item{
+    background: rgba(255,255,255,0.03);
+    padding:1.25rem;
+    border-radius:10px;
+    backdrop-filter: blur(4px);
+  }
+  .tech-item h3{
+    margin-bottom:0.5rem;
+  }
+
+  /* セクションごとの個別背景 */
+  #hero {
+    /* 既に背景画像があるならこのまま、色調補正したければオーバーレイ追加 */
+  }
+  /* グループ1：濃い青系（Product A と 課題1） */
+  #product-1 {
+    background: linear-gradient(135deg, #0b1d46 0%, #1e3a7f 100%);
+  }
+  #problem-1 {
+    background: linear-gradient(315deg, #102c5f 0%, #234e9d 100%);
+  }
+  
+  /* グループ2：落ち着いた水色系。内部で差を出す */
+  #product-2 {
+    /* 深みのあるティール→ソフトブルーのグラデ */
+    background: linear-gradient(135deg, #1f5f7f 0%, #4a9cbf 100%);
+  }
+  #problem-2 {
+    /* もう少し暗め／コントラストを出したシアン寄り */
+    background: linear-gradient(315deg, #164f6e 0%, #3b8aa8 100%);
+  }
+  
+  /* 文字のコントラスト（必要なら明るく） */
+  #product-2 h2,
+  #problem-2 h2 {
+    color: #eef3f9;
+  }
+  #product-2 p,
+  #problem-2 p {
+    color: rgba(238,243,249,0.9);
+  }
+  
+  
+  /* 技術紹介：ブランド感のあるグラデーション */
+  #tech {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  }
+  
+  /* 文字のコントラスト調整（必要に応じて） */
+  #product-1 h2,
+  #product-2 h2,
+  #problem-1 h2,
+  #problem-2 h2,
+  #tech h2 {
+    color: #f5f5f8;
+  }
+  #product-1 p,
+  #product-2 p,
+  #problem-1 p,
+  #problem-2 p,
+  #tech p {
+    color: rgba(245,245,248,0.9);
+  }
+  
+  
