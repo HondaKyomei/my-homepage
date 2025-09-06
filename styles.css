@@ -395,4 +395,40 @@
     color: rgba(245,245,248,0.9);
   }
   
-  
+  /* ===== WHY 1（選ばれる理由）===== */
+  .why{
+    /* 上(オフホワイト)→下(白) の縦グラデーション */
+    background: linear-gradient(to bottom, #f7f7f2 0%, #ffffff 100%);
+    /* このセクションは明色背景なので文字色をダーク系に */
+    color: #0f111a;
+  }
+
+  .why-inner{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .why-img{
+    width: min(160vw, 800px);
+    height: auto;
+    display: block;
+    margin: 0 auto 1rem;
+  }
+
+  .why-text h2{
+    color: #0f111a;
+    margin: .5rem 0;
+    font-size: clamp(1.6rem, 2.4vw + 1rem, 2.2rem);
+  }
+
+  .why-text p{
+    color: #333;
+    opacity: .9;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+  /* ===== /WHY 1 ===== */
