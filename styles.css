@@ -411,11 +411,34 @@
     gap: 1rem;
   }
 
+
+  /* ベース：モバイル（～599px想定） */
   .why-img{
-    width: min(160vw, 800px);
+    width: clamp(240px, 92vw, 720px);
     height: auto;
     display: block;
     margin: 0 auto 1rem;
+  }
+
+  /* タブレット（600px～1023px） */
+  @media (min-width: 600px){
+    .why-img{
+      width: clamp(360px, 80vw, 800px);
+    }
+  }
+
+  /* デスクトップ（1024px～） */
+  @media (min-width: 1024px){
+    .why-img{
+      width: clamp(520px, 62vw, 920px);
+    }
+  }
+
+  /* ラージデスクトップ（1440px～）—見栄え優先でもう一段 */
+  @media (min-width: 1440px){
+    .why-img{
+      width: clamp(600px, 56vw, 1040px);
+    }
   }
 
   .why-text h2{
