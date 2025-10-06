@@ -18,6 +18,11 @@
     .section {
         scroll-snap-align: start;
     }
+
+    .site-footer {
+        scroll-snap-align: end;
+        scroll-snap-stop: always;
+    }
   
   
   *{box-sizing:border-box;margin:0;padding:0;}
