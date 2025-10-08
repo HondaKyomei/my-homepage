@@ -17,12 +17,9 @@
         </a>
       </div>
       <nav class="nav">
-        <a href="#hero">Home</a>
         <a href="#why-1">nanoFACTORYとは</a>
-        <a href="#problem-0">解決する課題</a>
-        <a href="#problem-1">生産実行</a>
-        <a href="#problem-2">食品工場</a>
-        <a href="#tech">技術紹介</a>
+        <a href="products-services/">製品・サービス</a>
+        <a href="news/">ニュース</a>
         <a href="#about">会社情報</a>
       </nav>
       
@@ -71,7 +68,7 @@
       <div class="why-text fade-up delay-1">
         <h2>まずはお気軽にお問い合わせください</h2>
         <p>
-          Email: contact@nano-factory.jp
+          Email: <span id="mail"></span>
         </p>
       </div>
     </div>
@@ -184,7 +181,7 @@
         <div>
           <h3>Contact</h3>
           <p>〒107-0062 東京都港区南青山５-11-14 H&M南青山イースト308</p>
-          <p>Email: contact@nano-factory.jp</p>
+          <p>Email: <span id="mail-footer"></span></p>
         </div>
         <div>
           <h3>Links</h3>
@@ -201,8 +198,17 @@
     </div>
   </footer>
 
+  <script>
+    const user = "contact";
+    const domain = "nano-factory.jp";
+    const email = `${user}@${domain}`;
+    document.querySelectorAll("#mail, #mail-footer").forEach((el) => {
+      el.innerText = email;
+    });
+  </script>
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
