@@ -3,10 +3,78 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>熊対策特設ページ｜バーチャルセキュリティゲート</title>
-  <meta name="description" content="熊・犬・人を識別するAI。動体検出より正確に、危険を未然に防ぐ熊対策モード。" />
+  <title>「熊検出」エッジAIカメラ｜バーチャルセキュリティゲート</title>
+  <meta name="description" content="熊検出AIカメラ。熊の移動方向が分かる、危険を未然に防ぐ熊対策モード。" />
+
+  <!-- ▼ ここからSEO/OGP/Twitter 追記 -->
+  <!-- 正規URL（ページの本来のURLに置き換えてください） -->
+  <link rel="canonical" href="https://nano-factory.net/virtual-security-gate/bear/" />
+
+  <!-- robots（公開ページ想定） -->
+  <meta name="robots" content="index, follow" />
+
+  <!-- OGP（SNSシェア時の見た目を最適化） -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ja_JP" />
+  <meta property="og:site_name" content="Nano Factory" />
+  <meta property="og:title" content="熊対策特設ページ｜バーチャルセキュリティゲート" />
+  <meta property="og:description" content="熊検出AIカメラ。熊の移動方向が分かる、危険を未然に防ぐ熊対策モード。" />
+  <meta property="og:url" content="https://nano-factory.net/virtual-security-gate/bear/" />
+
+
+  <!-- X(Twitter)カード -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="熊対策特設ページ｜バーチャルセキュリティゲート" />
+  <meta name="twitter:description" content="熊・犬・人を識別するAI。動体検出より正確に、危険を未然に防ぐ熊対策モード。" />
+  <meta name="twitter:image" content="https://nano-factory.net/virtual-security-gate/assets/og-bear.jpg" />
+
+  <!-- パンくずや動画の存在を検索エンジンに伝える構造化データ（JSON-LD） -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "熊対策特設ページ｜バーチャルセキュリティゲート",
+    "url": "https://nano-factory.net/virtual-security-gate/bear/",
+    "description": "熊検出AIカメラ。熊の移動方向が分かる、危険を未然に防ぐ熊対策モード。",
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem","position": 1,"name": "バーチャルセキュリティゲート","item": "https://nano-factory.net/virtual-security-gate/"},
+        {"@type": "ListItem","position": 2,"name": "熊対策特設ページ","item": "https://nano-factory.net/virtual-security-gate/bear/"}
+      ]
+    },
+    "primaryImageOfPage": {
+      "@type": "ImageObject",
+      "url": "https://nano-factory.net/virtual-security-gate/assets/og-bear.jpg",
+      "width": 1200,
+      "height": 630
+    },
+    "video": {
+      "@type": "VideoObject",
+      "name": "熊検出デモ",
+      "description": "エッジAIによる熊検出デモ",
+      "thumbnailUrl": "https://nano-factory.net/virtual-security-gate/assets/og-bear.jpg",
+      "embedUrl": "https://www.youtube.com/embed/CXSH-WsT2_I",
+      "uploadDate": "2025-01-01"
+    },
+    "about": {"@type": "Thing","name": "熊対策AI"},
+    "publisher": {
+      "@type": "Organization",
+      "name": "Nano Factory",
+      "url": "https://nano-factory.net/"
+    }
+  }
+  </script>
+  <!-- ▲ ここまで追記 -->
+
+  <!-- ファビコン（任意・用意があれば） -->
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+
+  <!-- CSS（既存） -->
   <link rel="stylesheet" href="./assets/styles.css">
 </head>
+
 <body>
   <header class="container section-sm" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
     <div style="display:flex;align-items:center;gap:10px;">
@@ -28,7 +96,7 @@
         <div class="breadcrumbs">バーチャルセキュリティゲート / 特設</div>
         <div class="kicker">熊対策モード</div>
         <h1 class="h1">「熊」の動線解析AI、登場。</h1>
-        <p class="lead">熊が「どこに・いつ・どの方向に」動いたかを可視化。<br>現場の安全を守ります。オフシーズンは通常の現場管理に切替可能。</p>
+        <p class="lead">熊が「いつ・どこに・どの方向に」動いたかを可視化。<br>現場の安全を守ります。オフシーズンは通常の現場管理に切替可能。</p>
         <div class="hero-bear__actions">
           <a class="btn" href="#video">デモ動画を見る</a>
           <a class="btn secondary" href="#metrics">精度を見る</a>
@@ -42,7 +110,7 @@
 
   <section id="video" class="container section">
     <div class="kicker">熊検出の動画</div>
-    <h2 class="h2">エッジでこの精度。熊の不安も情報流出の不安もゼロに</h2>
+    <h2 class="h2">エッジでも高精度。熊の不安も情報流出の不安もゼロに</h2>
     <!-- YouTube 埋め込み（差し替え想定）-->
 
     <iframe class="video-embed" src="https://www.youtube.com/embed/CXSH-WsT2_I?si=t5GuEGmTkWKNgrKh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -192,9 +260,9 @@
           </tr>
           <tr>
             <th scope="row">価格</th>
-            <td data-label="価格"><span class="price">月額 ¥29,000〜</span></td>
+            <td data-label="価格"><span class="price">月額 ¥29,000〜</span><br><small>熊対策モード標準搭載</small></td>
             <td data-label="価格"><span class="price">月額 ¥79,000〜</span><br><small>熊対策モード標準搭載</small></td>
-            <td data-label="価格"><span class="price">1台 ¥349,900〜<br>3台 ¥990,000〜</span></td>
+            <td data-label="価格"><span class="price">1台 ¥349,900〜<br>3台 ¥990,000〜</span><br><small>熊対策モード標準搭載</small></td>
           </tr>
           <tr>
             <th scope="row">台数</th>
@@ -203,10 +271,10 @@
             <td data-label="台数">最適台数をご提案します</td>
           </tr>
           <tr>
-            <th scope="row">レポート機能</th>
-            <td data-label="レポート機能">なし</td>
-            <td data-label="レポート機能">あり</td>
-            <td data-label="レポート機能">あり</td>
+            <th scope="row">現場管理モード切替</th>
+            <td data-label="現場管理">なし</td>
+            <td data-label="現場管理">あり</td>
+            <td data-label="現場管理">あり</td>
           </tr>
           <tr>
             <th scope="row">初期費用</th>
