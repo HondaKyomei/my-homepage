@@ -329,7 +329,8 @@ footer { color: #6b7280; font-size: 13px; padding: 32px 0; }
 
 /* Pricing */
 .pricing-section { background: #f8faff; border-radius: 20px; padding: 32px; }
-.pricing-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.pricing-table-wrapper { margin-top: 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.pricing-table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 720px; }
 .pricing-table thead th {
   background: #fff; color: #0f172a; padding: 16px; border-bottom: 2px solid #dbeafe; text-align: center; font-size: 18px; font-weight: 800;
 }
@@ -362,13 +363,7 @@ footer { color: #6b7280; font-size: 13px; padding: 32px 0; }
 @media (max-width: 640px) {
   .banner-inner { flex-direction: column; align-items: flex-start; }
   .pricing-section { padding: 20px; border-radius: 16px; }
-  .pricing-table thead { display: none; }
-  .pricing-table, .pricing-table tbody, .pricing-table tr, .pricing-table td, .pricing-table th { display: block; width: 100%; }
-  .pricing-table tbody th { position: relative; padding: 12px 0; background: transparent; }
-  .pricing-table tbody tr { margin-bottom: 14px; border: 1px solid #e5e7eb; border-radius: 16px; padding: 14px; background: #fff; }
-  .pricing-table td { text-align: left; padding: 8px 0; border: 0; }
-  .pricing-table td::before { content: attr(data-label); display: block; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2px; }
-  .pricing-table .recommend::before { top: -18px; }
+  .pricing-table-wrapper { margin-top: 12px; }
 }
 
 .setup-flow-wrapper {

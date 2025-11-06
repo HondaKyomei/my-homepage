@@ -26,6 +26,33 @@ document.querySelectorAll('.btn, .cta').forEach(btn => {
   });
 });
 
+// Obfuscate mailto links
+const decodeDataAttribute = (value) => {
+  if (!value) return '';
+  try {
+    if (typeof atob !== 'function') {
+      return value;
+    }
+    return atob(value);
+  } catch (error) {
+    return value;
+  }
+};
+
+document.querySelectorAll('[data-mailto]').forEach((link) => {
+  const user = decodeDataAttribute(link.dataset.user);
+  const domain = decodeDataAttribute(link.dataset.domain);
+  if (!user || !domain) return;
+  const subject = link.dataset.subject ? `?subject=${encodeURIComponent(link.dataset.subject)}` : '';
+  const address = `${user}@${domain}`;
+  link.setAttribute('href', `mailto:${address}${subject}`);
+  link.setAttribute('rel', 'nofollow');
+  link.removeAttribute('data-user');
+  link.removeAttribute('data-domain');
+  link.removeAttribute('data-subject');
+  link.removeAttribute('data-mailto');
+});
+
 // Smooth scroll for same-page anchors
 document.querySelectorAll('a[href^="#"]').forEach((a) => {
   a.addEventListener('click', (e) => {
