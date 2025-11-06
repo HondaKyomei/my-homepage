@@ -68,17 +68,17 @@
     display: flex;
     align-items: center;
   }
-  .nav a{
+  .nav__link {
     margin-left:1rem;
     text-decoration:none;
     color: #cfcfe5;
     font-size:0.9rem;
     position: relative;
   }
-  .nav a:hover{
+  .nav__link:hover {
     color:#fff;
   }
-  .nav a::after{
+  .nav__link::after {
     content:"";
     position:absolute;
     left:0; bottom:-3px;
@@ -87,8 +87,57 @@
     background:#fff;
     transition: width .3s ease;
   }
-  .nav a:hover::after{
+  .nav__link:hover::after {
     width:100%;
+  }
+
+  .nav__link--products {
+    font-weight: 600;
+  }
+
+  @media (max-width: 720px) {
+    .site-header .container {
+      gap: 0.75rem;
+    }
+
+    .menu-toggle {
+      display: none;
+    }
+
+    .nav {
+      display: flex;
+      flex: 0 0 auto;
+      width: auto;
+      gap: 0;
+      margin-top: 0;
+    }
+
+    .nav__link {
+      display: none;
+    }
+
+    .nav__link--products {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 0;
+      padding: 0.45rem 1.1rem;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #080a1f;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.2);
+    }
+
+    .nav__link--products:hover {
+      color: #080a1f;
+      opacity: 0.88;
+    }
+
+    .nav__link--products::after {
+      display: none;
+    }
   }
 
   .menu-toggle {
@@ -544,14 +593,14 @@
       display: flex;
     }
 
-    .nav a {
+    .nav__link {
       margin-left: 0;
       display: block;
       padding: 0.5rem 0;
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
-    .nav a:last-child {
+    .nav__link:last-child {
       border-bottom: none;
     }
 
