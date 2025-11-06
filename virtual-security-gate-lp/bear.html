@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>熊対策特設ページ｜バーチャルセキュリティゲート</title>
+  <meta name="description" content="熊・犬・人を識別するAI。動体検出より正確に、危険を未然に防ぐ熊対策モード。" />
+  <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+  <header class="container section-sm" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a class="muted" href="./index.html">← 戻る</a>
+      <strong>熊対策特設ページ</strong>
+    </div>
+    <nav style="display:flex;gap:18px;">
+      <a class="muted" href="./index.html#features">特徴</a>
+      <a class="muted" href="./index.html#usecases">活用例</a>
+      <a class="muted" href="#setup">設置方法</a>
+      <a class="muted" href="#pricing">料金</a>
+      <a class="btn" href="./index.html#contact">資料請求</a>
+    </nav>
+  </header>
+
+  <section class="hero-bear">
+    <div class="hero-bear__inner container">
+      <div class="hero-bear__copy">
+        <div class="breadcrumbs">バーチャルセキュリティゲート / 特設</div>
+        <div class="kicker">熊対策モード</div>
+        <h1 class="h1">「熊」を見分けるAI、登場。</h1>
+        <p class="lead">熊出没時に「どこに・いつ・どの方向に」動いたかを可視化。<br>現場の安全運用を支援します。オフシーズンは通常の現場管理に切替可能。</p>
+        <div class="hero-bear__actions">
+          <a class="btn" href="#video">デモ動画を見る</a>
+          <a class="btn secondary" href="#metrics">精度を見る</a>
+        </div>
+      </div>
+      <div class="hero-bear__visual">
+        <img src="./assets/bear.png" alt="熊対策モードのイメージビジュアル">
+      </div>
+    </div>
+  </section>
+
+  <section id="video" class="container section">
+    <div class="kicker">熊検出の動画</div>
+    <h2 class="h2">リアルな映像で、検出～アラートまで</h2>
+    <!-- YouTube 埋め込み（差し替え想定）-->
+    <iframe class="video-embed" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="熊検出デモ" allowfullscreen></iframe>
+    <p class="muted" style="margin-top:8px;"></p>
+  </section>
+
+  <section id="metrics" class="container section">
+    <div class="kicker">精度</div>
+    <h2 class="h2">熊検出の機能評価グラフ</h2>
+    <div class="metrics-panel">
+      <div class="grid metric-cards" style="margin-bottom:18px;">
+        <div class="metric-card" role="button" tabindex="0" data-metric-id="detection" data-tooltip-image="./assets/bear.png" data-tooltip-title="熊検出率 98.7%" data-tooltip-text="サーマル・可視カメラのマルチモーダル解析により、熊を98.7%の確度で検出します。">
+          <div class="metric-card__label">熊検出率</div>
+          <div class="metric-card__value">98.7%</div>
+        </div>
+        <div class="metric-card" role="button" tabindex="0" data-metric-id="direction" data-tooltip-image="./assets/bear2.png" data-tooltip-title="移動方向検出率 95.0%" data-tooltip-text="骨格推定と軌跡解析を組み合わせ、熊の進行方向を95.0%の精度で推定します。">
+          <div class="metric-card__label">移動方向検出率</div>
+          <div class="metric-card__value">95.0%</div>
+        </div>
+        <div class="metric-card" role="button" tabindex="0" data-metric-id="notification" data-tooltip-image="./assets/mail.jpg" data-tooltip-title="1分以内の即時通知率 100%" data-tooltip-text="ローカル警告とクラウド通知の二段構えで、1分以内に100%の即時通知を実現。">
+          <div class="metric-card__label">1分以内の即時通知率</div>
+          <div class="metric-card__value">100%</div>
+        </div>
+      </div>
+      <!-- 静的SVGグラフ（数値差し替えOK） -->
+      <div class="chart" data-metric-chart>
+        <svg viewBox="0 0 800 300" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="metrics-chart-title metrics-chart-desc">
+          <title id="metrics-chart-title">熊検出モードの機能評価</title>
+          <desc id="metrics-chart-desc">熊検出率、移動方向検出率、1分以内の即時通知率の棒グラフ</desc>
+          <defs>
+            <linearGradient id="bar" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#1f57ff" stop-opacity="0.95"/>
+              <stop offset="1" stop-color="#1f57ff" stop-opacity="0.55"/>
+            </linearGradient>
+            <linearGradient id="bar-active" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f97316" stop-opacity="0.95"/>
+              <stop offset="1" stop-color="#f97316" stop-opacity="0.65"/>
+            </linearGradient>
+          </defs>
+          <!-- axes -->
+          <line x1="70" y1="20" x2="70" y2="260" stroke="#cbd5e1" stroke-width="2"/>
+          <line x1="70" y1="260" x2="760" y2="260" stroke="#cbd5e1" stroke-width="2"/>
+          <!-- ticks & labels -->
+          <g fill="#64748b" font-size="12" text-anchor="end">
+            <text x="60" y="260">0%</text>
+            <text x="60" y="210">20%</text>
+            <text x="60" y="160">40%</text>
+            <text x="60" y="110">60%</text>
+            <text x="60" y="60">80%</text>
+            <text x="60" y="20">100%</text>
+          </g>
+          <!-- bars -->
+          <g>
+            <g class="chart-bar" data-metric-id="detection" tabindex="0" role="button" aria-label="熊検出率 98.7%" data-tooltip-image="./assets/bear.svg" data-tooltip-title="熊検出率 98.7%" data-tooltip-text="サーマル・可視カメラのマルチモーダル解析により、熊を98.7%の確度で検出します。">
+              <rect class="chart-bar__shape" x="130" y="23" width="80" height="237" rx="10" fill="url(#bar)"/>
+              <text class="chart-bar__label" x="170" y="285" text-anchor="middle">熊検出率</text>
+            </g>
+            <g class="chart-bar" data-metric-id="direction" tabindex="0" role="button" aria-label="移動方向検出率 95.0%" data-tooltip-image="./assets/mountain.svg" data-tooltip-title="移動方向検出率 95.0%" data-tooltip-text="骨格推定と軌跡解析を組み合わせ、熊の進行方向を95.0%の精度で推定します。">
+              <rect class="chart-bar__shape" x="320" y="32" width="80" height="228" rx="10" fill="url(#bar)"/>
+              <text class="chart-bar__label" x="360" y="285" text-anchor="middle">移動方向検出率</text>
+            </g>
+            <g class="chart-bar" data-metric-id="notification" tabindex="0" role="button" aria-label="1分以内の即時通知率 100%" data-tooltip-image="./assets/room.png" data-tooltip-title="1分以内の即時通知率 100%" data-tooltip-text="ローカル警告とクラウド通知の二段構えで、1分以内に100%の即時通知を実現。">
+              <rect class="chart-bar__shape" x="510" y="20" width="80" height="240" rx="10" fill="url(#bar)"/>
+              <text class="chart-bar__label" x="550" y="285" text-anchor="middle">1分以内の即時通知率</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="metric-tooltip" data-metric-tooltip aria-hidden="true">
+        <div class="metric-tooltip__inner">
+          <div class="metric-tooltip__image" data-metric-tooltip-image></div>
+          <div class="metric-tooltip__title" data-metric-tooltip-text></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section">
+    <div class="kicker">特徴・機能</div>
+    <h2 class="h2">対象を見分け、正確に警告</h2>
+    <div class="grid cards">
+      <div class="card"><div class="icon icon--image"><img src="./assets/bear.svg" alt="熊のアイコン"></div><h3 class="h3">熊・犬・人を識別</h3><p class="muted">動体検出より高精度なアラート運用。</p></div>
+      <div class="card"><div class="icon">📱</div><h3 class="h3">専用アプリで確認</h3><p class="muted">リアルタイム通知と履歴管理。</p></div>
+      <div class="card"><div class="icon">🔊</div><h3 class="h3">現場音声警告</h3><p class="muted">即時のアナウンスで被害を未然に。</p></div>
+      <div class="card"><div class="icon">⚡</div><h3 class="h3">オフライン推論</h3><p class="muted">山間部でも通信不要で動作（一部制限）。</p></div>
+      <div class="card"><div class="icon">🔗</div><h3 class="h3">複数台連携</h3><p class="muted">広範囲監視ネットワークを構築。</p></div>
+    </div>
+  </section>
+
+  <!-- SETUP -->
+  <section id="setup" class="container section">
+    <div class="kicker">設置方法</div>
+    <h2 class="h2">注文から稼働開始まで、最短5ステップ</h2>
+    <div class="setup-flow-wrapper" data-setup-section data-setup-default-image="./assets/device.png">
+      <ol class="setup-flow">
+        <li data-setup-id="order" data-tooltip-title="注文" data-tooltip-text="お問い合わせフォームまたは担当営業経由でご注文ください。" data-tooltip-image="./assets/order.png" tabindex="0">
+          <h3>注文</h3>
+          <p>お問い合わせフォームまたは担当営業経由でご注文ください。</p>
+        </li>
+        <li data-setup-id="arrival" data-tooltip-title="届く" data-tooltip-text="最短5営業日で機材一式とクイックスタートガイドをお届けします。" data-tooltip-image="./assets/receive.png" tabindex="0">
+          <h3>届く</h3>
+          <p>最短5営業日で機材一式とクイックスタートガイドをお届けします。※現在多くお問い合わせを頂いております。納期についてはご相談ください。</p>
+        </li>
+        <li data-setup-id="power" data-tooltip-title="電源を入れる" data-tooltip-text="付属のACアダプターを接続し、起動ランプを確認します。" data-tooltip-image="./assets/on.png" tabindex="0">
+          <h3>電源を入れる</h3>
+          <p>付属のACアダプターを接続し、起動ランプを確認します。</p>
+        </li>
+        <li data-setup-id="wifi" data-tooltip-title="Wi-Fi設定（オフラインでも動作）" data-tooltip-text="セットアップウィザードでネットワークを登録。通信不可エリアでもローカルモードで稼働します。" data-tooltip-image="./assets/wifi.png" tabindex="0">
+          <h3>Wi-Fi設定（オフラインでも動作）</h3>
+          <p>セットアップウィザードでネットワークを登録。通信不可エリアでもローカルモードで稼働します。</p>
+        </li>
+        <li data-setup-id="launch" data-tooltip-title="稼働開始" data-tooltip-text="設定完了で即日運用できます。※写真は実際の設置例です。" data-tooltip-image="./assets/examplehp.jpg" tabindex="0">
+          <h3>稼働開始</h3>
+          <p>管理アプリでカメラを登録し、検知ルールを設定すれば即日運用できます。</p>
+        </li>
+      </ol>
+      <div class="setup-tooltip" data-setup-tooltip aria-hidden="true">
+        <div class="setup-tooltip__inner">
+          <div class="setup-tooltip__image" data-setup-tooltip-image></div>
+          <div class="setup-tooltip__title" data-setup-tooltip-title></div>
+          <div class="setup-tooltip__caption" data-setup-tooltip-text></div>
+        </div>
+      </div>
+      <figure class="setup-flow__device-figure">
+      </figure>
+    </div>
+  </section>
+
+  <section id="pricing" class="container section">
+    <div class="pricing-section">
+      <div class="kicker">料金</div>
+      <h2 class="h2">熊対策モードも含めたプラン比較</h2>
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">ライトプラン</th>
+            <th scope="col" class="recommend">スタンダードプラン</th>
+            <th scope="col">購入プラン</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">おすすめ対象</th>
+            <td data-label="おすすめ対象">スモールスタートしたい方</td>
+            <td data-label="おすすめ対象">効果を実感したい全てのお客様</td>
+            <td data-label="おすすめ対象">長期的にコスト最適導入したい方</td>
+          </tr>
+          <tr>
+            <th scope="row">価格</th>
+            <td data-label="価格"><span class="price">月額 ¥29,000〜</span></td>
+            <td data-label="価格"><span class="price">月額 ¥79,000〜</span><br><small>熊対策モード標準搭載</small></td>
+            <td data-label="価格"><span class="price">1台 ¥349,900〜<br>3台 ¥990,000〜</span></td>
+          </tr>
+          <tr>
+            <th scope="row">台数</th>
+            <td data-label="台数">1台</td>
+            <td data-label="台数">3台</td>
+            <td data-label="台数">最適台数をご提案します</td>
+          </tr>
+          <tr>
+            <th scope="row">レポート機能</th>
+            <td data-label="レポート機能">なし</td>
+            <td data-label="レポート機能">あり</td>
+            <td data-label="レポート機能">あり</td>
+          </tr>
+          <tr>
+            <th scope="row">初期費用</th>
+            <td data-label="初期費用">一部無料キャンペーン中</td>
+            <td data-label="初期費用">一部無料キャンペーン中</td>
+            <td data-label="初期費用">一部無料キャンペーン中</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pricing-notes">※ カスタマイズは別途お見積りいたします。</div>
+    </div>
+  </section>
+
+  <section class="container section">
+    <div class="cta-box">
+      <div class="kicker">問い合わせ</div>
+      <h2 class="h2">熊警戒期間も、オフシーズンも。</h2>
+      <p class="muted">警戒期は熊対策に、冬眠中は現場管理に。シーズンで使い分け可能です。</p>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:14px;flex-wrap:wrap;">
+        <a class="btn" href="mailto:contact@nano-factory.net?subject=熊対策%20資料請求">資料請求</a>
+        <a class="btn ghost" href="./index.html">トップへ</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="container">
+    <div>© 2025 Virtual Security Gate</div>
+  </footer>
+  <script src="./assets/script.js" defer></script>
+</body>
+</html>
