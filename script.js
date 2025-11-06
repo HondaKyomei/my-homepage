@@ -1,7 +1,10 @@
 // スムーズフェードイン on scroll
 document.addEventListener("DOMContentLoaded", () => {
     // 年更新
-    document.getElementById("year").textContent = new Date().getFullYear();
+    const yearEl = document.getElementById("year");
+    if (yearEl) {
+      yearEl.textContent = new Date().getFullYear();
+    }
   
     const faders = document.querySelectorAll(".fade-up, .fade-in");
     const options = {
@@ -21,7 +24,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     }, options);
-  
+
     faders.forEach(el => observer.observe(el));
+
+    const menuToggle = document.querySelector(".menu-toggle");
+    const nav = document.getElementById("site-nav");
+
+    if (menuToggle && nav) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = nav.classList.toggle("is-open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      nav.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          nav.classList.remove("is-open");
+          menuToggle.setAttribute("aria-expanded", "false");
+        });
+      });
+    }
   });
   
