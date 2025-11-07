@@ -529,6 +529,7 @@ footer { color: #6b7280; font-size: 13px; padding: 32px 0; }
 }
 @media (max-width: 640px) {
   .hero-bear { padding: 60px 0 32px; }
+  .hero-bear__visual { display: none; }
   .hero-bear__copy { padding: 24px; }
   .setup-flow { grid-template-columns: 1fr; }
   .setup-flow li { min-height: auto; }
