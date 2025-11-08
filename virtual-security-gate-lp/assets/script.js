@@ -43,13 +43,24 @@ document.querySelectorAll('[data-mailto]').forEach((link) => {
   const user = decodeDataAttribute(link.dataset.user);
   const domain = decodeDataAttribute(link.dataset.domain);
   if (!user || !domain) return;
-  const subject = link.dataset.subject ? `?subject=${encodeURIComponent(link.dataset.subject)}` : '';
+
   const address = `${user}@${domain}`;
-  link.setAttribute('href', `mailto:${address}${subject}`);
+  const params = new URLSearchParams();
+  if (link.dataset.subject) {
+    params.set('subject', link.dataset.subject);
+  }
+  const body = decodeDataAttribute(link.dataset.body);
+  if (body) {
+    params.set('body', body);
+  }
+
+  const query = params.toString();
+  link.setAttribute('href', `mailto:${address}${query ? `?${query}` : ''}`);
   link.setAttribute('rel', 'nofollow');
   link.removeAttribute('data-user');
   link.removeAttribute('data-domain');
   link.removeAttribute('data-subject');
+  link.removeAttribute('data-body');
   link.removeAttribute('data-mailto');
 });
 
