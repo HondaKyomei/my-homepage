@@ -119,6 +119,7 @@
   <section id="metrics" class="container section">
     <div class="kicker">精度</div>
     <h2 class="h2">熊検出の機能評価</h2>
+    <p class="muted" style="font-size:0.8rem;margin-top:8px;">※当社の試験環境における測定結果です</p>
     <div class="metrics-panel">
       <div class="grid metric-cards" style="margin-bottom:18px;">
         <div class="metric-card" role="button" tabindex="0" data-metric-id="detection" data-tooltip-image="./assets/bear.png" data-tooltip-title="熊の出現を見逃さない" data-tooltip-text="サーマル・可視カメラのマルチモーダル解析により、熊を98.7%の確度で検出します。">
@@ -132,6 +133,7 @@
         <div class="metric-card" role="button" tabindex="0" data-metric-id="notification" data-tooltip-image="./assets/mail.jpg" data-tooltip-title="即時通知で動画もリアルタイム確認可能" data-tooltip-text="ローカル警告とクラウド通知の二段構えで、1分以内に100%の即時通知を実現。">
           <div class="metric-card__label">1分以内の即時通知率</div>
           <div class="metric-card__value">100%</div>
+          <p class="muted" style="font-size:0.75rem;margin-top:8px;">※安定した通信環境が前提</p>
         </div>
       </div>
       <!-- 静的SVGグラフ（数値差し替えOK） -->
@@ -196,6 +198,43 @@
       <div class="card"><div class="icon">🔊</div><h3 class="h3">現場音声警告</h3><p class="muted">即時のアナウンスで被害を未然に。</p></div>
       <div class="card"><div class="icon">⚡</div><h3 class="h3">オフライン推論</h3><p class="muted">山間部でも通信不要で動作（一部制限）。</p></div>
       <div class="card"><div class="icon">🔗</div><h3 class="h3">複数台連携</h3><p class="muted">広範囲監視ネットワークを構築。</p></div>
+    </div>
+  </section>
+
+  <section class="container section" style="padding-top:0;">
+    <h2 class="h2">他社との比較</h2>
+    <div class="table-responsive" style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;min-width:320px;">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:12px;border-bottom:1px solid #e2e8f0;background:#f8fafc;color:#0f172a;">項目</th>
+            <th style="text-align:left;padding:12px;border-bottom:1px solid #e2e8f0;background:#f8fafc;color:#0f172a;">他社</th>
+            <th style="text-align:left;padding:12px;border-bottom:1px solid #e2e8f0;background:#f8fafc;color:#0f172a;">nanoFACTORY</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" style="text-align:left;padding:12px;border-bottom:1px solid #e2e8f0;color:#0f172a;">検出対象</th>
+            <td style="padding:12px;border-bottom:1px solid #e2e8f0;color:#334155;">熊だけ</td>
+            <td style="padding:12px;border-bottom:1px solid #e2e8f0;color:#334155;">熊・人・犬など</td>
+          </tr>
+          <tr>
+            <th scope="row" style="text-align:left;padding:12px;border-bottom:1px solid #e2e8f0;color:#0f172a;">通知内容</th>
+            <td style="padding:12px;border-bottom:1px solid #e2e8f0;color:#334155;">熊の出現</td>
+            <td style="padding:12px;border-bottom:1px solid #e2e8f0;color:#334155;">熊の数・移動方向</td>
+          </tr>
+          <tr>
+            <th scope="row" style="text-align:left;padding:12px;border-bottom:1px solid #e2e8f0;color:#0f172a;">必要設定</th>
+            <td style="padding:12px;border-bottom:1px solid #e2e8f0;color:#334155;">Wi-Fi設定など</td>
+            <td style="padding:12px;border-bottom:1px solid #e2e8f0;color:#334155;">電源を入れるだけ</td>
+          </tr>
+          <tr>
+            <th scope="row" style="text-align:left;padding:12px;color:#0f172a;">用途</th>
+            <td style="padding:12px;color:#334155;">熊対策のみ</td>
+            <td style="padding:12px;color:#334155;">現場の動線管理にも</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
