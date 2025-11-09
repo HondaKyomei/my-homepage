@@ -27,43 +27,61 @@ document.querySelectorAll('.btn, .cta').forEach(btn => {
 });
 
 // Obfuscate mailto links
-const decodeDataAttribute = (value) => {
-  if (!value) return '';
-  try {
-    if (typeof atob !== 'function') {
-      return value;
+// Obfuscate mailto links ーー ここから差し替え
+(() => {
+  // Base64(UTF-8) → 正しいUTF-8文字列へ
+  const b64ToUtf8 = (b64) => {
+    if (!b64) return '';
+    try {
+      const bin = atob(b64); // Latin-1の見かけの文字列
+      const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+      // TextDecoder が無い古い環境でも一応動くようにフォールバック
+      if (typeof TextDecoder === 'function') {
+        return new TextDecoder('utf-8').decode(bytes);
+      }
+      // フォールバック（簡易）：%エンコード経由
+      let pct = '';
+      for (let i = 0; i < bytes.length; i++) pct += '%' + bytes[i].toString(16).padStart(2, '0');
+      return decodeURIComponent(pct);
+    } catch {
+      return '';
     }
-    return atob(value);
-  } catch (error) {
-    return value;
-  }
-};
+  };
 
-document.querySelectorAll('[data-mailto]').forEach((link) => {
-  const user = decodeDataAttribute(link.dataset.user);
-  const domain = decodeDataAttribute(link.dataset.domain);
-  if (!user || !domain) return;
+  // 改行はCRLFへ統一（メールクライアント互換性のため）
+  const toCRLF = (text) => (text || '').replace(/\r?\n/g, '\r\n');
 
-  const address = `${user}@${domain}`;
-  const params = new URLSearchParams();
-  if (link.dataset.subject) {
-    params.set('subject', link.dataset.subject);
-  }
-  const body = decodeDataAttribute(link.dataset.body);
-  if (body) {
-    params.set('body', body);
-  }
+  document.querySelectorAll('[data-mailto]').forEach((link) => {
+    const user   = b64ToUtf8(link.dataset.user);
+    const domain = b64ToUtf8(link.dataset.domain);
+    if (!user || !domain) return;
 
-  const query = params.toString();
-  link.setAttribute('href', `mailto:${address}${query ? `?${query}` : ''}`);
-  link.setAttribute('rel', 'nofollow');
-  link.removeAttribute('data-user');
-  link.removeAttribute('data-domain');
-  link.removeAttribute('data-subject');
-  link.removeAttribute('data-body');
-  link.removeAttribute('data-mailto');
-});
+    // 件名・本文はUTF-8文字列として用意してからURLエンコード
+    const subjectRaw = b64ToUtf8(link.dataset.subject || '');
+    const bodyRaw    = b64ToUtf8(link.dataset.body || '');
 
+    const subject = encodeURIComponent(subjectRaw);
+    const body    = encodeURIComponent(toCRLF(bodyRaw));
+
+    const address = `${user}@${domain}`;
+    // RFC 6068: query は % エンコードしたキー/値を & で連結
+    const query = [
+      subject ? `subject=${subject}` : '',
+      body    ? `body=${body}`       : ''
+    ].filter(Boolean).join('&');
+
+    link.setAttribute('href', `mailto:${address}${query ? `?${query}` : ''}`);
+    link.setAttribute('rel', 'nofollow noopener');
+
+    // データ属性はクリア（念のため）
+    link.removeAttribute('data-user');
+    link.removeAttribute('data-domain');
+    link.removeAttribute('data-subject');
+    link.removeAttribute('data-body');
+    link.removeAttribute('data-mailto');
+  });
+})();
+// Obfuscate mailto links ーー ここまで差し替え
 // Smooth scroll for same-page anchors
 document.querySelectorAll('a[href^="#"]').forEach((a) => {
   a.addEventListener('click', (e) => {
