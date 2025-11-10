@@ -240,11 +240,10 @@ footer { color: #6b7280; font-size: 13px; padding: 32px 0; }
 
 .bear-highlight__list li {
   position: relative;
-  font-size: clamp(16px, 1.5vw, 20px);
-  font-weight: 700;
-  color: #0f172a;
   padding-left: 32px;
-  line-height: 1.6;
+  display: grid;
+  gap: 6px;
+  line-height: 1.4;
 }
 
 .bear-highlight__list li::before {
@@ -257,6 +256,20 @@ footer { color: #6b7280; font-size: 13px; padding: 32px 0; }
   border-radius: 4px;
   background: linear-gradient(135deg, #1f57ff, #60a5fa);
   box-shadow: 0 6px 14px rgba(31, 87, 255, 0.25);
+}
+
+.bear-highlight__item-title {
+  font-size: clamp(17px, 1.6vw, 22px);
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: .01em;
+}
+
+.bear-highlight__item-sub {
+  font-size: clamp(14px, 1.2vw, 18px);
+  font-weight: 600;
+  color: #475569;
+  letter-spacing: .02em;
 }
 
 .breadcrumbs { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
