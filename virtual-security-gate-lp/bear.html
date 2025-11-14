@@ -95,7 +95,6 @@
     <div class="hero-bear__backdrop" aria-hidden="true">
       <video
         class="hero-bear__video"
-        src="./assets/test5.mp4"
         poster="./assets/room.png"
         autoplay
         muted
@@ -103,7 +102,9 @@
         playsinline
         preload="auto"
         aria-hidden="true"
-      ></video>
+      >
+        <source src="./assets/test5.mp4" type="video/mp4" />
+      </video>
     </div>
     <div class="hero-bear__inner container">
       <div class="hero-bear__copy">
@@ -141,6 +142,41 @@
             <span class="bear-highlight__item-sub">熊がいなくなるまで複数音声を再生</span>
           </li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="ai-gate section">
+    <div class="container">
+      <div class="ai-gate__intro">
+        <div class="ai-gate__media">
+          <img src="./assets/gate.jpg" alt="AIゲートの外観写真">
+        </div>
+        <div class="ai-gate__copy">
+          <div class="kicker">AIゲートとは</div>
+          <h2 class="h2">熊の侵入を防ぐためのインテリジェントな見張り役</h2>
+          <p class="lead">施設の出入口に設置したカメラで熊だけを識別し、撃退音と同時に最速で通知を送ることで「気づかない侵入」を防ぎます。最大15m幅の大型ゲートにも対応し、広い現場でも柔軟に展開できます。</p>
+        </div>
+      </div>
+      <div class="ai-gate__defense">
+        <article class="defense-card">
+          <div class="defense-card__media">
+            <img src="./assets/one.jpg" alt="第一防衛線のイメージ">
+          </div>
+          <div class="defense-card__body">
+            <h3 class="h3">第一防衛線</h3>
+            <p>出入口で熊を検知すると即座に撃退音を再生し、敷地に近づかせないように自律的に対応します。</p>
+          </div>
+        </article>
+        <article class="defense-card">
+          <div class="defense-card__media">
+            <img src="./assets/two.jpg" alt="第二防衛線のイメージ">
+          </div>
+          <div class="defense-card__body">
+            <h3 class="h3">第二防衛線</h3>
+            <p>万が一熊が敷地内へ入った場合でも、アナウンスで人に警告し、危険エリアからの退避を促します。</p>
+          </div>
+        </article>
       </div>
     </div>
   </section>
