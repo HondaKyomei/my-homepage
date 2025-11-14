@@ -95,13 +95,15 @@
     <div class="hero-bear__backdrop" aria-hidden="true">
       <video
         class="hero-bear__video"
-        src="./assets/test5.mp4"
         poster="./assets/room.png"
         autoplay
         muted
         loop
         playsinline
-      ></video>
+        aria-hidden="true"
+      >
+        <source src="./assets/test5.mp4" type="video/mp4" />
+      </video>
     </div>
     <div class="hero-bear__inner container">
       <div class="hero-bear__copy">
@@ -113,9 +115,6 @@
           <a class="btn" href="#video">デモ動画を見る</a>
           <a class="btn secondary" href="#metrics">精度を見る</a>
         </div>
-      </div>
-      <div class="hero-bear__visual">
-        <img src="./assets/bear.png" alt="熊対策モードのイメージビジュアル">
       </div>
     </div>
   </section>
