@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>会社情報 | nanoFACTORY</title>
+  <meta name="description" content="nanoFACTORYの会社情報。会社概要と、現場実装を支える3つのコア技術をご紹介します。" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" />
+  <style>
+    html, body { scroll-snap-type: none !important; }
+    .company-hero {
+      min-height: 64vh;
+    }
+    .company-lead {
+      max-width: 820px;
+    }
+    .company-summary {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 2rem;
+      align-items: start;
+      margin-top: 2rem;
+    }
+    .company-summary__card,
+    .company-profile {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 22px;
+      padding: 1.5rem;
+      box-shadow: 0 14px 34px rgba(15,23,42,0.08);
+    }
+    .company-summary__card h3,
+    .company-profile h3 {
+      margin-bottom: 0.75rem;
+      color: #0f172a;
+      font-size: 1.15rem;
+    }
+    .company-summary__card p,
+    .company-profile p,
+    .company-profile li {
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.9;
+    }
+    .company-profile ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.7rem;
+    }
+    .company-profile strong {
+      color: #0f172a;
+    }
+    .company-tech-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .company-tech-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 16px 38px rgba(15,23,42,0.08);
+    }
+    .company-tech-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+    .company-tech-card__body {
+      padding: 1.3rem;
+    }
+    .company-tech-card__label {
+      display: inline-flex;
+      margin-bottom: 0.55rem;
+      padding: 0.28rem 0.58rem;
+      border-radius: 999px;
+      background: rgba(42,95,255,0.08);
+      color: #1d4ed8;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .company-tech-card h3 {
+      margin-bottom: 0.55rem;
+      color: #0f172a;
+      font-size: 1.05rem;
+      line-height: 1.55;
+    }
+    .company-tech-card p {
+      margin: 0;
+      color: #475569;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+    @media (max-width: 960px) {
+      .company-summary,
+      .company-tech-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-wrapper">
+        <a href="../index.html">
+          <img src="../assets/site-logo-nanofactory.png" alt="nanoFACTORY" class="logo-img" />
+        </a>
+      </div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle__bar"></span>
+        <span class="sr-only">メニューを開閉</span>
+      </button>
+      <nav id="site-nav" class="nav">
+        <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
+        <a class="nav__link nav__link--products" href="../nanostep-lp/">作業管理</a>
+        <a class="nav__link nav__link--products" href="../nanosi-lp/">AI検査</a>
+        <a class="nav__link nav__link--products" href="../nanoguard-lp/">AI監視カメラ</a>
+        <a class="nav__link nav__link--products" href="../sanicam-lp/hand.html">手指衛生</a>
+        <a class="nav__link" href="../news/">ニュース・事例</a>
+        <a class="nav__link" href="../company/">会社情報</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="lp-hero lp-hero--blue company-hero">
+    <div class="lp-hero__inner container">
+      <div class="lp-kicker">Company</div>
+      <h1 class="lp-h1">現場に実装されるAIを、<br>仕組みとして届ける会社です。</h1>
+      <p class="lp-lead company-lead">
+        nanoFACTORYは、作業標準化、AI検査、AI監視・衛生管理の領域で、
+        現場に定着する仕組みをつくる会社です。<br>
+        研究や開発で終わらせず、現場に実装されて初めて価値になるという前提で、
+        使われ続ける形まで落とし込んで届けています。
+      </p>
+    </div>
+  </section>
+
+  <section class="lp-section lp-section--white">
+    <div class="container">
+      <div class="lp-kicker">About nanoFACTORY</div>
+      <h2>会社説明</h2>
+      <div class="company-summary">
+        <div class="company-summary__card">
+          <h3>起業の原点は、実家の製造現場で向き合った課題でした</h3>
+          <p>nanoFACTORYは、慶應理工出身のAI・ロボットエンジニア3人が、実家の地方製造業の現場課題を解決する中で得た技術ノウハウを社会に届けるために起業したスタートアップ企業です。人に依存した教育、目視に頼る検査、守られにくい安全・衛生ルール。そうした課題に対して、机上の理論ではなく、現場で回る仕組みとして形にしてきた技術とノウハウが出発点になっています。</p>
+          <p>ロボコンで培った「動く仕組みを組み上げる力」と、製造現場で培った「止めずに回す力」を土台に、現場で解決してきた技術・ノウハウを社会に届けるべく nanoFACTORY を立ち上げました。現在は、製造業、医療機関、食品工場・飲食店などに向けて、AIと周辺設計を一体で扱い、実運用に乗る形まで落とし込んでいます。</p>
+        </div>
+        <div class="company-profile">
+          <h3>基本情報</h3>
+          <ul>
+            <li><strong>会社名:</strong> nanoFACTORY Co.</li>
+            <li><strong>事業領域:</strong> 作業標準化、AI検査、AI監視・衛生管理</li>
+            <li><strong>提供形態:</strong> 製品、ソリューション、現場実装支援</li>
+            <li><strong>バックグラウンド:</strong> 慶應理工のAI・ロボット開発 + 地方製造業の現場実装</li>
+            <li><strong>連絡先:</strong> contact@nano-factory.jp</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-section lp-section--surface">
+    <div class="container">
+      <div class="lp-kicker">Core Technology</div>
+      <h2>コア技術</h2>
+      <div class="company-tech-grid">
+        <article class="company-tech-card">
+          <img src="../assets/homepage-tech-knowledge-learning-concept.jpg" alt="ノウハウ学習AIのイメージ" loading="lazy" />
+          <div class="company-tech-card__body">
+            <div class="company-tech-card__label">Core 01</div>
+            <h3>作業ノウハウを、AIが理解できる形に変える</h3>
+            <p>既存の手順書や現場ルールを、教育・監視・記録へつながる形に変換します。ノウハウが個人に閉じず、現場全体で再現できる状態をつくります。</p>
+          </div>
+        </article>
+        <article class="company-tech-card">
+          <img src="../assets/homepage-tech-high-precision-inspection-concept.png" alt="高精度AI検査のイメージ" loading="lazy" />
+          <div class="company-tech-card__body">
+            <div class="company-tech-card__label">Core 02</div>
+            <h3>現場条件に合わせて、高精度な検査を組み立てる</h3>
+            <p>照明、治具、判定条件、学習データを含めて最適化し、目視や汎用機では拾いきれない検査要求に対応します。精度だけでなく、速度と運用性も含めて設計します。</p>
+          </div>
+        </article>
+        <article class="company-tech-card">
+          <img src="../assets/homepage-tech-edge-processing-concept.png" alt="エッジ処理システムのイメージ" loading="lazy" />
+          <div class="company-tech-card__body">
+            <div class="company-tech-card__label">Core 03</div>
+            <h3>エッジ完結で、運用しやすいシステムにする</h3>
+            <p>現場内で処理を完結させる構成により、情報漏洩リスクと通信依存を抑えます。導入後の運用負荷まで考慮し、使い続けられるシステムとして実装します。</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section">
+    <div class="container">
+      <h2>会社や技術について詳しく知りたい場合はお問い合わせください</h2>
+      <p class="lead-text">
+        導入の相談だけでなく、技術の考え方や進め方の確認からでも対応しています。<br>
+        Email: <span id="company-mail"></span>
+      </p>
+      <div class="cta-buttons">
+        <a class="cta-button" id="company-mail-btn" href="#">メールで問い合わせる</a>
+        <a class="cta-button cta-button--outline" href="../index.html">トップに戻る</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; nanoFACTORY Co.</p>
+    </div>
+  </footer>
+
+  <script>
+    const companyEmail = "contact@nano-factory.jp";
+    const companyMail = document.getElementById("company-mail");
+    const companyBtn = document.getElementById("company-mail-btn");
+    if (companyMail) companyMail.textContent = companyEmail;
+    if (companyBtn) companyBtn.href = `mailto:${companyEmail}`;
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html>

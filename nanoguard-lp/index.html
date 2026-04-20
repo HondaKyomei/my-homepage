@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>nanoGUARD | AI監視・ルール順守カメラシステム | nanoFACTORY</title>
+  <meta name="description" content="現場の安全・衛生・5S管理を映像AIで一元化。転倒検出・手洗いチェック・定位置管理・ISO監査証跡の自動化まで。nanoGUARDの特設ページ。" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" />
+  <style>
+    html, body { scroll-snap-type: none !important; }
+
+    /* Hero centre-align */
+    .lp-hero--guard .lp-hero__inner {
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+    .lp-hero--guard .hero-tags,
+    .lp-hero--guard .lp-btns {
+      justify-content: center;
+    }
+    .lp-hero--guard .lp-lead { margin-left: auto; margin-right: auto; }
+
+    /* ── Frosted glass card base ── */
+    .glass {
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.75);
+      box-shadow: 0 8px 32px rgba(15,23,42,0.10);
+      border-radius: 18px;
+    }
+    .glass-dark {
+      background: rgba(10,18,40,0.52);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      border-radius: 18px;
+    }
+
+    /* ── Slideshow ── */
+    .problem-slideshow {
+      margin-bottom: 3rem;
+    }
+    .slide-track {
+      position: relative;
+      height: 440px;
+    }
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.5rem 2rem;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+    }
+    .slide.is-active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .slide-icon {
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 1.25rem;
+    }
+    .slide-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: rgba(255,255,255,0.88);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      overflow: visible;
+    }
+    .slide-counter {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 0.6rem;
+    }
+    .slide-headline {
+      font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.35;
+      margin-bottom: 0.75rem;
+    }
+    .slide-desc {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.7;
+      max-width: 440px;
+    }
+
+    /* progress bar */
+    .slide-nav {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .slide-progress-track {
+      width: 100%;
+      max-width: 480px;
+      height: 2px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+    .slide-progress-fill {
+      height: 100%;
+      background: rgba(255,255,255,0.65);
+      border-radius: 1px;
+      width: 0%;
+    }
+    @keyframes progressRun {
+      from { width: 0%; }
+      to   { width: 100%; }
+    }
+    .slide-progress-fill.running {
+      animation: progressRun 4.5s linear forwards;
+    }
+    .slide-dots {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .slide-dot {
+      width: 28px;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.22);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.3s ease, width 0.3s ease;
+    }
+    .slide-dot.is-active {
+      background: rgba(255,255,255,0.82);
+      width: 44px;
+    }
+
+    /* ── Per-slide SVG animations (only run on .is-active) ── */
+
+    /* Slide 1: falling person */
+    @keyframes fallDown {
+      0%,15%  { transform: rotate(0deg);                          stroke: rgba(255,255,255,0.88); }
+      45%,75% { transform: rotate(-70deg) translate(-4px, 6px);  stroke: #f97316; }
+      90%,100%{ transform: rotate(0deg);                          stroke: rgba(255,255,255,0.88); }
+    }
+    .slide[data-slide="0"].is-active .fig-body {
+      transform-origin: 38px 44px;
+      animation: fallDown 3.2s ease-in-out infinite;
+    }
+    @keyframes impactPulse {
+      0%,40%  { opacity: 0;   transform: scale(0.6); }
+      55%,70% { opacity: 1;   transform: scale(1);   }
+      85%,100%{ opacity: 0;   transform: scale(1.2); }
+    }
+    .slide[data-slide="0"].is-active .fig-impact {
+      transform-origin: 20px 70px;
+      animation: impactPulse 3.2s ease-in-out infinite;
+    }
+
+    /* Slide 2: handwashing — 合掌スタイル (手のひらを合わせて擦る) */
+    @keyframes washL {
+      0%,8%   { transform: translate(0, 0); }
+      22%     { transform: translate(9px, 0); }
+      34%     { transform: translate(9px, -7px); }
+      46%     { transform: translate(9px, 7px); }
+      58%     { transform: translate(9px, -4px); }
+      70%     { transform: translate(9px, 0); }
+      84%,100%{ transform: translate(0, 0); }
+    }
+    @keyframes washR {
+      0%,8%   { transform: translate(0, 0); }
+      22%     { transform: translate(-9px, 0); }
+      34%     { transform: translate(-9px, 7px); }
+      46%     { transform: translate(-9px, -7px); }
+      58%     { transform: translate(-9px, 4px); }
+      70%     { transform: translate(-9px, 0); }
+      84%,100%{ transform: translate(0, 0); }
+    }
+    @keyframes dropFall {
+      0%,28%  { transform: translateY(0);   opacity: 0; }
+      50%,68% { transform: translateY(8px);  opacity: 1; }
+      88%,100%{ transform: translateY(18px); opacity: 0; }
+    }
+    .slide[data-slide="1"].is-active .fig-hand-l { animation: washL 2.2s ease-in-out infinite; }
+    .slide[data-slide="1"].is-active .fig-hand-r { animation: washR 2.2s ease-in-out infinite; }
+    .slide[data-slide="1"].is-active .fig-drops  { animation: dropFall 2.2s ease-in-out infinite; }
+
+    /* Slide 3: hand approaching face */
+    @keyframes handIn {
+      0%,20%  { transform: translateX(0);    stroke: rgba(255,255,255,0.82); }
+      55%,70% { transform: translateX(-16px); stroke: #f97316; }
+      90%,100%{ transform: translateX(0);    stroke: rgba(255,255,255,0.82); }
+    }
+    @keyframes warnBlink {
+      0%,45%  { opacity: 0;   transform: scale(0.8); }
+      60%,75% { opacity: 1;   transform: scale(1.1); }
+      90%,100%{ opacity: 0;   transform: scale(0.8); }
+    }
+    .slide[data-slide="2"].is-active .fig-hand { animation: handIn 3s ease-in-out infinite; }
+    .slide[data-slide="2"].is-active .fig-warn { animation: warnBlink 3s ease-in-out infinite; }
+
+    /* Slide 4: box slides out of grid */
+    @keyframes boxDrift {
+      0%,20%  { transform: translate(0,0);         stroke: rgba(255,255,255,0.88); opacity: 1; }
+      50%,70% { transform: translate(20px,-18px);  stroke: #f97316;               opacity: 1; }
+      85%     { transform: translate(20px,-18px);  stroke: #f97316;               opacity: 0.3; }
+      100%    { transform: translate(0,0);         stroke: rgba(255,255,255,0.88); opacity: 1; }
+    }
+    @keyframes slotPulse {
+      0%,20%  { stroke-opacity: 0.2; }
+      50%,70% { stroke-opacity: 0.8; stroke: #f97316; }
+      100%    { stroke-opacity: 0.2; }
+    }
+    .slide[data-slide="3"].is-active .fig-movebox { animation: boxDrift 3.5s ease-in-out infinite; }
+    .slide[data-slide="3"].is-active .fig-slot    { animation: slotPulse 3.5s ease-in-out infinite; }
+
+    /* Slide 5: clock minute hand spins, doc shakes */
+    @keyframes minuteSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes docShake {
+      0%,100%{ transform: translateX(0);   stroke: rgba(255,255,255,0.88); }
+      15%    { transform: translateX(-3px); stroke: #f97316; }
+      35%    { transform: translateX(3px);  stroke: #f97316; }
+      55%    { transform: translateX(-2px); stroke: #f97316; }
+      75%    { transform: translateX(2px);  stroke: #f97316; }
+    }
+    .slide[data-slide="4"].is-active .fig-minute {
+      transform-origin: 70px 70px;
+      animation: minuteSpin 3s linear infinite;
+    }
+    .slide[data-slide="4"].is-active .fig-doc {
+      animation: docShake 1.8s ease-in-out infinite;
+    }
+
+    /* ── Hero SF background ── */
+    .lp-hero--guard { background: #03080f !important; }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    /* Moving grid */
+    .hero-grid {
+      position: absolute;
+      inset: -80px;
+      background-image:
+        linear-gradient(rgba(42,95,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42,95,255,0.05) 1px, transparent 1px);
+      background-size: 72px 72px;
+      animation: gridScroll 16s linear infinite;
+    }
+    @keyframes gridScroll {
+      from { transform: translateY(0); }
+      to   { transform: translateY(72px); }
+    }
+
+    /* JS-controlled scan line */
+    #heroScanLine {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(42,95,255,0.35) 10%,
+        rgba(86,204,242,1)   50%,
+        rgba(42,95,255,0.35) 90%,
+        transparent 100%);
+      box-shadow:
+        0 0  8px rgba(86,204,242,0.9),
+        0 0 28px rgba(86,204,242,0.5),
+        0 0 60px rgba(42,95,255,0.35);
+      transition: opacity 0.25s ease;
+    }
+
+    /* Scan word highlight — default */
+    .scan-word {
+      display: inline;
+      transition: color 0.4s ease, text-shadow 0.4s ease;
+    }
+    /* Lit state (scan activated) */
+    .scan-word.lit {
+      color: #56ccf2;
+      text-shadow:
+        0 0 18px rgba(86,204,242,0.95),
+        0 0 40px rgba(42,95,255,0.6),
+        0 0 80px rgba(86,204,242,0.3);
+    }
+
+    /* Glowing orbs */
+    .hero-orb { position: absolute; border-radius: 50%; filter: blur(80px); }
+    .hero-orb--1 {
+      width: 700px; height: 700px; background: rgba(42,95,255,0.14);
+      top: -300px; right: -150px; animation: orbDrift1 24s ease-in-out infinite;
+    }
+    .hero-orb--2 {
+      width: 500px; height: 500px; background: rgba(10,143,106,0.10);
+      bottom: -180px; left: 10%; animation: orbDrift2 30s ease-in-out infinite;
+    }
+    .hero-orb--3 {
+      width: 350px; height: 350px; background: rgba(86,204,242,0.07);
+      top: 30%; left: -90px; animation: orbDrift3 20s ease-in-out infinite;
+    }
+    @keyframes orbDrift1 {
+      0%,100% { transform: translate(0,0); }
+      40%     { transform: translate(-40px,50px); }
+      70%     { transform: translate(25px,-25px); }
+    }
+    @keyframes orbDrift2 {
+      0%,100% { transform: translate(0,0); }
+      35%     { transform: translate(50px,-35px); }
+      70%     { transform: translate(-25px,25px); }
+    }
+    @keyframes orbDrift3 {
+      0%,100% { transform: translate(0,0); }
+      50%     { transform: translate(35px,-45px); }
+    }
+
+    /* HUD corner brackets */
+    .hero-hud { position: absolute; width: 44px; height: 44px; animation: hudPulse 5s ease-in-out infinite; }
+    .hero-hud--tl { top: 24px; left: 24px; border-top: 1.5px solid #56ccf2; border-left: 1.5px solid #56ccf2; }
+    .hero-hud--tr { top: 24px; right: 24px; border-top: 1.5px solid #56ccf2; border-right: 1.5px solid #56ccf2; animation-delay: 1.25s; }
+    .hero-hud--bl { bottom: 24px; left: 24px; border-bottom: 1.5px solid #56ccf2; border-left: 1.5px solid #56ccf2; animation-delay: 2.5s; }
+    .hero-hud--br { bottom: 24px; right: 24px; border-bottom: 1.5px solid #56ccf2; border-right: 1.5px solid #56ccf2; animation-delay: 3.75s; }
+    @keyframes hudPulse { 0%,100% { opacity: 0.22; } 50% { opacity: 0.65; } }
+
+    /* HUD data bars */
+    .hero-hud-data {
+      position: absolute; display: flex; flex-direction: column; gap: 4px;
+      opacity: 0.18; animation: hudPulse 7s ease-in-out infinite;
+    }
+    .hero-hud-data--tl { top: 76px; left: 24px; }
+    .hero-hud-data--tr { top: 76px; right: 24px; align-items: flex-end; animation-delay: 2s; }
+    .hero-hud-data span { display: block; height: 1.5px; background: #56ccf2; border-radius: 1px; }
+    .hero-hud-data span:nth-child(1) { width: 52px; }
+    .hero-hud-data span:nth-child(2) { width: 36px; }
+    .hero-hud-data span:nth-child(3) { width: 44px; }
+
+    /* ── Hero tags ── */
+    .hero-tags { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+    .hero-tag {
+      padding: 0.28rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.72);
+      transition: background 0.4s ease, border-color 0.4s ease,
+                  color 0.4s ease, box-shadow 0.4s ease;
+    }
+    .hero-tag.lit {
+      background: rgba(86,204,242,0.14);
+      border-color: rgba(86,204,242,0.55);
+      color: #56ccf2;
+      box-shadow: 0 0 14px rgba(86,204,242,0.35);
+    }
+
+    /* ── 課題セクション (photo backdrop) ── */
+    .problem-section {
+      position: relative;
+      padding: 6rem 0;
+      overflow: hidden;
+    }
+    .problem-section__bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('../assets/homepage-solution-manufacturing-vsg-safety-monitoring.png');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.35);
+    }
+    .problem-section .container { position: relative; z-index: 2; }
+    .problem-section .lp-kicker {
+      background: rgba(86,204,242,0.15);
+      border-color: rgba(86,204,242,0.35);
+      color: #56ccf2;
+    }
+    .problem-section h2 { color: #f5f5f8; }
+    .problem-section .lead-text { color: rgba(245,245,248,0.7); margin-bottom: 2.5rem; }
+
+    .problem-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+    .problem-card {
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+    }
+    .problem-card__icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .problem-card__label {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.45;
+    }
+
+    /* ターゲット chips */
+    .target-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+    .target-chip {
+      padding: 0.55rem 1.25rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* ── できること — 3 photo cards ── */
+    .domain-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.75rem;
+      margin-top: 2.5rem;
+    }
+    .domain-card {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(15,23,42,0.12);
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+    .domain-card__photo {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .domain-card__photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .domain-card__tag {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .domain-card--safety  .domain-card__tag { background: #1d4ed8; }
+    .domain-card--hygiene .domain-card__tag { background: #059669; }
+    .domain-card--quality .domain-card__tag { background: #d97706; }
+    .domain-card__body {
+      padding: 1.5rem 1.75rem;
+      flex: 1;
+    }
+    .domain-card__body h3 {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 1rem;
+    }
+    .domain-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .domain-bullets li {
+      font-size: 0.86rem;
+      color: #374151;
+      line-height: 1.55;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .domain-bullets li .bi {
+      flex-shrink: 0;
+      font-size: 0.85rem;
+      margin-top: 0.15rem;
+    }
+    .domain-card--safety  .domain-bullets li .bi { color: #1d4ed8; }
+    .domain-card--hygiene .domain-bullets li .bi { color: #059669; }
+    .domain-card--quality .domain-bullets li .bi { color: #d97706; }
+
+    /* ── Before/After table ── */
+    .ba-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2.5rem;
+      font-size: 0.88rem;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(15,23,42,0.08);
+    }
+    .ba-table thead tr { background: #0f172a; }
+    .ba-table thead th {
+      padding: 1rem 1.25rem;
+      text-align: left;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+    }
+    .ba-table thead th:first-child { width: 26%; }
+    .ba-table tbody tr { border-bottom: 1px solid #e5e7eb; }
+    .ba-table tbody tr:last-child { border-bottom: none; }
+    .ba-table tbody tr:nth-child(even) { background: #f8faff; }
+    .ba-table tbody td {
+      padding: 0.95rem 1.25rem;
+      color: #374151;
+      vertical-align: middle;
+      line-height: 1.55;
+    }
+    .ba-table tbody td:first-child { font-weight: 700; color: #0f172a; font-size: 0.83rem; }
+    .ba-before { color: #6b7280 !important; }
+    .ba-before::before { content: "✗ "; color: #ef4444; font-weight: 900; }
+    .ba-after  { color: #065f46 !important; font-weight: 600; }
+    .ba-after::before  { content: "✓ "; color: #059669; font-weight: 900; }
+
+    /* ── 業種タブ内の写真 ── */
+    .usecase-photo-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .usecase-photo {
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.1);
+      height: 240px;
+    }
+    .usecase-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .usecase-list-col { display: flex; flex-direction: column; gap: 0.85rem; }
+    .usecase-list-col .usecase-item { border: none; background: #f8faff; border-radius: 12px; }
+
+    /* ── ISOバナー ── */
+    .iso-wrap {
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+    .iso-wrap__bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('../assets/homepage-tech-edge-processing-concept.png');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.25);
+    }
+    .iso-inner {
+      position: relative;
+      z-index: 2;
+      padding: 3.5rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 3rem;
+      align-items: center;
+    }
+    .iso-inner h3 { color: #fff; font-size: 1.5rem; font-weight: 900; margin-bottom: 0.75rem; }
+    .iso-inner p  { color: rgba(255,255,255,0.78); font-size: 0.92rem; line-height: 1.85; }
+    .iso-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; }
+    .iso-tag {
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: #fff;
+    }
+    .iso-flow { display: flex; flex-direction: column; gap: 0.45rem; min-width: 210px; }
+    .iso-step {
+      padding: 0.65rem 1rem;
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .iso-step--highlight {
+      background: rgba(34,197,94,0.22);
+      border-color: rgba(34,197,94,0.4) !important;
+    }
+    .iso-arrow { text-align: center; color: rgba(255,255,255,0.35); font-size: 0.8rem; }
+
+    @media (max-width: 768px) {
+      .usecase-photo-panel { grid-template-columns: 1fr; }
+      .usecase-photo { height: 180px; }
+      .iso-inner { grid-template-columns: 1fr; padding: 2rem 1.5rem; }
+      .iso-flow { display: none; }
+      .ba-table thead th:nth-child(2),
+      .ba-table tbody td:nth-child(2) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-wrapper">
+        <a href="../index.html">
+          <img src="../assets/site-logo-nanofactory.png" alt="nanoFACTORY" class="logo-img" />
+        </a>
+      </div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle__bar"></span>
+        <span class="sr-only">メニューを開閉</span>
+      </button>
+      <nav id="site-nav" class="nav">
+        <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
+        <a class="nav__link nav__link--products" href="../nanostep-lp/">作業管理</a>
+        <a class="nav__link nav__link--products" href="../nanosi-lp/">AI検査</a>
+        <a class="nav__link nav__link--products" href="../nanoguard-lp/">AI監視カメラ</a>
+        <a class="nav__link nav__link--products" href="../sanicam-lp/hand.html">手指衛生</a>
+        <a class="nav__link" href="../news/">ニュース・事例</a>
+        <a class="nav__link" href="../company/">会社情報</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="lp-hero lp-hero--guard">
+    <!-- SF background -->
+    <div class="hero-bg" aria-hidden="true">
+      <div class="hero-grid"></div>
+      <div id="heroScanLine"></div>
+      <div class="hero-orb hero-orb--1"></div>
+      <div class="hero-orb hero-orb--2"></div>
+      <div class="hero-orb hero-orb--3"></div>
+      <div class="hero-hud hero-hud--tl"></div>
+      <div class="hero-hud hero-hud--tr"></div>
+      <div class="hero-hud hero-hud--bl"></div>
+      <div class="hero-hud hero-hud--br"></div>
+      <div class="hero-hud-data hero-hud-data--tl"><span></span><span></span><span></span></div>
+      <div class="hero-hud-data hero-hud-data--tr"><span></span><span></span><span></span></div>
+    </div>
+
+    <div class="lp-hero__inner container">
+      <div class="lp-kicker">nanoGUARD — AI監視・ルール順守カメラシステム</div>
+      <h1 class="lp-h1">AI監視カメラが、24時間<br><span class="scan-word">安全</span>・<span class="scan-word">衛生</span>・<span class="scan-word">品質管理</span></h1>
+      <div class="hero-tags">
+        <span class="hero-tag">労災対策</span>
+        <span class="hero-tag">5S管理</span>
+        <span class="hero-tag">ISO対応</span>
+        <span class="hero-tag">ネット不要</span>
+        <span class="hero-tag">使い放題AI</span>
+      </div>
+      <div class="lp-btns">
+        <a class="cta-button" href="#domains">できることを見る</a>
+        <a class="cta-button cta-button--outline" href="#contact">お問い合わせ</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 課題 + ターゲット（photo backdrop） -->
+  <section class="problem-section">
+    <div class="problem-section__bg"></div>
+    <div class="container">
+      <div class="lp-kicker">こんな現場に</div>
+      <h2 style="color:#f5f5f8;margin-bottom:0.5rem;">見えていない問題が、リスクになっていませんか</h2>
+      <p class="lead-text">製造・食品・医療・物流——業種を問わず共通する現場の課題です。</p>
+
+      <div class="problem-slideshow">
+        <div class="slide-track">
+
+          <!-- Slide 0: 転倒 -->
+          <div class="slide is-active" data-slide="0">
+            <div class="slide-icon">
+              <svg viewBox="0 0 96 96" stroke-width="2.4">
+                <g class="fig-body">
+                  <circle cx="58" cy="16" r="9"/>
+                  <line x1="52" y1="24" x2="32" y2="50"/>
+                  <line x1="42" y1="37" x2="60" y2="46"/>
+                  <line x1="32" y1="50" x2="22" y2="70"/>
+                  <line x1="32" y1="50" x2="44" y2="68"/>
+                </g>
+                <g class="fig-impact" stroke="#f97316">
+                  <line x1="10" y1="80" x2="20" y2="74" stroke-width="2.8"/>
+                  <line x1="14" y1="88" x2="22" y2="80" stroke-width="2.8"/>
+                  <path d="M8 72 Q20 64 34 70" stroke-dasharray="4 3" stroke-width="2.2"/>
+                </g>
+              </svg>
+            </div>
+            <div class="slide-counter">01 / 05</div>
+            <h3 class="slide-headline">一人作業中の転倒・体調不良に<br>気づけない</h3>
+            <p class="slide-desc">異変が起きても発見が遅れ、重篤化するリスクがある。</p>
+          </div>
+
+          <!-- Slide 1: 手洗い -->
+          <div class="slide" data-slide="1">
+            <div class="slide-icon">
+              <svg viewBox="0 0 96 96" stroke-width="2.4">
+                <!-- Left hand -->
+                <g class="fig-hand-l">
+                  <!-- palm -->
+                  <path d="M8 76 L8 50 Q8 42 16 42 L34 42 Q42 42 42 50 L42 76 Q42 84 34 84 L16 84 Q8 84 8 76 Z"/>
+                  <!-- fingers -->
+                  <rect x="11" y="20" width="7" height="24" rx="3.5"/>
+                  <rect x="20" y="16" width="7" height="28" rx="3.5"/>
+                  <rect x="29" y="18" width="7" height="26" rx="3.5"/>
+                  <!-- thumb -->
+                  <path d="M6 62 Q2 56 4 50 Q7 44 12 46" stroke-width="2.2"/>
+                </g>
+                <!-- Right hand (mirror) -->
+                <g class="fig-hand-r">
+                  <path d="M88 76 L88 50 Q88 42 80 42 L62 42 Q54 42 54 50 L54 76 Q54 84 62 84 L80 84 Q88 84 88 76 Z"/>
+                  <rect x="78" y="20" width="7" height="24" rx="3.5"/>
+                  <rect x="69" y="16" width="7" height="28" rx="3.5"/>
+                  <rect x="60" y="18" width="7" height="26" rx="3.5"/>
+                  <path d="M90 62 Q94 56 92 50 Q89 44 84 46" stroke-width="2.2"/>
+                </g>
+                <!-- Water drops -->
+                <g class="fig-drops" stroke="#56ccf2" stroke-width="2">
+                  <path d="M28 86 Q26 90 28 93 Q30 96 32 93 Q34 90 32 86 Z" fill="rgba(86,204,242,0.25)"/>
+                  <path d="M48 88 Q46 92 48 95 Q50 98 52 95 Q54 92 52 88 Z" fill="rgba(86,204,242,0.25)"/>
+                  <path d="M68 86 Q66 90 68 93 Q70 96 72 93 Q74 90 72 86 Z" fill="rgba(86,204,242,0.25)"/>
+                </g>
+              </svg>
+            </div>
+            <div class="slide-counter">02 / 05</div>
+            <h3 class="slide-headline">手洗い・保護具着用が<br>自己申告だけ</h3>
+            <p class="slide-desc">「やった」という記録だけでは、本当に守られたか証明できない。</p>
+          </div>
+
+          <!-- Slide 2: 顔触り -->
+          <div class="slide" data-slide="2">
+            <div class="slide-icon">
+              <svg viewBox="0 0 96 96" stroke-width="2.4">
+                <!-- face -->
+                <circle cx="38" cy="44" r="24"/>
+                <circle cx="30" cy="38" r="2.5" fill="rgba(255,255,255,0.88)" stroke="none"/>
+                <circle cx="46" cy="38" r="2.5" fill="rgba(255,255,255,0.88)" stroke="none"/>
+                <path d="M30 54 Q38 60 46 54"/>
+                <!-- approaching hand -->
+                <g class="fig-hand">
+                  <path d="M80 52 Q74 48 70 42 Q67 36 62 38 Q58 40 60 46 Q57 44 55 47 Q53 50 57 52 Q54 52 54 56 Q54 60 58 60 Q56 63 59 66 Q63 70 70 68 Q76 66 80 60 Z" stroke-width="2.2"/>
+                </g>
+                <!-- warning flash (orange) -->
+                <g class="fig-warn" style="opacity:0" stroke="#f97316">
+                  <path d="M72 14 L82 32 L62 32 Z" stroke-width="2.4" fill="rgba(249,115,22,0.15)"/>
+                  <line x1="72" y1="19" x2="72" y2="26" stroke-width="3"/>
+                  <circle cx="72" cy="30" r="2" fill="#f97316" stroke="none"/>
+                </g>
+              </svg>
+            </div>
+            <div class="slide-counter">03 / 05</div>
+            <h3 class="slide-headline">無意識の顔触りが<br>コンタミリスクになる</h3>
+            <p class="slide-desc">注意しても繰り返される行動が、異物混入・感染リスクにつながる。</p>
+          </div>
+
+          <!-- Slide 3: 5S定位置 -->
+          <div class="slide" data-slide="3">
+            <div class="slide-icon">
+              <svg viewBox="0 0 96 96" stroke-width="2.4">
+                <!-- grid slots (fixed) -->
+                <rect x="8"  y="52" width="22" height="22" rx="4"/>
+                <rect x="37" y="52" width="22" height="22" rx="4"/>
+                <rect x="66" y="52" width="22" height="22" rx="4"/>
+                <rect x="8"  y="26" width="22" height="22" rx="4"/>
+                <rect x="37" y="26" width="22" height="22" rx="4" stroke-dasharray="5 3" stroke-opacity="0.35" class="fig-slot"/>
+                <!-- box that drifts out of position -->
+                <rect x="37" y="26" width="22" height="22" rx="4" class="fig-movebox"/>
+              </svg>
+            </div>
+            <div class="slide-counter">04 / 05</div>
+            <h3 class="slide-headline">5Sの定位置管理が<br>形骸化している</h3>
+            <p class="slide-desc">誰かが巡回しないと、物が正しい場所に戻っているか確認できない。</p>
+          </div>
+
+          <!-- Slide 4: ISO監査 -->
+          <div class="slide" data-slide="4">
+            <div class="slide-icon">
+              <svg viewBox="0 0 96 96" stroke-width="2.4">
+                <!-- document -->
+                <g class="fig-doc">
+                  <path d="M16 8 L16 80 L64 80 L64 28 L44 8 Z"/>
+                  <polyline points="44,8 44,28 64,28"/>
+                  <line x1="26" y1="44" x2="54" y2="44"/>
+                  <line x1="26" y1="55" x2="54" y2="55"/>
+                  <line x1="26" y1="66" x2="40" y2="66"/>
+                </g>
+                <!-- clock overlay -->
+                <circle cx="70" cy="70" r="22" fill="rgba(10,18,40,0.88)" stroke-width="2.2"/>
+                <!-- hour hand -->
+                <line x1="70" y1="70" x2="70" y2="54" stroke-width="2.8"/>
+                <!-- minute hand (animated, orange) -->
+                <line x1="70" y1="70" x2="84" y2="70" stroke-width="3" stroke="#f97316" class="fig-minute"/>
+                <!-- tick marks -->
+                <line x1="70" y1="52" x2="70" y2="54" stroke-width="1.6"/>
+                <line x1="70" y1="86" x2="70" y2="88" stroke-width="1.6"/>
+                <line x1="52" y1="70" x2="54" y2="70" stroke-width="1.6"/>
+                <line x1="86" y1="70" x2="88" y2="70" stroke-width="1.6"/>
+              </svg>
+            </div>
+            <div class="slide-counter">05 / 05</div>
+            <h3 class="slide-headline">ISO監査のたびに<br>記録集めに追われる</h3>
+            <p class="slide-desc">手作業で記録を作り続けるコストが、現場管理の大きな負担になっている。</p>
+          </div>
+
+        </div><!-- /slide-track -->
+
+        <div class="slide-nav">
+          <div class="slide-progress-track">
+            <div class="slide-progress-fill" id="slideProgress"></div>
+          </div>
+          <div class="slide-dots">
+            <button class="slide-dot is-active" data-goto="0"></button>
+            <button class="slide-dot" data-goto="1"></button>
+            <button class="slide-dot" data-goto="2"></button>
+            <button class="slide-dot" data-goto="3"></button>
+            <button class="slide-dot" data-goto="4"></button>
+          </div>
+        </div>
+      </div>
+
+      <p style="text-align:center;color:rgba(245,245,248,0.5);font-size:0.8rem;margin-bottom:1rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;">こんな現場でご活用いただいています</p>
+      <div class="target-chips">
+        <span class="target-chip glass-dark">製造業・物流</span>
+        <span class="target-chip glass-dark">食品工場・飲食店</span>
+        <span class="target-chip glass-dark">医療・介護施設</span>
+        <span class="target-chip glass-dark">ISO・品質管理</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- できること -->
+  <section id="domains" class="lp-section lp-section--surface">
+    <div class="container">
+      <div class="lp-kicker">nanoGUARDができること</div>
+      <h2>安全・衛生・品質管理を、カメラ1台で一元化する</h2>
+      <p class="lead-text">骨格AI・物体検知・行動解析が、3つの領域の課題を同時に解決します。</p>
+
+      <div class="domain-cards">
+
+        <div class="domain-card domain-card--safety">
+          <div class="domain-card__photo">
+            <img src="../assets/homepage-solution-manufacturing-vsg-safety-monitoring.png" alt="安全管理" loading="lazy" />
+            <span class="domain-card__tag">🔵 安全管理</span>
+          </div>
+          <div class="domain-card__body">
+            <h3>事故を「起きてから」ではなく<br>「起きる前に」</h3>
+            <ul class="domain-bullets">
+              <li><span class="bi">▸</span>転倒・倒れ込みを骨格AIが即時検知しアラーム</li>
+              <li><span class="bi">▸</span>危険姿勢・無理な体勢を継続記録し労災リスクを可視化</li>
+              <li><span class="bi">▸</span>立入禁止エリアへの侵入をリアルタイム検知</li>
+              <li><span class="bi">▸</span>長時間の動作停止で体調不良を早期発見</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="domain-card domain-card--hygiene">
+          <div class="domain-card__photo">
+            <img src="../assets/nanoguard-showcase-sanicam.png" alt="衛生管理" loading="lazy" />
+            <span class="domain-card__tag">🟢 衛生管理</span>
+          </div>
+          <div class="domain-card__body">
+            <h3>自己申告に頼らない<br>客観的な衛生エビデンス</h3>
+            <ul class="domain-bullets">
+              <li><span class="bi">▸</span>手洗い実施を滞在時間・動作でAIが自動判定</li>
+              <li><span class="bi">▸</span>無意識の顔・口・鼻への接触行動をリアルタイム検知</li>
+              <li><span class="bi">▸</span>マスク・手袋・保護具の着用状態を常時モニタリング</li>
+              <li><span class="bi">▸</span>衛生手順の遵守をログで自動記録しHACCP証跡に活用</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="domain-card domain-card--quality">
+          <div class="domain-card__photo">
+            <img src="../assets/nanoguard-vsg-installation.jpg" alt="品質・5S管理" loading="lazy" />
+            <span class="domain-card__tag">🟡 品質・5S管理</span>
+          </div>
+          <div class="domain-card__body">
+            <h3>「あるべき姿」を<br>AIが24時間監視する</h3>
+            <ul class="domain-bullets">
+              <li><span class="bi">▸</span>置いてはいけない場所への物の放置を自動検知</li>
+              <li><span class="bi">▸</span>基準状態との差分を映像比較で自動判定・通知</li>
+              <li><span class="bi">▸</span>5S担当者の巡回実施を行動ログで客観記録</li>
+              <li><span class="bi">▸</span>時間帯・担当者別の実施率をKPIで定量化</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Before/After -->
+  <section class="lp-section lp-section--white">
+    <div class="container">
+      <div class="lp-kicker">導入効果</div>
+      <h2>導入前と導入後、何が変わるか</h2>
+      <table class="ba-table">
+        <thead>
+          <tr>
+            <th>管理項目</th>
+            <th>導入前</th>
+            <th>nanoGUARD導入後</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>転倒・体調不良の発見</td>
+            <td class="ba-before">巡回か本人からの連絡待ち</td>
+            <td class="ba-after">骨格AIがリアルタイムに検知し即アラーム</td>
+          </tr>
+          <tr>
+            <td>手洗い・衛生手順</td>
+            <td class="ba-before">自己申告・目視のみ、抜け漏れあり</td>
+            <td class="ba-after">AI が動作・滞在時間で自動判定し記録</td>
+          </tr>
+          <tr>
+            <td>顔への接触リスク</td>
+            <td class="ba-before">把握不能。注意しても繰り返す</td>
+            <td class="ba-after">リアルタイム検知＋ログで行動改善を促進</td>
+          </tr>
+          <tr>
+            <td>5S 定位置管理</td>
+            <td class="ba-before">人が巡回しないと気づかない</td>
+            <td class="ba-after">基準映像との差分をAIが自動検出・通知</td>
+          </tr>
+          <tr>
+            <td>ISO・HACCP 記録</td>
+            <td class="ba-before">手作業で作成、監査前に書類集め</td>
+            <td class="ba-after">日々の運用が自動的に監査証跡を生成</td>
+          </tr>
+          <tr>
+            <td>不適合の原因調査</td>
+            <td class="ba-before">記憶・目撃情報に依存</td>
+            <td class="ba-after">映像＋骨格ログで即座に遡及調査が可能</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 製品ラインアップ -->
+  <section id="products" class="lp-section lp-section--surface">
+    <div class="container">
+      <div class="lp-kicker">製品ラインアップ</div>
+      <h2>用途に合わせて選べる3つのAIカメラ</h2>
+      <p class="lead-text">衛生管理・入退室セキュリティ・野生動物対策——現場の課題に合わせてお選びください。複数の組み合わせも可能です。</p>
+      <div class="showcase-grid">
+
+        <a class="showcase-card" href="../sanicam-lp/hand.html">
+          <div class="showcase-card__media">
+            <img src="../assets/nanoguard-showcase-sanicam.png" alt="衛生管理AI SANI-CAM" loading="lazy" />
+          </div>
+          <div class="showcase-card__body">
+            <span class="showcase-card__label">衛生管理AIカメラ</span>
+            <h3>SANI-CAM</h3>
+            <p>WHO準拠の手洗い6ステップを教育・採点・記録。食品工場・医療施設の一般衛生管理とフードディフェンスに対応。</p>
+            <span class="showcase-card__cta">LPで詳細を見る</span>
+          </div>
+        </a>
+
+        <a class="showcase-card" href="../virtual-security-gate-lp/index.html">
+          <div class="showcase-card__media">
+            <img src="../assets/nanoguard-showcase-vsg.png" alt="バーチャルセキュリティゲート" loading="lazy" />
+          </div>
+          <div class="showcase-card__body">
+            <span class="showcase-card__label">入退室セキュリティ</span>
+            <h3>バーチャルセキュリティゲート</h3>
+            <p>カメラとAIで仮想ゲートを設置。非接触で入退室を管理・記録し、ルール違反を音声でリアルタイム警告します。</p>
+            <span class="showcase-card__cta">LPで詳細を見る</span>
+          </div>
+        </a>
+
+        <a class="showcase-card" href="../virtual-security-gate-lp/bear.html">
+          <div class="showcase-card__media">
+            <img src="../assets/nanoguard-showcase-bear-detection.png" alt="熊検出AI" loading="lazy" />
+          </div>
+          <div class="showcase-card__body">
+            <span class="showcase-card__label">野生動物対策</span>
+            <h3>熊検出AI</h3>
+            <p>山間部・農地・工事現場での熊をはじめとした野生動物の侵入をAIカメラが検知。現場作業者の安全を守ります。</p>
+            <span class="showcase-card__cta">LPで詳細を見る</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 業種別活用シーン -->
+  <section class="lp-section lp-section--white">
+    <div class="container">
+      <div class="lp-kicker">業種別活用シーン</div>
+      <h2>あなたの現場での使い方</h2>
+      <div class="tab-group">
+        <div class="usecase-tabs">
+          <button class="usecase-tab is-active" data-tab="mfg">製造業・物流</button>
+          <button class="usecase-tab" data-tab="med">医療・介護</button>
+          <button class="usecase-tab" data-tab="food">食品・飲食</button>
+        </div>
+
+        <div class="usecase-panel is-active" data-panel="mfg">
+          <div class="usecase-photo-panel">
+            <div class="usecase-photo">
+              <img src="../assets/homepage-solution-manufacturing-vsg-safety-monitoring.png" alt="製造業の安全監視" loading="lazy" />
+            </div>
+            <div class="usecase-list-col">
+              <div class="usecase-item">
+                <h4>一人作業中の転倒・事故検知</h4>
+                <p>夜間・一人作業中の転倒を骨格AIが即時検知。重篤化を防ぎます。</p>
+              </div>
+              <div class="usecase-item">
+                <h4>クリーンルームの衛生管理</h4>
+                <p>手洗い・保護具着用・顔触り行動をAIが常時確認。コンタミリスクを客観証明。</p>
+              </div>
+              <div class="usecase-item">
+                <h4>5S定位置管理とISO証跡</h4>
+                <p>基準状態との差分を自動検出。ISO 9001/45001の監査エビデンスを自動生成。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="usecase-panel" data-panel="med">
+          <div class="usecase-photo-panel">
+            <div class="usecase-photo">
+              <img src="../assets/homepage-solution-medical-vsg-hygiene-zone.png" alt="医療施設の衛生管理" loading="lazy" />
+            </div>
+            <div class="usecase-list-col">
+              <div class="usecase-item">
+                <h4>患者・入居者の転倒・徘徊リスク</h4>
+                <p>夜間・見守りが手薄な時間帯でも骨格AIが転倒を検知し即時アラーム。</p>
+              </div>
+              <div class="usecase-item">
+                <h4>手指衛生の記録と感染対策（SANI-CAM）</h4>
+                <p>WHO準拠の手洗いをAIが採点・記録。感染対策監査の証拠データを自動管理。</p>
+              </div>
+              <div class="usecase-item">
+                <h4>制限区域・衛生ゾーンの管理</h4>
+                <p>手術室・無菌室への不正侵入を24時間検知。アラートログが監査証跡に。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="usecase-panel" data-panel="food">
+          <div class="usecase-photo-panel">
+            <div class="usecase-photo">
+              <img src="../assets/homepage-solution-food-ai-cooking-hygiene-steps.png" alt="食品工場の衛生管理" loading="lazy" />
+            </div>
+            <div class="usecase-list-col">
+              <div class="usecase-item">
+                <h4>調理前の手洗い確認（SANI-CAM）</h4>
+                <p>手洗いをAIが自動確認・記録。HACCPの証跡を自動化します。</p>
+              </div>
+              <div class="usecase-item">
+                <h4>顔・口・鼻への接触リスクの可視化</h4>
+                <p>無意識な顔触り行動を個人単位でログ化。データに基づく衛生改善を実現。</p>
+              </div>
+              <div class="usecase-item">
+                <h4>5S・衛生基準の維持</h4>
+                <p>定位置管理・清掃実施をAIが自動確認。HACCP記録を一元的に自動生成。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ISO・内部監査 -->
+  <section class="lp-section lp-section--surface">
+    <div class="container">
+      <div class="lp-kicker">ISO対応・内部監査</div>
+      <h2>記録を「作る」から、記録が「自動で生まれる」へ</h2>
+      <div class="iso-wrap" style="margin-top:2rem;">
+        <div class="iso-wrap__bg"></div>
+        <div class="iso-inner">
+          <div>
+            <h3>現場の運用が、そのまま監査証跡になる</h3>
+            <p>安全確認・衛生チェック・5S実施のすべてをタイムスタンプ付きで自動記録。<br>不適合発生時は映像・骨格データで即座に遡及調査。内部監査のログ・映像はWebUIからCSVで即エクスポートできます。</p>
+            <div class="iso-tags">
+              <span class="iso-tag">ISO 9001</span>
+              <span class="iso-tag">ISO 14001</span>
+              <span class="iso-tag">ISO 45001</span>
+              <span class="iso-tag">HACCP</span>
+              <span class="iso-tag">GMP</span>
+            </div>
+          </div>
+          <div class="iso-flow">
+            <div class="iso-step glass-dark">📹 現場でのルール遵守行動</div>
+            <div class="iso-arrow">↓ AIが自動記録</div>
+            <div class="iso-step glass-dark">🗂️ タイムスタンプ付きログ蓄積</div>
+            <div class="iso-arrow">↓ 監査時に</div>
+            <div class="iso-step glass-dark iso-step--highlight">✅ そのまま証跡として提出</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="section cta-section">
+    <div class="container">
+      <h2>nanoGUARD の相談・見積もりはこちら</h2>
+      <p class="lead-text">
+        どの製品が現場に合うかわからない場合もお気軽にご相談ください。<br>
+        用途・環境をお聞きして最適な構成をご提案します。
+      </p>
+      <div class="cta-buttons">
+        <a class="cta-button" id="nanoguard-mail-btn" href="#">メールで相談する</a>
+        <a class="cta-button cta-button--outline" href="../products-services/">製品一覧に戻る</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; nanoFACTORY Co.</p>
+    </div>
+  </footer>
+
+  <script>
+    const email = "contact@nano-factory.jp";
+    const btn = document.getElementById("nanoguard-mail-btn");
+    if (btn) btn.href = `mailto:${email}`;
+
+    // ── Hero scan animation ──
+    (function () {
+      const scanEl  = document.getElementById('heroScanLine');
+      const hero    = document.querySelector('.lp-hero--guard');
+      const words   = document.querySelectorAll('.scan-word');
+      const tags    = document.querySelectorAll('.hero-tag');
+      const targets = [...words, ...tags];
+      if (!scanEl || !hero) return;
+
+      const SCAN_MS = 2400;  // duration of one scan top→bottom
+      const HOLD_MS = 3200;  // hold lit state before reset scan
+      const PAUSE_MS = 1800; // pause after reset before repeating
+
+      function relY(el) {
+        return el.getBoundingClientRect().top
+          - hero.getBoundingClientRect().top
+          + el.offsetHeight * 0.5;
+      }
+
+      function runScan(mode, onDone) {
+        const H = hero.offsetHeight;
+        let t0 = null;
+        scanEl.style.opacity = '1';
+
+        (function step(ts) {
+          if (!t0) t0 = ts;
+          const prog = Math.min((ts - t0) / SCAN_MS, 1);
+          const y    = prog * (H + 4) - 2;
+          scanEl.style.top = y + 'px';
+
+          targets.forEach(el => {
+            if (y >= relY(el)) {
+              if (mode === 'on')  el.classList.add('lit');
+              if (mode === 'off') el.classList.remove('lit');
+            }
+          });
+
+          if (prog < 1) { requestAnimationFrame(step); }
+          else {
+            scanEl.style.opacity = '0';
+            onDone && onDone();
+          }
+        })(performance.now());
+      }
+
+      function cycle() {
+        runScan('on', () => {
+          setTimeout(() => {
+            runScan('off', () => {
+              setTimeout(cycle, PAUSE_MS);
+            });
+          }, HOLD_MS);
+        });
+      }
+
+      setTimeout(cycle, 700);
+    })();
+
+    // ── Problem slideshow ──
+    const SLIDE_DURATION = 4500;
+    const slides   = document.querySelectorAll('.slide');
+    const dots     = document.querySelectorAll('.slide-dot');
+    const progressEl = document.getElementById('slideProgress');
+    let current = 0;
+    let timer   = null;
+
+    function goTo(idx) {
+      slides[current].classList.remove('is-active');
+      dots[current].classList.remove('is-active');
+      current = (idx + slides.length) % slides.length;
+      slides[current].classList.add('is-active');
+      dots[current].classList.add('is-active');
+      // restart progress bar
+      if (progressEl) {
+        progressEl.classList.remove('running');
+        void progressEl.offsetWidth; // reflow
+        progressEl.classList.add('running');
+      }
+    }
+
+    function startAuto() {
+      clearInterval(timer);
+      timer = setInterval(() => goTo(current + 1), SLIDE_DURATION);
+    }
+
+    dots.forEach(d => {
+      d.addEventListener('click', () => {
+        goTo(Number(d.dataset.goto));
+        startAuto();
+      });
+    });
+
+    // kick off
+    if (progressEl) progressEl.classList.add('running');
+    startAuto();
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html>

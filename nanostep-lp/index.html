@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>nanoSTEP | AI作業解析・教育システム | nanoFACTORY</title>
+  <meta name="description" content="手順書×AIカメラで工場作業を可視化・保証。ベテラン依存のOJTから脱却し、誰でも標準品質を出せる現場をつくるnanoSTEPの特設ページ。" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" />
+  <style>
+    html, body { scroll-snap-type: none !important; }
+    .nanostep-problem__frame {
+      margin-top: 1.8rem;
+      padding: 1.4rem;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(248,250,252,0.96) 0%, rgba(255,255,255,0.98) 100%);
+      box-shadow: 0 20px 52px rgba(15, 23, 42, 0.08);
+    }
+    .nanostep-problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+    .nanostep-problem-card {
+      padding: 1.25rem;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 26px rgba(15,23,42,0.06);
+    }
+    .nanostep-problem-card__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      margin-bottom: 0.85rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+      color: #1d4ed8;
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+    .nanostep-problem-card h3 {
+      margin-bottom: 0.55rem;
+      color: #0f172a;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+    .nanostep-problem-card p {
+      margin: 0;
+      color: #475569;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+    .nanostep-problem-insight {
+      margin-top: 1.2rem;
+      padding: 1rem 1.1rem;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
+      border: 1px solid #c7d2fe;
+      color: #1e3a8a;
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+    .nanostep-problem-insight strong {
+      color: #1e40af;
+    }
+    @media (max-width: 900px) {
+      .nanostep-problem-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 480px) {
+      .nanostep-problem__frame {
+        padding: 1rem;
+        border-radius: 20px;
+      }
+      .nanostep-problem-card {
+        padding: 1rem;
+        border-radius: 16px;
+      }
+      .nanostep-problem-card h3 {
+        font-size: 0.95rem;
+      }
+      .nanostep-problem-card p,
+      .nanostep-problem-insight {
+        font-size: 0.9rem;
+        line-height: 1.75;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-wrapper">
+        <a href="../index.html">
+          <img src="../assets/site-logo-nanofactory.png" alt="nanoFACTORY" class="logo-img" />
+        </a>
+      </div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle__bar"></span>
+        <span class="sr-only">メニューを開閉</span>
+      </button>
+      <nav id="site-nav" class="nav">
+        <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
+        <a class="nav__link nav__link--products" href="../nanostep-lp/">作業管理</a>
+        <a class="nav__link nav__link--products" href="../nanosi-lp/">AI検査</a>
+        <a class="nav__link nav__link--products" href="../nanoguard-lp/">AI監視カメラ</a>
+        <a class="nav__link nav__link--products" href="../sanicam-lp/hand.html">手指衛生</a>
+        <a class="nav__link" href="../news/">ニュース・事例</a>
+        <a class="nav__link" href="../company/">会社情報</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="lp-hero lp-hero--blue">
+    <div class="lp-hero__inner container">
+      <div class="lp-kicker">nanoSTEP — AI作業管理・教育システム</div>
+      <h1 class="lp-h1">手順書×AIカメラで、<br>現場の作業品質を保証する</h1>
+      <p class="lp-lead">
+        既存の手順書をAIが読み込み、現場カメラで作業動作をリアルタイム評価。<br>
+        ベテラン依存のOJTから脱却し、誰でも標準品質を出せる現場をつくります。
+      </p>
+      <div class="lp-btns">
+        <a class="cta-button" href="#contact">デモを申し込む</a>
+        <a class="cta-button cta-button--outline" href="#features">特長を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 課題 -->
+  <section class="lp-section lp-section--white">
+    <div class="container">
+      <div class="lp-kicker">こんな課題はありませんか</div>
+      <h2>製造現場の「属人化」が、品質リスクになっていませんか？</h2>
+      <p class="lead-text">起きている問題は個別に見えても、根っこは同じです。<strong>教育・確認・改善を人に依存したまま</strong>なので、品質を安定して再現できません。</p>
+      <div class="nanostep-problem__frame">
+        <div class="nanostep-problem-grid">
+          <article class="nanostep-problem-card">
+            <div class="nanostep-problem-card__num">01</div>
+            <h3>教育がベテラン依存で、<br>現場の時間が奪われる</h3>
+            <p>新人教育のたびにベテランが張り付き、本来業務が止まります。ノウハウが人に閉じたままだと、退職や異動のたびに品質リスクが増えます。</p>
+          </article>
+          <article class="nanostep-problem-card">
+            <div class="nanostep-problem-card__num">02</div>
+            <h3>手順遵守を見切れず、<br>品質ばらつきが残る</h3>
+            <p>手順書があっても、現場でその通りに実行されているかは常時確認できません。人による作業差が残り、不良の原因特定にも時間がかかります。</p>
+          </article>
+          <article class="nanostep-problem-card">
+            <div class="nanostep-problem-card__num">03</div>
+            <h3>データが残らず、<br>改善活動が続かない</h3>
+            <p>多品種化で手順が増えるほど、管理も教育も追いつきにくくなります。作業実績データがないため、改善のPDCAを回しづらい状態が続きます。</p>
+          </article>
+        </div>
+        <div class="nanostep-problem-insight">
+          つまり必要なのは、<strong>教育そのものを増やすことではなく、標準作業が再現される運用をつくること</strong>です。nanoSTEPは、既存の手順書をもとに教育・確認・記録を一体で支援します。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特長 -->
+  <section id="features" class="lp-section lp-section--surface">
+    <div class="container">
+      <div class="lp-kicker">nanoSTEPの特長</div>
+      <h2>既存の手順書がそのまま「AIの教科書」になる</h2>
+      <p class="lead-text">新しい手順書を作り直す必要はありません。現在お使いの手順書・マニュアルをAIに読み込ませるだけで現場監視がスタートします。</p>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-card__num">01</div>
+          <h3>手順書解析AI</h3>
+          <p>既存のPDF・Excel・紙の手順書をAIが解析。工程ごとの作業要素を自動抽出し、判定モデルを構築します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__num">02</div>
+          <h3>リアルタイム作業評価</h3>
+          <p>現場のAIカメラが作業動作を解析し、手順の抜け・順序ミス・品質逸脱をリアルタイムで検知・通知します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__num">03</div>
+          <h3>作業データの自動蓄積</h3>
+          <p>作業時間・手順遵守率・頻出ミス箇所などを自動蓄積。改善活動のエビデンスとして活用できます。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__num">04</div>
+          <h3>OJT自動化モード</h3>
+          <p>新人向けに手順をステップ表示しながらリアルタイム採点。ベテランが隣につかなくても標準品質の教育が可能です。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__num">05</div>
+          <h3>エッジ処理で情報漏洩なし</h3>
+          <p>映像処理は社内のエッジデバイスで完結。製造ノウハウや作業映像が外部に出ることはありません。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__num">06</div>
+          <h3>多品種・多工程に対応</h3>
+          <p>製品・工程ごとに複数の手順書を登録可能。QRコード読み取りで自動切替できます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 導入フロー -->
+  <section class="lp-section lp-section--tinted">
+    <div class="container">
+      <div class="lp-kicker">導入の流れ</div>
+      <h2>手順書を登録するだけで、翌週には現場監視がスタート</h2>
+      <p class="lead-text">大規模なシステム改修は不要。既存設備にAIカメラを追加するだけで導入できます。</p>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-step__icon">📄</div>
+          <h3>STEP 1<br>手順書を登録</h3>
+          <p>既存の手順書をアップロード。AIが工程要素を自動抽出します。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step__icon">📷</div>
+          <h3>STEP 2<br>カメラを設置</h3>
+          <p>作業台上部にAIカメラを設置。既存カメラの流用も可能です。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step__icon">🤖</div>
+          <h3>STEP 3<br>AI学習</h3>
+          <p>数回の作業映像でAIが学習完了。特殊な環境構築は不要です。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step__icon">📊</div>
+          <h3>STEP 4<br>監視・改善</h3>
+          <p>リアルタイム監視と作業データ蓄積が開始。改善サイクルが回り始めます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 業種別活用シーン -->
+  <section class="lp-section lp-section--white">
+    <div class="container">
+      <div class="lp-kicker">業種別活用シーン</div>
+      <h2>製造業・医療・飲食——どの現場にも対応</h2>
+      <p class="lead-text">nanoSTEPの「手順書×AIカメラ」は業種を問いません。あなたの現場に合った活用イメージをご覧ください。</p>
+      <div class="tab-group">
+        <div class="usecase-tabs">
+          <button class="usecase-tab is-active" data-tab="mfg">🏭 製造業</button>
+          <button class="usecase-tab" data-tab="med">🏥 医療機関</button>
+          <button class="usecase-tab" data-tab="food">🍽️ 飲食店・食品工場</button>
+        </div>
+        <ul class="usecase-list">
+          <!-- 製造業 -->
+          <div class="usecase-panel is-active" data-panel="mfg">
+            <ul class="usecase-list">
+              <li class="usecase-item">
+                <h4>ライン作業の標準化・OJT自動化</h4>
+                <p>ベテラン不在でも標準品質を維持。新人が手順書の通りに作業できているかをAIが自動採点し、ミスをリアルタイムで通知。多言語音声ガイドで外国人スタッフにも対応します。</p>
+              </li>
+              <li class="usecase-item">
+                <h4>作業品質データの自動蓄積</h4>
+                <p>各作業員の手順遵守率・頻出ミス箇所・作業時間を自動記録。クレーム発生時のトレーサビリティ確保と、改善活動のエビデンスとして活用できます。</p>
+              </li>
+              <li class="usecase-item">
+                <h4>多品種小ロット対応</h4>
+                <p>QRコード読み取りで製品切り替え時に手順書を自動切替。段取り変えのミスを防ぎ、多品種化が進む現場でも教育コストをかけずに対応できます。</p>
+              </li>
+            </ul>
+          </div>
+          <!-- 医療機関 -->
+          <div class="usecase-panel" data-panel="med">
+            <ul class="usecase-list">
+              <li class="usecase-item">
+                <h4>看護・処置手順の標準化</h4>
+                <p>医療処置・感染対策プロトコルをAIカメラが監視。新人看護師・スタッフのインシデント防止と、OJT担当なしでの研修効率化を同時に実現します。</p>
+              </li>
+              <li class="usecase-item">
+                <h4>手順遵守の記録・エビデンス化</h4>
+                <p>各手順の実施状況が自動で記録されるため、医療安全委員会への報告書作成や監査対応に活用可能。「やったかどうか」の記録漏れをなくします。</p>
+              </li>
+              <li class="usecase-item">
+                <h4>研修・教育の効率化</h4>
+                <p>研修シミュレーションをAIが自動採点してレポート化。指導者の工数を削減しながら、客観的な習熟度評価が可能になります。</p>
+              </li>
+            </ul>
+          </div>
+          <!-- 飲食店 -->
+          <div class="usecase-panel" data-panel="food">
+            <ul class="usecase-list">
+              <li class="usecase-item">
+                <h4>調理・仕込み手順の標準化</h4>
+                <p>レシピ通りに調理されているかをAIが確認。アルバイトでも経験豊富なスタッフと同じ品質を出せるようになります。忙しい店長の教育負担を大幅に削減。</p>
+              </li>
+              <li class="usecase-item">
+                <h4>衛生管理手順の記録（HACCP対応）</h4>
+                <p>食材の温度確認・洗浄手順・清掃チェックなどをAIカメラが確認し、HACCPで必要な衛生管理記録を自動化。監査の証跡として即日提出できます。</p>
+              </li>
+              <li class="usecase-item">
+                <h4>新人スタッフ育成の自動化</h4>
+                <p>入れ替わりが多いアルバイトスタッフの教育をAIが担当。店長・社員のマルチタスク化を可能にし、繁忙期でも教育品質を落とさず対応できます。</p>
+              </li>
+            </ul>
+          </div>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="section cta-section">
+    <div class="container">
+      <h2>nanoSTEP の詳細・デモのご相談</h2>
+      <p class="lead-text">
+        導入事例・デモ映像・お見積もりはお問い合わせください。<br>
+        オンラインデモも承っております。
+      </p>
+      <div class="cta-buttons">
+        <a class="cta-button" id="nanostep-mail-btn" href="#">メールで相談する</a>
+        <a class="cta-button cta-button--outline" href="../products-services/">製品一覧に戻る</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; nanoFACTORY Co.</p>
+    </div>
+  </footer>
+
+  <script>
+    const email = "contact@nano-factory.jp";
+    const btn = document.getElementById("nanostep-mail-btn");
+    if (btn) btn.href = `mailto:${email}`;
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html>

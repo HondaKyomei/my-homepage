@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>nanoSI | 検査ライン無人化 | nanoFACTORY</title>
+  <meta name="description" content="自社工場での無人化実績・目薬医薬品レベルの対応力を持つAI×メカSI。PoCから完全無人化まで現場を止めずに伴走します。" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" />
+  <style>
+    html, body { scroll-snap-type: none !important; }
+
+    .nanosi-problem {
+      position: relative;
+      overflow: hidden;
+    }
+    .nanosi-problem::before {
+      content: "";
+      position: absolute;
+      inset: 4% auto auto -8%;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(42,95,255,0.12) 0%, rgba(42,95,255,0) 72%);
+      pointer-events: none;
+      animation: nanosiFloat 8s ease-in-out infinite;
+    }
+    .nanosi-problem::after {
+      content: "";
+      position: absolute;
+      right: -120px;
+      bottom: -140px;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(13,148,136,0.14) 0%, rgba(13,148,136,0) 70%);
+      pointer-events: none;
+      animation: nanosiFloat 10s ease-in-out infinite reverse;
+    }
+    .nanosi-problem .container {
+      position: relative;
+      z-index: 1;
+    }
+    .nanosi-problem__frame {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, rgba(248,250,252,0.96) 0%, rgba(255,255,255,0.98) 48%, rgba(240,249,255,0.96) 100%);
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(12px);
+    }
+    .nanosi-goal-switch {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .nanosi-goal-switch__card {
+      position: relative;
+      overflow: hidden;
+      padding: 1.25rem 1.35rem;
+      border-radius: 22px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+    }
+    .nanosi-goal-switch__card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+      transform: translateX(-140%);
+      animation: nanosiShine 5.5s ease-in-out infinite;
+    }
+    .nanosi-goal-switch__card span {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 0.45rem;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .nanosi-goal-switch__card strong {
+      display: block;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      line-height: 1.45;
+      color: #0f172a;
+    }
+    .nanosi-goal-switch__card--wrong {
+      background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
+    }
+    .nanosi-goal-switch__card--wrong span {
+      color: #c2410c;
+    }
+    .nanosi-goal-switch__card--right {
+      background: linear-gradient(135deg, #ecfeff 0%, #f8fafc 100%);
+    }
+    .nanosi-goal-switch__card--right span {
+      color: #0f766e;
+    }
+    .nanosi-goal-switch__arrow {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2a5fff 0%, #0ea5e9 100%);
+      color: #ffffff;
+      font-size: 1.35rem;
+      font-weight: 900;
+      box-shadow: 0 16px 30px rgba(42, 95, 255, 0.24);
+    }
+    .nanosi-problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .nanosi-problem-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 100%;
+      padding: 1.4rem;
+      border-radius: 22px;
+      background: #ffffff;
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+      transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+    .nanosi-problem-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -55% auto;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(42,95,255,0.16) 0%, rgba(42,95,255,0) 70%);
+      transition: transform 0.35s ease;
+    }
+    .nanosi-problem-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(59, 130, 246, 0.28);
+      box-shadow: 0 24px 48px rgba(42, 95, 255, 0.14);
+    }
+    .nanosi-problem-card:hover::after {
+      transform: scale(1.15);
+    }
+    .nanosi-problem-card__index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      margin-bottom: 1rem;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+      color: #1d4ed8;
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+    }
+    .nanosi-problem-card h3 {
+      margin-bottom: 0.65rem;
+      font-size: 1.08rem;
+      line-height: 1.5;
+      color: #0f172a;
+    }
+    .nanosi-problem-card p {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.85;
+      color: #475569;
+    }
+    .nanosi-problem-card strong {
+      color: #0f172a;
+    }
+    .nanosi-partner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
+      gap: 1rem;
+      align-items: center;
+      margin-top: 1.5rem;
+      padding: 1.35rem 1.45rem;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #0f172a 0%, #0f2d4d 55%, #0b4f5a 100%);
+      color: #e2e8f0;
+      box-shadow: 0 24px 54px rgba(15, 23, 42, 0.2);
+    }
+    .nanosi-partner__eyebrow {
+      display: inline-flex;
+      margin-bottom: 0.5rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #7dd3fc;
+    }
+    .nanosi-partner h3 {
+      margin-bottom: 0.55rem;
+      font-size: clamp(1.15rem, 2.1vw, 1.5rem);
+      line-height: 1.55;
+      color: #ffffff;
+    }
+    .nanosi-partner p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: rgba(226, 232, 240, 0.88);
+    }
+    .nanosi-partner__badge {
+      justify-self: end;
+      min-width: 200px;
+      padding: 1rem 1.1rem;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(125, 211, 252, 0.26);
+      text-align: center;
+    }
+    .nanosi-partner__badge strong {
+      display: block;
+      margin-top: 0.35rem;
+      font-size: 1.4rem;
+      line-height: 1.45;
+      color: #ffffff;
+    }
+    .nanosi-partner__badge span {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #7dd3fc;
+    }
+    @keyframes nanosiFloat {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -18px, 0); }
+    }
+    @keyframes nanosiShine {
+      0%, 55% { transform: translateX(-140%); }
+      100% { transform: translateX(140%); }
+    }
+    @media (max-width: 960px) {
+      .nanosi-goal-switch,
+      .nanosi-problem-grid,
+      .nanosi-partner {
+        grid-template-columns: 1fr;
+      }
+      .nanosi-goal-switch__arrow,
+      .nanosi-partner__badge {
+        justify-self: start;
+      }
+      .nanosi-goal-switch__arrow {
+        transform: rotate(90deg);
+      }
+    }
+    @media (max-width: 640px) {
+      .nanosi-problem__frame {
+        padding: 1.1rem;
+        border-radius: 22px;
+      }
+      .nanosi-problem-card,
+      .nanosi-goal-switch__card,
+      .nanosi-partner {
+        border-radius: 18px;
+      }
+      .nanosi-problem-card {
+        padding: 1.2rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .nanosi-problem__frame {
+        margin-top: 1.4rem;
+        padding: 0.95rem;
+        border-radius: 20px;
+      }
+      .nanosi-goal-switch {
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      .nanosi-goal-switch__card,
+      .nanosi-problem-card,
+      .nanosi-partner {
+        padding: 1rem;
+        border-radius: 16px;
+      }
+      .nanosi-goal-switch__card strong {
+        line-height: 1.5;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .nanosi-problem::before,
+      .nanosi-problem::after,
+      .nanosi-goal-switch__card::before,
+      .nanosi-goal-switch__arrow {
+        animation: none;
+      }
+      .nanosi-problem-card,
+      .nanosi-problem-card::after {
+        transition: none;
+      }
+      .nanosi-cost-chart .need-line,
+      .nanosi-cost-chart .need-dot,
+      .nanosi-cost-chart .waste-brace,
+      .nanosi-cost-chart .waste-copy,
+      .nanosi-cost-chart .fit-badge {
+        animation: none;
+      }
+    }
+    .nanosi-cost-chart .need-line {
+      stroke-dasharray: 7 5;
+      animation: nanosiNeedLine 4s linear infinite;
+    }
+    .nanosi-cost-chart .need-dot {
+      animation: nanosiNeedDot 2.2s ease-in-out infinite;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    .nanosi-cost-chart .waste-brace {
+      animation: nanosiWasteBrace 2.4s ease-in-out infinite;
+    }
+    .nanosi-cost-chart .waste-copy {
+      animation: nanosiWasteCopy 2.4s ease-in-out infinite;
+    }
+    .nanosi-cost-chart .fit-badge {
+      animation: nanosiFitBadge 2.6s ease-in-out infinite;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    @keyframes nanosiNeedLine {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: -48; }
+    }
+    @keyframes nanosiNeedDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.45); opacity: 0.85; }
+    }
+    @keyframes nanosiWasteBrace {
+      0%, 100% { opacity: 0.75; }
+      50% { opacity: 1; }
+    }
+    @keyframes nanosiWasteCopy {
+      0%, 100% { opacity: 0.82; }
+      50% { opacity: 1; }
+    }
+    @keyframes nanosiFitBadge {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .nanosi-cta {
+      text-align: left;
+    }
+    .nanosi-cta__grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.9fr);
+      gap: 1.5rem;
+      align-items: center;
+      margin-top: 1.6rem;
+    }
+    .nanosi-cta__notes {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 1.2rem;
+    }
+    .nanosi-cta__note {
+      padding: 0.95rem 1rem;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(245,245,248,0.84);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+    .nanosi-cta__note strong {
+      color: #fff;
+    }
+    .nanosi-cta__visual {
+      position: relative;
+      overflow: hidden;
+      min-height: 100%;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .nanosi-cta__visual img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .nanosi-cta__visual::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 42%;
+      background: linear-gradient(180deg, rgba(11,29,70,0) 0%, rgba(11,29,70,0.82) 100%);
+    }
+    .nanosi-cta__caption {
+      position: absolute;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 1;
+      color: #fff;
+      font-size: 0.82rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 900px) {
+      .nanosi-cta__grid {
+        grid-template-columns: 1fr;
+      }
+      .nanosi-cta__visual {
+        order: -1;
+        max-width: 560px;
+      }
+    }
+    @media (max-width: 768px) {
+      .nanosi-chart-wrap {
+        padding: 1rem 0.85rem 1rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+      }
+      .nanosi-cost-chart {
+        width: 700px;
+        min-width: 700px;
+        max-width: none;
+      }
+      .nanosi-cta__visual {
+        width: 100%;
+        max-width: none;
+      }
+    }
+    @media (max-width: 480px) {
+      .nanosi-chart-wrap {
+        margin: 2rem -0.2rem 0;
+        padding: 0.9rem 0.7rem 1rem;
+        border-radius: 16px;
+      }
+      .nanosi-cost-chart {
+        width: 760px;
+        min-width: 760px;
+      }
+      .nanosi-cta__visual {
+        border-radius: 18px;
+      }
+      .nanosi-cta__caption {
+        left: 0.85rem;
+        right: 0.85rem;
+        bottom: 0.85rem;
+        font-size: 0.78rem;
+        line-height: 1.6;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-wrapper">
+        <a href="../index.html">
+          <img src="../assets/site-logo-nanofactory.png" alt="nanoFACTORY" class="logo-img" />
+        </a>
+      </div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle__bar"></span>
+        <span class="sr-only">メニューを開閉</span>
+      </button>
+      <nav id="site-nav" class="nav">
+        <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
+        <a class="nav__link nav__link--products" href="../nanostep-lp/">作業管理</a>
+        <a class="nav__link nav__link--products" href="../nanosi-lp/">AI検査</a>
+        <a class="nav__link nav__link--products" href="../nanoguard-lp/">AI監視カメラ</a>
+        <a class="nav__link nav__link--products" href="../sanicam-lp/hand.html">手指衛生</a>
+        <a class="nav__link" href="../news/">ニュース・事例</a>
+        <a class="nav__link" href="../company/">会社情報</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="lp-hero lp-hero--teal">
+    <div class="lp-hero__inner container">
+      <div class="lp-kicker">nanoSI — 検査ライン無人化</div>
+      <h1 class="lp-h1">高い検査装置を入れたのに、<br>なぜかラインに人が必要なまま——</h1>
+      <p class="lp-lead">
+        問題は装置の性能ではありません。<br>
+        「本当の無人化」まで見据えて導入後も支援できるパートナーがいないことが原因です。<br>
+        nanoFACTORYは自社工場での実証済み技術で、PoCから完全無人化まで現場を止めずに進めます。
+      </p>
+      <div class="lp-btns">
+        <a class="cta-button" href="#contact">まずPoC相談をする</a>
+        <a class="cta-button cta-button--outline" href="#why">なぜ任せられるか</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 問題提起 -->
+  <section class="lp-section lp-section--white nanosi-problem">
+    <div class="container">
+      <div class="lp-kicker fade-up">こんな状況に心当たりはありませんか</div>
+      <h2 class="fade-up delay-1">「検査装置を入れたのに、人が減らない」<br>——その本当の原因</h2>
+      <p class="lead-text fade-up delay-1">起きている問題はバラバラに見えても、根っこはひとつです。<strong>「検査装置を買うこと」</strong>が目的になった瞬間、無人化に必要な設計と運用のサポートが抜け落ちます。</p>
+      <div class="nanosi-problem__frame fade-up delay-1">
+        <div class="nanosi-goal-switch">
+          <div class="nanosi-goal-switch__card nanosi-goal-switch__card--wrong">
+            <span>Wrong Goal</span>
+            <strong>「検査装置を買う」ことが目的になっている</strong>
+          </div>
+          <div class="nanosi-goal-switch__arrow" aria-hidden="true">→</div>
+          <div class="nanosi-goal-switch__card nanosi-goal-switch__card--right">
+            <span>Right Goal</span>
+            <strong>本来の目的は「検査ラインの無人化」を実現すること</strong>
+          </div>
+        </div>
+        <div class="nanosi-problem-grid">
+          <article class="nanosi-problem-card fade-up">
+            <div class="nanosi-problem-card__index">01</div>
+            <h3>必要以上の装置を買い、<br>投資だけが先に膨らむ</h3>
+            <p><strong>無人化に必要な全体設計ではなく装置選定だけで判断する</strong>ため、現場に対して過剰スペックになりやすく、ROIが合わず次の投資判断も止まります。</p>
+          </article>
+          <article class="nanosi-problem-card fade-up delay-1">
+            <div class="nanosi-problem-card__index">02</div>
+            <h3>装置は動いても、<br>ライン運用から人が外れない</h3>
+            <p><strong>精度だけでなく照明・治具・搬送・判定フローまで一体で詰めない</strong>と、誤検知対応や目視確認が残り、結局人が張り付く運用になります。</p>
+          </article>
+          <article class="nanosi-problem-card fade-up delay-2">
+            <div class="nanosi-problem-card__index">03</div>
+            <h3>PoC止まりになり、<br>導入後の支援が続かない</h3>
+            <p><strong>「導入して終わり」の体制では、製品変更や精度低下に追従できません。</strong> 無人化をゴールに据えた継続サポートがないため、本導入まで進まず現場に負債が残ります。</p>
+          </article>
+        </div>
+        <div class="nanosi-partner fade-up delay-2">
+          <div>
+            <div class="nanosi-partner__eyebrow">Partner For Automation</div>
+            <h3>必要なのは、装置を売る業者ではなく<br>「検査ラインの無人化」まで見据えて支援できるパートナーです。</h3>
+            <p>nanoFACTORYは、PoCの成立だけで終わりません。現場要件の整理、AIとメカの一体設計、立ち上げ後の改善までサポートし、ラインから人を外していく運用づくりまで支援します。</p>
+          </div>
+          <div class="nanosi-partner__badge">
+            <span>Goal</span>
+            <strong>装置導入<br>ではなく<br>無人化達成</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 信頼の根拠 -->
+  <section id="why" class="lp-section lp-section--surface">
+    <div class="container">
+      <div class="lp-kicker">なぜnanoFACTORYに任せられるか</div>
+      <h2>原点は、創業者が向き合った実家の製造現場。<br>だから現場の現実を知っている。</h2>
+      <p class="lead-text">「なぜ高い装置を入れても人が減らないのか」——この問いはnanoFACTORY創業者が、実家の製造現場で直面したリアルな課題でした。買う側・使う側として現場の苦労を知り尽くしているから、本当に機能するシステムを設計できます。</p>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-card__num">原点</div>
+          <h3>製造現場で培った実践知</h3>
+          <p>創業者自身が製造現場で、検査工程の無人化に向き合ってきた経験が土台にあります。高額装置の失敗も含め「買う側」として経験した当事者だからこそ、現場で本当に使えるシステムを提案できます。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__num">精度</div>
+          <h3>医薬品レベルでの採用実績</h3>
+          <p>品質基準の厳しい医薬品の検査工程での実績があります。精度要求の高い現場に対応できる技術力の証明です。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__num">技術</div>
+          <h3>AI開発もメカ設計も自社一貫</h3>
+          <p>画像認識AIとメカニカル設計の両方を社内に持つSIは稀少です。カメラ・レンズ・照明・治具・設置まで、一社で最適解を出せます。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__num">コスト</div>
+          <h3>必要スペックだけ選定、だからリーズナブル</h3>
+          <p>機器選定も自社で行うため、「言われるまま高スペックを買う」が起きません。現場の要件に対して最小コストの構成を提案します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 他社との比較 -->
+  <section class="lp-section lp-section--white">
+    <div class="container">
+      <div class="lp-kicker">他社SIとの違い</div>
+      <h2>「AI × メカ × 運用」を一社で担えるから、<br>責任の穴が生まれない</h2>
+      <p class="lead-text">一般的なSIはソフトウェアかハードウェアのどちらかに偏りがちです。nanoFACTORYはAI開発・機器選定・メカ設計・現場設置・保守をすべて自社で完結します。</p>
+      <div class="nanosi-compare">
+        <div class="nanosi-compare__col nanosi-compare__col--other">
+          <h3>一般的なSI・装置メーカー</h3>
+          <ul>
+            <li>既製品装置＋標準ソフトが前提、カスタムは別途高額</li>
+            <li>カメラ・照明・治具は「別途手配してください」</li>
+            <li>導入後の精度低下は保守契約外で動いてくれない</li>
+            <li>製品変更のたびに長期見積もり・高額追加費用</li>
+            <li>問題が出ると責任の所在が複数社にまたがり曖昧</li>
+          </ul>
+        </div>
+        <div class="nanosi-compare__col nanosi-compare__col--nano">
+          <h3>nanoFACTORY（nanoSI）</h3>
+          <ul>
+            <li>AI・メカ・ソフト・設置を一社でワンストップ設計</li>
+            <li>カメラ〜治具まで現場に最適なスペックを自社選定</li>
+            <li>運用後の精度維持・改善まで継続的に対応</li>
+            <li>AIの再学習で製品変更に短期間・低コストで対応</li>
+            <li>一社完結だから責任が明確、問題解決が速い</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- コスト最適化 -->
+  <section class="lp-section lp-section--surface">
+    <div class="container">
+      <div class="lp-kicker">なぜリーズナブルなのか</div>
+      <h2>「一律高スペック＋複数業者」という<br>コスト構造の無駄を、根本から解消する</h2>
+      <p class="lead-text">
+        一般的なSIや装置メーカーは、各工程に必要なスペックがバラバラでも「一律で高スペックな製品」を組み合わせます。さらに複数ベンダーへの発注が重なり、調整コストも増加します。nanoFACTORYは各工程に本当に必要なスペックだけを自社で選定・開発し、システム全体をワンストップで渡します。
+      </p>
+
+      <!-- コスト比較チャート -->
+      <div class="nanosi-chart-wrap">
+        <svg class="nanosi-cost-chart" viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="コスト構造の違いを示すイメージ図">
+          <title>コスト構造の違い：一般的なSI vs nanoFACTORY</title>
+
+          <!-- 背景 -->
+          <rect width="700" height="250" fill="#ffffff" rx="12" stroke="#e2e8f0"/>
+
+          <!-- タイトル -->
+          <text x="350" y="22" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="800" fill="#0f172a">コスト構造の違い（イメージ）</text>
+
+          <!-- 左チャートラベル -->
+          <rect x="22" y="32" width="12" height="12" fill="#fb923c" rx="2"/>
+          <text x="38" y="42" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#b45309">一般的なSI・装置メーカー</text>
+
+          <!-- 右チャートラベル -->
+          <rect x="372" y="32" width="12" height="12" fill="#3b82f6" rx="2"/>
+          <text x="388" y="42" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#1d4ed8">nanoFACTORY</text>
+
+          <!-- 中央区切り線 -->
+          <line x1="348" y1="30" x2="348" y2="210" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+          <!-- ======== 左チャート（一律高スペック） ======== -->
+          <line x1="22" y1="195" x2="334" y2="195" stroke="#cbd5e1" stroke-width="1.5"/>
+
+          <!-- オレンジのバー5本：すべて均一に高い（y=55、h=140） -->
+          <!-- bar width=36, centers: 51,107,163,219,275 -->
+          <rect x="33"  y="55" width="36" height="140" fill="#fb923c" rx="3" opacity="0.85"/>
+          <rect x="89"  y="55" width="36" height="140" fill="#fb923c" rx="3" opacity="0.85"/>
+          <rect x="145" y="55" width="36" height="140" fill="#fb923c" rx="3" opacity="0.85"/>
+          <rect x="201" y="55" width="36" height="140" fill="#fb923c" rx="3" opacity="0.85"/>
+          <rect x="257" y="55" width="36" height="140" fill="#fb923c" rx="3" opacity="0.85"/>
+
+          <!-- 実際に必要なスペックライン（緑の点線） -->
+          <!-- actual need heights: 90,52,42,62,18 → tops: 105,143,153,133,177 -->
+          <polyline class="need-line" points="51,105 107,143 163,153 219,133 275,177"
+            fill="none" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="5,3"/>
+          <circle class="need-dot" cx="51"  cy="105" r="3.5" fill="#16a34a"/>
+          <circle class="need-dot" cx="107" cy="143" r="3.5" fill="#16a34a"/>
+          <circle class="need-dot" cx="163" cy="153" r="3.5" fill="#16a34a"/>
+          <circle class="need-dot" cx="219" cy="133" r="3.5" fill="#16a34a"/>
+          <circle class="need-dot" cx="275" cy="177" r="3.5" fill="#16a34a"/>
+
+          <!-- 「無駄なコスト」ブレース（3番目のバーに対して） -->
+          <line class="waste-brace" x1="332" y1="57"  x2="332" y2="151" stroke="#ef4444" stroke-width="2"/>
+          <line class="waste-brace" x1="163" y1="57"  x2="333" y2="57"  stroke="#ef4444" stroke-width="1.1" stroke-dasharray="3,2"/>
+          <line class="waste-brace" x1="163" y1="151" x2="333" y2="151" stroke="#ef4444" stroke-width="1.1" stroke-dasharray="3,2"/>
+          <rect class="waste-copy" x="280" y="82" width="48" height="34" rx="8" fill="#fef2f2" stroke="#fecaca"/>
+          <text class="waste-copy" x="304" y="95" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.8" fill="#dc2626" font-weight="800">無駄な</text>
+          <text class="waste-copy" x="304" y="107" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.8" fill="#dc2626" font-weight="800">コスト</text>
+          <text class="waste-copy" x="304" y="119" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10.5" fill="#dc2626">↕</text>
+
+          <!-- X軸ラベル（左） -->
+          <text x="51"  y="207" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.5" fill="#64748b">カメラ</text>
+          <text x="107" y="207" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.5" fill="#64748b">照明・治具</text>
+          <text x="163" y="207" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.5" fill="#64748b">AI開発</text>
+          <text x="219" y="207" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.5" fill="#64748b">システム</text>
+          <text x="275" y="207" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.5" fill="#64748b">多品種対応</text>
+
+          <!-- 合計ラベル（左） -->
+          <text x="178" y="228" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9.5" fill="#b45309" font-weight="700">▲ 合計コスト大（過剰スペックが積み重なる）</text>
+
+          <!-- ======== 右チャート（最適スペック） ======== -->
+          <line x1="362" y1="195" x2="686" y2="195" stroke="#cbd5e1" stroke-width="1.5"/>
+
+          <!-- 青のバー5本：高さがバラバラ＝必要分だけ -->
+          <!-- bar centers: 383,439,495,551,607 （左+350-18+9=... ） bar lefts: 365+18=383→ 33+350=383, etc. -->
+          <rect x="383" y="105" width="36" height="90"  fill="#3b82f6" rx="3" opacity="0.9"/>
+          <rect x="439" y="143" width="36" height="52"  fill="#3b82f6" rx="3" opacity="0.9"/>
+          <rect x="495" y="153" width="36" height="42"  fill="#3b82f6" rx="3" opacity="0.9"/>
+          <rect x="551" y="133" width="36" height="62"  fill="#3b82f6" rx="3" opacity="0.9"/>
+          <rect x="607" y="177" width="36" height="18"  fill="#3b82f6" rx="3" opacity="0.9"/>
+
+          <!-- nanoFACTORY側にも必要スペック基準線を表示 -->
+          <polyline class="need-line" points="401,105 457,143 513,153 569,133 625,177"
+            fill="none" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="5,3"/>
+          <circle class="need-dot" cx="401" cy="105" r="3.5" fill="#16a34a"/>
+          <circle class="need-dot" cx="457" cy="143" r="3.5" fill="#16a34a"/>
+          <circle class="need-dot" cx="513" cy="153" r="3.5" fill="#16a34a"/>
+          <circle class="need-dot" cx="569" cy="133" r="3.5" fill="#16a34a"/>
+          <circle class="need-dot" cx="625" cy="177" r="3.5" fill="#16a34a"/>
+
+          <!-- 凡例：緑点線 -->
+          <line class="need-line" x1="538" y1="58" x2="552" y2="58" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="5,3"/>
+          <text x="558" y="62" font-family="system-ui,sans-serif" font-size="9" fill="#16a34a" font-weight="800">実際に必要なスペック</text>
+
+          <!-- 「定額」バッジ（多品種対応バーの上） -->
+          <rect class="fit-badge" x="602" y="161" width="46" height="14" rx="3" fill="#dbeafe" stroke="#3b82f6" stroke-width="1"/>
+          <text class="fit-badge" x="625" y="172" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.5" fill="#1d4ed8" font-weight="700">定額</text>
+
+          <!-- X軸ラベル（右） -->
+          <text x="401" y="207" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.5" fill="#64748b">カメラ</text>
+          <text x="457" y="207" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.5" fill="#64748b">照明・治具</text>
+          <text x="513" y="207" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.5" fill="#64748b">AI開発</text>
+          <text x="569" y="207" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.5" fill="#64748b">システム</text>
+          <text x="625" y="207" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8.5" fill="#64748b">多品種対応</text>
+
+          <!-- 合計ラベル（右） -->
+          <text x="524" y="228" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9.5" fill="#1d4ed8" font-weight="700">◎ 合計コスト最小（必要スペックだけ積み上げる）</text>
+
+          <!-- イメージ注記 -->
+          <text x="696" y="247" text-anchor="end" font-family="system-ui,sans-serif" font-size="7.5" fill="#cbd5e1">※イメージ図</text>
+        </svg>
+      </div>
+
+      <!-- なぜ最適化できるか：技術の幅 -->
+      <div class="nanosi-tech-section">
+        <h3>選択肢が多いから、各工程に最適解を出せる</h3>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-card__num">01</div>
+            <h3>外部装置も自社AIカメラも、最適な手段を選べる</h3>
+            <p>外部の画像検査装置を組み合わせる選択も、自社開発のAIカメラを使ってコストを抑える選択もできます。特定の製品ありきではなく、現場に合う構成を選べるから最適化できます。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__num">02</div>
+            <h3>AI学習も自社完結、外注ゼロ</h3>
+            <p>モデル開発・学習・チューニングをすべて内製。外注コストが発生せず、製品変更時の再学習も迅速・低コストで対応できます。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__num">03</div>
+            <h3>不良画像生成技術で学習データを補完</h3>
+            <p>実際の不良品サンプルが少ない場合でも、独自の不良画像生成技術でAI学習データを補完。立ち上げ期間の短縮とコスト削減を実現します。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__num">04</div>
+            <h3>治具・設置からシステム一式で納品</h3>
+            <p>メカ設計・治具製作・現場設置・ソフトウェア統合まで全部繋げてシステムとして渡します。ベンダー間の「うちの範囲外」が発生しません。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 定額ソリューション強調 -->
+      <div class="nanosi-fixedprice">
+        <div class="nanosi-fixedprice__icon">💡</div>
+        <div class="nanosi-fixedprice__body">
+          <h3>多品種少量・不良種類が多くても、追加料金なし</h3>
+          <p>他社では品種が増えるたびに「再学習費用」「追加ライセンス」が発生しがちです。nanoFACTORYは定額ソリューション設計を基本とし、多品種少量生産や不良の種類が多いケースでも追加コストが膨らむ心配がありません。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 導入ステップ -->
+  <section class="lp-section lp-section--tinted">
+    <div class="container">
+      <div class="lp-kicker">スモールスタートの進め方</div>
+      <h2>PoCから完全無人化まで、<br>現場を止めずに段階的に進める</h2>
+      <p class="lead-text">一気に全ラインを切り替えるリスクは取りません。1工程・1ラインで効果を実証し、確信を持って展開します。</p>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-step__icon">🔬</div>
+          <h3>STEP 1<br>PoC（概念検証）</h3>
+          <p>1工程・最小投資で検査AIの精度と実現性を検証。「できる・できない」を現場データで確認します。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step__icon">▶️</div>
+          <h3>STEP 2<br>パイロット導入</h3>
+          <p>1ラインで本格稼働。精度・運用コスト・人員削減効果を実績として積み上げます。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step__icon">📈</div>
+          <h3>STEP 3<br>本導入・拡張</h3>
+          <p>実証されたシステムを複数ライン・工程に展開。既存設備との統合も含め順次スケールアップします。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step__icon">🏭</div>
+          <h3>STEP 4<br>完全無人化</h3>
+          <p>蓄積データで継続改善し、検査ラインから人を外した完全無人化を実現します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 対応業種 -->
+  <section class="lp-section lp-section--white">
+    <div class="container">
+      <div class="lp-kicker">対応実績のある業種・検査対象</div>
+      <h2>精度要求の厳しい現場での実績が、<br>対応力の証明</h2>
+      <p class="lead-text">目薬・医薬品レベルの基準に対応できる技術力があるため、一般的な製造現場の検査要件には余裕を持って対応できます。</p>
+      <div class="nanosi-industries">
+        <span class="nanosi-industry-tag">💊 目薬・医薬品</span>
+        <span class="nanosi-industry-tag">🍱 食品・飲料</span>
+        <span class="nanosi-industry-tag">⚙️ 精密部品</span>
+        <span class="nanosi-industry-tag">🔌 電子機器・基板</span>
+        <span class="nanosi-industry-tag">📦 パッケージ・印字検査</span>
+        <span class="nanosi-industry-tag">🏭 自動車部品</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 業種別活用シーン -->
+  <section class="lp-section lp-section--white">
+    <div class="container">
+      <div class="lp-kicker">業種別活用シーン</div>
+      <h2>製造業・医療・飲食——検査ニーズのある現場すべてに</h2>
+      <p class="lead-text">nanoSIの「AI×メカ一体SI」は業種を問いません。あなたの現場の検査課題に合った活用イメージをご確認ください。</p>
+      <div class="tab-group">
+        <div class="usecase-tabs">
+          <button class="usecase-tab is-active" data-tab="mfg">🏭 製造業</button>
+          <button class="usecase-tab" data-tab="med">🏥 医療機関</button>
+          <button class="usecase-tab" data-tab="food">🍽️ 飲食店・食品工場</button>
+        </div>
+        <div class="usecase-panel is-active" data-panel="mfg">
+          <ul class="usecase-list">
+            <li class="usecase-item">
+              <h4>外観検査の完全自動化</h4>
+              <p>傷・汚れ・寸法外れ・欠け・色ムラをAIカメラが全数検査。目視検査員を配置し続けるコストを削減し、検査精度のばらつきも排除します。</p>
+            </li>
+            <li class="usecase-item">
+              <h4>多品種対応はAI再学習のみで</h4>
+              <p>製品変更のたびに装置を買い替える必要はありません。AIの再学習のみで新製品に対応。段取り変えのコストと工数を大幅に削減できます。</p>
+            </li>
+            <li class="usecase-item">
+              <h4>精密部品・医薬品レベルの高精度検査</h4>
+              <p>目薬・医薬品・電子部品など微細な異物・欠陥にも対応。高精度な検査要件を、大手装置ベンダーより低コストで実現します。</p>
+            </li>
+          </ul>
+        </div>
+        <div class="usecase-panel" data-panel="med">
+          <ul class="usecase-list">
+            <li class="usecase-item">
+              <h4>薬品・医療器具のセット確認</h4>
+              <p>処方薬の種類・数量の確認や手術器具のセットチェックをAIカメラで自動化。ヒューマンエラーを排除し、患者安全を高めます。</p>
+            </li>
+            <li class="usecase-item">
+              <h4>医療材料の品質・期限チェック</h4>
+              <p>滅菌パックの破損・シール不良・使用期限切れをAIが自動検出。目視チェックの漏れをなくし、医療事故リスクを低減します。</p>
+            </li>
+            <li class="usecase-item">
+              <h4>現場チェックのデータ化・記録</h4>
+              <p>各チェック作業の実施記録を自動蓄積。監査・品質管理委員会への報告データとして即活用でき、チェックシートの手書き記録も不要になります。</p>
+            </li>
+          </ul>
+        </div>
+        <div class="usecase-panel" data-panel="food">
+          <ul class="usecase-list">
+            <li class="usecase-item">
+              <h4>提供品の品質・盛り付けチェック</h4>
+              <p>料理のビジュアル・盛り付け量・異物混入をAIが検査してクレームを事前防止。「提供基準に合っているか」を客観的データで管理します。</p>
+            </li>
+            <li class="usecase-item">
+              <h4>食材の品質管理・規格外品排除</h4>
+              <p>納品された食材の鮮度・外観・規格をAIカメラが自動確認。規格外品の混入を排除し、仕入れ管理の工数と廃棄コストを削減します。</p>
+            </li>
+            <li class="usecase-item">
+              <h4>セントラルキッチン・食品ラインの省人化</h4>
+              <p>大量生産ラインでのAI全数検査導入で、品質担保と省人化を同時達成。製品切り替えへの対応も柔軟で、多品種の食品工場に最適です。</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="section cta-section nanosi-cta">
+    <div class="container">
+      <h2>導入検討の入口として、まずは資料請求か無料サンプル評価から</h2>
+      <p class="lead-text">
+        導入事例や進め方を知りたい場合は資料請求、<br>
+        自社ワークの適合性を見たい場合は無料サンプル評価をご活用ください。
+      </p>
+      <div class="nanosi-cta__grid">
+        <div>
+          <div class="nanosi-cta__notes">
+            <div class="nanosi-cta__note"><strong>事例は資料請求で。</strong> 導入イメージや進め方を、社内共有しやすい形で確認できます。</div>
+            <div class="nanosi-cta__note"><strong>適合性は無料サンプル評価で。</strong> 対象ワークや画像をもとに、まず検査可能性の方向性を見られます。</div>
+          </div>
+          <div class="cta-buttons">
+            <a class="cta-button" id="nanosi-mail-btn" href="#">資料請求・無料サンプル評価を問い合わせる</a>
+            <a class="cta-button cta-button--outline" href="../products-services/">製品一覧に戻る</a>
+          </div>
+        </div>
+        <div class="nanosi-cta__visual">
+          <img src="../assets/homepage-tech-high-precision-inspection-concept.png" alt="検査工程の評価イメージ" loading="lazy" />
+          <div class="nanosi-cta__caption">導入事例の確認と、サンプルでの見立て。その両方から検討を始められます。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; nanoFACTORY Co.</p>
+    </div>
+  </footer>
+
+  <script>
+    const email = "contact@nano-factory.jp";
+    const btn = document.getElementById("nanosi-mail-btn");
+    if (btn) btn.href = `mailto:${email}`;
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html>
