@@ -35,7 +35,7 @@
       </button>
       <nav id="site-nav" class="nav">
         <a class="nav__link" href="#why-1">nanoFACTORYとは</a>
-        <a class="nav__link nav__link--products" href="nanostep-lp/">作業管理</a>
+        <a class="nav__link nav__link--products" href="nanostep-lp/">作業認識AI</a>
         <a class="nav__link nav__link--products" href="nanosi-lp/">AI検査</a>
         <a class="nav__link nav__link--products" href="nanoguard-lp/">AI監視カメラ</a>
         <a class="nav__link nav__link--products" href="sanicam-lp/hand.html">手指衛生</a>
@@ -85,50 +85,250 @@
     <div class="ind-solution">
       <div class="ind-solution__inner">
         <div class="ind-solution__visual ind-vis--step">
-          <img src="assets/homepage-solution-manufacturing-ai-work-management.png" alt="AI作業管理・教育システム" loading="lazy" />
+          <img src="assets/homepage-solution-manufacturing-ai-work-management.png" alt="nanoSTEP 作業認識AI" loading="lazy" />
+          <div class="vsg-slider" data-vsg-slider>
+            <div class="vsg-slider__inner">
+              <div class="vsg-slider__track">
+                <div class="vsg-slide is-active" data-slide="0">
+                  <div class="vsg-slide__icon">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="7" y="14" width="18" height="13" rx="2"/>
+                      <path d="M11 14 v-3 a5 5 0 0 1 10 0 v3"/>
+                      <circle cx="16" cy="20" r="1.6"/>
+                      <line x1="16" y1="21.6" x2="16" y2="24"/>
+                    </svg>
+                  </div>
+                  <div class="vsg-slide__counter">01 / 04</div>
+                  <h4 class="vsg-slide__title">ノウハウ属人化</h4>
+                  <p class="vsg-slide__desc">退職・異動でベテランの暗黙知が失われ、品質再現が崩れる</p>
+                </div>
+                <div class="vsg-slide" data-slide="1">
+                  <div class="vsg-slide__icon">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="16" cy="16" r="11"/>
+                      <path d="M5 16 h22 M16 5 c-3.5 3.5 -5 7 -5 11 s1.5 7.5 5 11 c3.5 -3.5 5 -7 5 -11 s-1.5 -7.5 -5 -11"/>
+                    </svg>
+                  </div>
+                  <div class="vsg-slide__counter">02 / 04</div>
+                  <h4 class="vsg-slide__title">外国人教育</h4>
+                  <p class="vsg-slide__desc">言葉の壁で実習生の戦力化に時間がかかる</p>
+                </div>
+                <div class="vsg-slide" data-slide="2">
+                  <div class="vsg-slide__icon">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="13" y="22" width="6" height="5" rx="1"/>
+                      <line x1="16" y1="22" x2="10" y2="10"/>
+                      <circle cx="10" cy="10" r="2"/>
+                      <line x1="10" y1="10" x2="6" y2="6"/>
+                      <line x1="10" y1="10" x2="13" y2="6"/>
+                      <line x1="6" y1="27" x2="26" y2="27"/>
+                    </svg>
+                  </div>
+                  <div class="vsg-slide__counter">03 / 04</div>
+                  <h4 class="vsg-slide__title">自動化</h4>
+                  <p class="vsg-slide__desc">機械化したいが、人の動きが標準化できない</p>
+                </div>
+                <div class="vsg-slide" data-slide="3">
+                  <div class="vsg-slide__icon">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="16" y1="3" x2="16" y2="6"/>
+                      <circle cx="16" cy="2.5" r="1.2"/>
+                      <rect x="9" y="6" width="14" height="11" rx="2.5"/>
+                      <circle cx="13" cy="11" r="1.5"/>
+                      <circle cx="19" cy="11" r="1.5"/>
+                      <line x1="12" y1="14.5" x2="20" y2="14.5"/>
+                      <line x1="7" y1="11" x2="9" y2="11"/>
+                      <line x1="23" y1="11" x2="25" y2="11"/>
+                      <rect x="11" y="17" width="10" height="9" rx="1.5"/>
+                      <line x1="11" y1="22" x2="6" y2="22"/>
+                      <line x1="21" y1="22" x2="26" y2="22"/>
+                    </svg>
+                  </div>
+                  <div class="vsg-slide__counter">04 / 04</div>
+                  <h4 class="vsg-slide__title">フィジカルAI・ロボット</h4>
+                  <p class="vsg-slide__desc">蓄積データから人の動きを機械が学び、作業を代替する</p>
+                </div>
+              </div>
+            </div>
+            <div class="vsg-slider__dots">
+              <button class="vsg-dot is-active" data-goto="0" aria-label="スライド 1"></button>
+              <button class="vsg-dot" data-goto="1" aria-label="スライド 2"></button>
+              <button class="vsg-dot" data-goto="2" aria-label="スライド 3"></button>
+              <button class="vsg-dot" data-goto="3" aria-label="スライド 4"></button>
+            </div>
+          </div>
         </div>
         <div class="ind-solution__content">
           <span class="ind-solution__num">01</span>
-          <span class="ind-solution__badge">AI作業管理・教育システム</span>
-          <h3 class="ind-solution__headline">人手不足・人材流動化が止まらない。<br>ノウハウ管理と教育コストをどう解決するか</h3>
+          <a class="ind-solution__badge ind-solution__badge--link" href="nanostep-lp/">作業認識AI</a>
+          <h3 class="ind-solution__headline">人手不足・人材流動化を、<br>「作業をデータ化するAIエージェント」で解く</h3>
           <p class="ind-solution__quote">「主力職人が定年で3人抜けた。引き継ぎはしたつもりだったが、その後クレームが増えた。誰の、どの工程が原因かすら分からない。」</p>
-          <p class="ind-solution__body">既存の手順書をAIに登録するだけで、現場カメラが作業をリアルタイム採点します。誰が・どのステップを・何回ミスしたかがデータに残るため、「感覚で教える」から「データで育てる」に変わります。ベテラン不在でも標準品質を維持できる構造を、設備追加なしで構築できます。</p>
-          <a class="ind-solution__cta" href="nanostep-lp/">このソリューションの詳細を見る</a>
+          <p class="ind-solution__body">独自AIエージェント "VSG3.0" が手順書と現場をつなぎ、ノウハウのデータ化からフィジカルAIまで段階的に展開します。</p>
         </div>
       </div>
     </div>
 
-    <!-- 02 VSG -->
     <!-- 02 nanoSI -->
     <div class="ind-solution ind-solution--rev">
       <div class="ind-solution__inner">
         <div class="ind-solution__visual ind-vis--si">
           <img src="assets/homepage-solution-manufacturing-ai-inspection-automation.png" alt="AI検査ライン自動化" loading="lazy" />
+          <div class="vsg-slider" data-vsg-slider>
+            <div class="vsg-slider__inner">
+              <div class="vsg-slider__track">
+                <div class="vsg-slide is-active" data-slide="0">
+                  <div class="vsg-slide__icon">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="14" y="6" width="14" height="20" rx="2"/>
+                      <line x1="17" y1="11" x2="25" y2="11"/>
+                      <line x1="17" y1="15" x2="25" y2="15"/>
+                      <line x1="17" y1="19" x2="25" y2="19"/>
+                      <circle cx="7" cy="9" r="2.5"/>
+                      <path d="M4 22 L4 14 Q4 12 7 12 Q10 12 10 14 L10 22"/>
+                      <line x1="2" y1="27" x2="30" y2="27"/>
+                    </svg>
+                  </div>
+                  <div class="vsg-slide__counter">01 / 04</div>
+                  <h4 class="vsg-slide__title">装置への張り付き</h4>
+                  <p class="vsg-slide__desc">検査装置を入れても、結局人が付き添うことから抜け出せない</p>
+                </div>
+                <div class="vsg-slide" data-slide="1">
+                  <div class="vsg-slide__icon">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 11 v15 a2 2 0 0 0 2 2 h20 a2 2 0 0 0 2 -2 V13 a2 2 0 0 0 -2 -2 H15 L12 8 H6 a2 2 0 0 0 -2 2 z"/>
+                      <circle cx="11" cy="19" r="1.5"/>
+                      <circle cx="16" cy="19" r="1.5"/>
+                      <circle cx="21" cy="19" r="1.5"/>
+                      <path d="M9.5 23.5 l1 1 2 -2"/>
+                      <path d="M19.5 23.5 l1 1 2 -2"/>
+                    </svg>
+                  </div>
+                  <div class="vsg-slide__counter">02 / 04</div>
+                  <h4 class="vsg-slide__title">学習データ作り</h4>
+                  <p class="vsg-slide__desc">良品・不良品サンプル収集とラベル付けが大きな負担</p>
+                </div>
+                <div class="vsg-slide" data-slide="2">
+                  <div class="vsg-slide__icon">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="5" width="11" height="10" rx="1"/>
+                      <rect x="18" y="5" width="11" height="10" rx="1"/>
+                      <rect x="3" y="18" width="11" height="10" rx="1"/>
+                      <rect x="18" y="18" width="11" height="10" rx="1"/>
+                      <line x1="6" y1="10" x2="11" y2="10"/>
+                      <line x1="21" y1="10" x2="26" y2="10"/>
+                      <circle cx="8.5" cy="23" r="2"/>
+                      <path d="M21 25 l2 -2 3 3"/>
+                    </svg>
+                  </div>
+                  <div class="vsg-slide__counter">03 / 04</div>
+                  <h4 class="vsg-slide__title">多品種小ロット</h4>
+                  <p class="vsg-slide__desc">品種切替のたびにパラメータ再調整、人手が抜けない</p>
+                </div>
+                <div class="vsg-slide" data-slide="3">
+                  <div class="vsg-slide__icon">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="12" y="5" width="9" height="6" rx="1"/>
+                      <path d="M7 27 L7 17 Q7 14 10 14 L19 14 Q23 14 23 18 L23 22 L25 22 Q27 22 27 24 L27 27 z"/>
+                      <line x1="3" y1="30" x2="29" y2="30"/>
+                    </svg>
+                  </div>
+                  <div class="vsg-slide__counter">04 / 04</div>
+                  <h4 class="vsg-slide__title">周辺工程の手作業</h4>
+                  <p class="vsg-slide__desc">搬送・仕分け・最終確認が残り、自動化が完成しない</p>
+                </div>
+              </div>
+            </div>
+            <div class="vsg-slider__dots">
+              <button class="vsg-dot is-active" data-goto="0" aria-label="スライド 1"></button>
+              <button class="vsg-dot" data-goto="1" aria-label="スライド 2"></button>
+              <button class="vsg-dot" data-goto="2" aria-label="スライド 3"></button>
+              <button class="vsg-dot" data-goto="3" aria-label="スライド 4"></button>
+            </div>
+          </div>
         </div>
         <div class="ind-solution__content">
           <span class="ind-solution__num">02</span>
-          <span class="ind-solution__badge">AI検査ライン自動化</span>
+          <a class="ind-solution__badge ind-solution__badge--link" href="nanosi-lp/">AI検査</a>
           <h3 class="ind-solution__headline">高い検査装置を入れたのに、<br>いつまでも人が必要なままだ</h3>
           <p class="ind-solution__quote">「検査装置は導入した。でも結局、サンプルデータの収集も、装置の設定変更も、判定が怪しいときの最終確認も、全部人がやっている。装置に人が付き添っている状態から抜け出せない。」</p>
-          <p class="ind-solution__body">検査装置を入れただけでは自動化は完成しません。学習データの準備・品種ごとのパラメータ調整・周辺の搬送や仕分け作業——これらが残る限り、人は離れられません。nanoFACTORYはAIによる自動学習とラインへの組み込み設計により、装置導入後に発生する「残り作業」ごと自動化します。</p>
-          <a class="ind-solution__cta" href="nanosi-lp/">このソリューションの詳細を見る</a>
+          <p class="ind-solution__body">AIの自動学習とラインへの組み込み設計により、装置導入後に残る「人手が必要な作業」までまとめて自動化します。</p>
         </div>
       </div>
     </div>
 
-    <!-- 03 VSG -->
+    <!-- 03 VSG (AI監視カメラ) -->
     <div class="ind-solution">
       <div class="ind-solution__inner">
         <div class="ind-solution__visual ind-vis--vsg">
-          <img src="assets/homepage-solution-manufacturing-vsg-safety-monitoring.png" alt="バーチャルセキュリティゲート" loading="lazy" />
+          <img src="assets/homepage-solution-manufacturing-vsg-safety-monitoring.png" alt="AI監視カメラ" loading="lazy" />
+          <div class="vsg-slider" data-vsg-slider>
+            <div class="vsg-slider__inner">
+              <div class="vsg-slider__track">
+                <div class="vsg-slide is-active" data-slide="0">
+                  <div class="vsg-slide__icon">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M16 5 L28 26 H4 z"/>
+                      <line x1="16" y1="13" x2="16" y2="20" stroke-width="2.4"/>
+                      <circle cx="16" cy="23" r="1.3" fill="currentColor" stroke="none"/>
+                    </svg>
+                  </div>
+                  <div class="vsg-slide__counter">01 / 04</div>
+                  <h4 class="vsg-slide__title">ニアミス・転倒</h4>
+                  <p class="vsg-slide__desc">フォークリフトと作業員の接触、一人作業中の事故リスク</p>
+                </div>
+                <div class="vsg-slide" data-slide="1">
+                  <div class="vsg-slide__icon">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="16" cy="16" r="12"/>
+                      <line x1="9" y1="16" x2="23" y2="16" stroke-width="3"/>
+                    </svg>
+                  </div>
+                  <div class="vsg-slide__counter">02 / 04</div>
+                  <h4 class="vsg-slide__title">立入禁止侵入</h4>
+                  <p class="vsg-slide__desc">物理工事なしで危険エリアへの侵入をリアルタイム警告したい</p>
+                </div>
+                <div class="vsg-slide" data-slide="2">
+                  <div class="vsg-slide__icon">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="6" y="6" width="20" height="22" rx="2"/>
+                      <rect x="11" y="3" width="10" height="5" rx="1"/>
+                      <path d="M11 17 l3 3 6 -7" stroke-width="2"/>
+                    </svg>
+                  </div>
+                  <div class="vsg-slide__counter">03 / 04</div>
+                  <h4 class="vsg-slide__title">ルール遵守の証拠</h4>
+                  <p class="vsg-slide__desc">「やった」の自己申告では、監査で形骸化を指摘される</p>
+                </div>
+                <div class="vsg-slide" data-slide="3">
+                  <div class="vsg-slide__icon">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="5" width="16" height="20" rx="1"/>
+                      <rect x="6" y="9" width="16" height="20" rx="1"/>
+                      <line x1="9" y1="17" x2="19" y2="17"/>
+                      <line x1="9" y1="21" x2="19" y2="21"/>
+                      <line x1="9" y1="25" x2="15" y2="25"/>
+                    </svg>
+                  </div>
+                  <div class="vsg-slide__counter">04 / 04</div>
+                  <h4 class="vsg-slide__title">監査証跡の自動化</h4>
+                  <p class="vsg-slide__desc">手作業のログ作成・映像確認が後追いで重い</p>
+                </div>
+              </div>
+            </div>
+            <div class="vsg-slider__dots">
+              <button class="vsg-dot is-active" data-goto="0" aria-label="スライド 1"></button>
+              <button class="vsg-dot" data-goto="1" aria-label="スライド 2"></button>
+              <button class="vsg-dot" data-goto="2" aria-label="スライド 3"></button>
+              <button class="vsg-dot" data-goto="3" aria-label="スライド 4"></button>
+            </div>
+          </div>
         </div>
         <div class="ind-solution__content">
           <span class="ind-solution__num">03</span>
-          <span class="ind-solution__badge">バーチャルセキュリティゲート — AI安全管理</span>
+          <a class="ind-solution__badge ind-solution__badge--link" href="nanoguard-lp/">AI監視カメラ</a>
           <h3 class="ind-solution__headline">ルールは決めた。それでも事故と<br>トラブルが絶えない</h3>
           <p class="ind-solution__quote">「フォークリフトと作業員のニアミスが月に3件。ヒヤリハット報告書を書くたびに、次は本当の事故になると思う。」</p>
-          <p class="ind-solution__body">AIが立入禁止区域への侵入を検知した瞬間、音声・映像でリアルタイム警告します。「記録して後から確認する」ではなく「起きる前に止める」安全管理へ。物理工事なしで設置でき、入退室ログが安全管理の証跡として自動蓄積されます。</p>
-          <a class="ind-solution__cta" href="virtual-security-gate-lp/index.html">VSGの詳細を見る</a>
+          <p class="ind-solution__body">AIが立入禁止区域への侵入を検知した瞬間、音声・映像でリアルタイム警告。「起きる前に止める」安全管理へ。</p>
         </div>
       </div>
     </div>

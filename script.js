@@ -173,6 +173,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.2, rootMargin: "0px 0px -40px 0px" });
     document.querySelectorAll(".js-tech-anim").forEach(function(el) { techAnimObserver.observe(el); });
 
+    // VSG3.0 オーバーレイ・スライドショー(ぼかし消失→画像表示→次スライドへ)
+    document.querySelectorAll("[data-vsg-slider]").forEach(function(slider) {
+      var inner  = slider.querySelector(".vsg-slider__inner");
+      var slides = slider.querySelectorAll(".vsg-slide");
+      var dots   = slider.querySelectorAll(".vsg-dot");
+      if (!slides.length || !inner) return;
+      var current = 0;
+      var timer = null;
+      var DURATION = 3800;
+      var FADE_MS  = 400;
+
+      function goTo(idx) {
+        inner.classList.add("is-fading");
+        setTimeout(function() {
+          slides[current].classList.remove("is-active");
+          if (dots[current]) dots[current].classList.remove("is-active");
+          current = (idx + slides.length) % slides.length;
+          slides[current].classList.add("is-active");
+          if (dots[current]) dots[current].classList.add("is-active");
+          inner.classList.remove("is-fading");
+        }, FADE_MS);
+      }
+      function startAuto() {
+        if (timer) clearInterval(timer);
+        timer = setInterval(function() { goTo(current + 1); }, DURATION);
+      }
+      dots.forEach(function(dot) {
+        dot.addEventListener("click", function() {
+          goTo(Number(dot.dataset.goto));
+          startAuto();
+        });
+      });
+      startAuto();
+    });
+
     const menuToggle = document.querySelector(".menu-toggle");
     const nav = document.getElementById("site-nav");
 

@@ -3,93 +3,1019 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>nanoSTEP | AI作業解析・教育システム | nanoFACTORY</title>
-  <meta name="description" content="手順書×AIカメラで工場作業を可視化・保証。ベテラン依存のOJTから脱却し、誰でも標準品質を出せる現場をつくるnanoSTEPの特設ページ。" />
+  <title>nanoSTEP | 作業解析AIエージェント VSG3.0 | nanoFACTORY</title>
+  <meta name="description" content="独自AIエージェント「VSG3.0」が手順書と現場のカメラ映像を結びつけ、作業を客観データに。現場改善 → 多能工化・教育負担削減 → フィジカルAI まで段階的に展開する、nanoSTEPの特設ページ。" />
   <link rel="stylesheet" href="../styles.css" />
   <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" />
   <style>
     html, body { scroll-snap-type: none !important; }
-    .nanostep-problem__frame {
-      margin-top: 1.8rem;
-      padding: 1.4rem;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      border-radius: 24px;
-      background: linear-gradient(135deg, rgba(248,250,252,0.96) 0%, rgba(255,255,255,0.98) 100%);
-      box-shadow: 0 20px 52px rgba(15, 23, 42, 0.08);
+
+    /* ====================================================================
+       Hero — SF backdrop + scan animation (nanoGUARD流)
+    ==================================================================== */
+    .lp-hero--blue { background: #060a14 !important; }
+    .lp-hero--blue .lp-hero__inner {
+      max-width: 920px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
     }
-    .nanostep-problem-grid {
+    .lp-hero--blue .hero-tags,
+    .lp-hero--blue .lp-btns {
+      justify-content: center;
+    }
+    .lp-hero--blue .lp-lead { margin-left: auto; margin-right: auto; }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .hero-grid {
+      position: absolute;
+      inset: -80px;
+      background-image:
+        linear-gradient(rgba(86,204,242,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(86,204,242,0.05) 1px, transparent 1px);
+      background-size: 72px 72px;
+      animation: gridScroll 16s linear infinite;
+    }
+    @keyframes gridScroll {
+      from { transform: translateY(0); }
+      to   { transform: translateY(72px); }
+    }
+    .scan-word {
+      display: inline-block;
+      position: relative;
+      transition: color 0.35s ease, text-shadow 0.35s ease;
+    }
+    .scan-word.lit {
+      color: #56ccf2;
+      text-shadow:
+        0 0 18px rgba(86,204,242,0.95),
+        0 0 40px rgba(42,95,255,0.6),
+        0 0 80px rgba(86,204,242,0.3);
+    }
+
+    /* ── スカウター・ターゲットレチクル ── */
+    .scouter {
+      position: absolute;
+      pointer-events: none;
+      z-index: 12;
+      opacity: 0;
+      transition:
+        opacity 0.25s ease,
+        left 0.5s cubic-bezier(0.45, 0, 0.15, 1),
+        top  0.5s cubic-bezier(0.45, 0, 0.15, 1),
+        width 0.5s cubic-bezier(0.45, 0, 0.15, 1),
+        height 0.5s cubic-bezier(0.45, 0, 0.15, 1);
+    }
+    .scouter.active { opacity: 1; }
+
+    /* 4隅のロックオンブラケット */
+    .scouter__bracket {
+      position: absolute;
+      width: 14px; height: 14px;
+      border-style: solid;
+      border-color: #56ccf2;
+      border-width: 0;
+      filter: drop-shadow(0 0 6px rgba(86,204,242,0.7));
+    }
+    .scouter__bracket--tl { top: -6px; left: -6px;   border-top-width: 2.5px; border-left-width: 2.5px; }
+    .scouter__bracket--tr { top: -6px; right: -6px;  border-top-width: 2.5px; border-right-width: 2.5px; }
+    .scouter__bracket--bl { bottom: -6px; left: -6px;  border-bottom-width: 2.5px; border-left-width: 2.5px; }
+    .scouter__bracket--br { bottom: -6px; right: -6px; border-bottom-width: 2.5px; border-right-width: 2.5px; }
+    .scouter.locked .scouter__bracket {
+      border-color: #10b981;
+      filter: drop-shadow(0 0 8px rgba(16,185,129,0.8));
+    }
+
+    /* クロスヘア */
+    .scouter__cross {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .scouter__cross::before,
+    .scouter__cross::after {
+      content: "";
+      position: absolute;
+      background: rgba(86,204,242,0.35);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .scouter__cross::before { width: 22px; height: 1px; }
+    .scouter__cross::after  { width: 1px;  height: 22px; }
+    .scouter.locked .scouter__cross::before,
+    .scouter.locked .scouter__cross::after {
+      background: rgba(16,185,129,0.5);
+    }
+
+    /* HUD読み取りパネル(上に浮く) */
+    .scouter__readout {
+      position: absolute;
+      top: -38px;
+      left: -6px;
+      font-family: ui-monospace, "SF Mono", "Consolas", monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #56ccf2;
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(6, 12, 28, 0.85);
+      border: 1px solid rgba(86,204,242,0.45);
+      border-radius: 4px;
+      padding: 4px 9px;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(86,204,242,0.25);
+      backdrop-filter: blur(8px);
+    }
+    .scouter__readout::before {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 14px;
+      width: 0; height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid rgba(86,204,242,0.45);
+    }
+    .scouter__rd-label { color: rgba(86,204,242,0.55); }
+    .scouter__rd-value {
+      color: #56ccf2;
+      font-weight: 900;
+      min-width: 44px;
+      text-align: right;
+    }
+    .scouter__rd-status {
+      color: #f97316;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 6px currentColor;
+      animation: scouterPulse 0.6s ease-in-out infinite;
+    }
+    .scouter.locked .scouter__rd-status {
+      color: #10b981;
+      animation: none;
+    }
+    .scouter.locked .scouter__rd-value { color: #10b981; }
+    .scouter.locked .scouter__readout { border-color: rgba(16,185,129,0.55); }
+    .scouter.locked .scouter__readout::before { border-top-color: rgba(16,185,129,0.55); }
+    @keyframes scouterPulse {
+      0%,100% { opacity: 0.3; transform: scale(0.85); }
+      50%     { opacity: 1;   transform: scale(1.15); }
+    }
+
+    /* スカウター自身の出現スイープ(横切り) */
+    .scouter__sweep {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .scouter__sweep::after {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0;
+      left: -30%;
+      width: 30%;
+      background: linear-gradient(90deg,
+        transparent,
+        rgba(86,204,242,0.4),
+        transparent);
+      animation: scouterSweep 1.6s ease-in-out infinite;
+    }
+    @keyframes scouterSweep {
+      0%   { left: -30%; }
+      100% { left: 100%; }
+    }
+    .scouter.locked .scouter__sweep::after { animation: none; opacity: 0; }
+    .hero-orb { position: absolute; border-radius: 50%; filter: blur(80px); }
+    .hero-orb--1 { width: 700px; height: 700px; background: rgba(42,95,255,0.18); top: -300px; right: -150px; animation: orbDrift1 24s ease-in-out infinite; }
+    .hero-orb--2 { width: 500px; height: 500px; background: rgba(86,204,242,0.10); bottom: -180px; left: 10%; animation: orbDrift2 30s ease-in-out infinite; }
+    .hero-orb--3 { width: 350px; height: 350px; background: rgba(15,168,160,0.08); top: 30%; left: -90px; animation: orbDrift3 20s ease-in-out infinite; }
+    @keyframes orbDrift1 { 0%,100%{transform:translate(0,0);} 40%{transform:translate(-40px,50px);} 70%{transform:translate(25px,-25px);} }
+    @keyframes orbDrift2 { 0%,100%{transform:translate(0,0);} 35%{transform:translate(50px,-35px);} 70%{transform:translate(-25px,25px);} }
+    @keyframes orbDrift3 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(35px,-45px);} }
+    .hero-hud { position: absolute; width: 44px; height: 44px; animation: hudPulse 5s ease-in-out infinite; }
+    .hero-hud--tl { top: 24px; left: 24px; border-top: 1.5px solid #56ccf2; border-left: 1.5px solid #56ccf2; }
+    .hero-hud--tr { top: 24px; right: 24px; border-top: 1.5px solid #56ccf2; border-right: 1.5px solid #56ccf2; animation-delay: 1.25s; }
+    .hero-hud--bl { bottom: 24px; left: 24px; border-bottom: 1.5px solid #56ccf2; border-left: 1.5px solid #56ccf2; animation-delay: 2.5s; }
+    .hero-hud--br { bottom: 24px; right: 24px; border-bottom: 1.5px solid #56ccf2; border-right: 1.5px solid #56ccf2; animation-delay: 3.75s; }
+    @keyframes hudPulse { 0%,100% { opacity: 0.22; } 50% { opacity: 0.65; } }
+    .hero-hud-data {
+      position: absolute; display: flex; flex-direction: column; gap: 4px;
+      opacity: 0.18; animation: hudPulse 7s ease-in-out infinite;
+    }
+    .hero-hud-data--tl { top: 76px; left: 24px; }
+    .hero-hud-data--tr { top: 76px; right: 24px; align-items: flex-end; animation-delay: 2s; }
+    .hero-hud-data span { display: block; height: 1.5px; background: #56ccf2; border-radius: 1px; }
+    .hero-hud-data span:nth-child(1) { width: 52px; }
+    .hero-hud-data span:nth-child(2) { width: 36px; }
+    .hero-hud-data span:nth-child(3) { width: 44px; }
+    .hero-tags { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+    .hero-tag {
+      padding: 0.28rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.72);
+      transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+    }
+    .hero-tag.lit {
+      background: rgba(86,204,242,0.14);
+      border-color: rgba(86,204,242,0.55);
+      color: #56ccf2;
+      box-shadow: 0 0 14px rgba(86,204,242,0.35);
+    }
+
+    /* ====================================================================
+       近未来背景(さわやか版) — VSG3.0進化ステップ・中身セクション用
+    ==================================================================== */
+    .lp-section--futuristic {
+      position: relative;
+      background: linear-gradient(135deg, #e0f2fe 0%, #ccfbf1 45%, #dbeafe 100%) !important;
+      overflow: hidden;
+    }
+    .lp-section--futuristic .container {
+      position: relative;
+      z-index: 3;
+    }
+    /* テキストはダーク基調を維持(明るいBGに) — 上書きしない */
+
+    .sf-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ドット格子(ヒーローのライン格子と区別) */
+    .sf-bg__grid {
+      position: absolute;
+      inset: -20px;
+      background-image: radial-gradient(circle, rgba(42,95,255,0.22) 1.3px, transparent 1.6px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse at center, black 35%, transparent 92%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 35%, transparent 92%);
+      animation: sfDotDrift 60s linear infinite;
+    }
+    @keyframes sfDotDrift {
+      from { transform: translate(0, 0); }
+      to   { transform: translate(28px, 28px); }
+    }
+
+    /* ふんわり浮遊オーブ(明るい色・サイズ控えめ) */
+    .sf-bg__orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+    }
+    .sf-bg__orb--1 {
+      width: 460px; height: 460px;
+      background: rgba(56,189,248,0.55);
+      top: -140px; right: -90px;
+      animation: sfOrb1 22s ease-in-out infinite;
+    }
+    .sf-bg__orb--2 {
+      width: 380px; height: 380px;
+      background: rgba(45,212,191,0.42);
+      bottom: -110px; left: 2%;
+      animation: sfOrb2 28s ease-in-out infinite;
+    }
+    .sf-bg__orb--3 {
+      width: 240px; height: 240px;
+      background: rgba(167,139,250,0.30);
+      top: 38%; right: 28%;
+      animation: sfOrb3 20s ease-in-out infinite;
+    }
+    @keyframes sfOrb1 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(-35px,40px);} }
+    @keyframes sfOrb2 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(40px,-30px);} }
+    @keyframes sfOrb3 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(25px,-35px) scale(1.08);} }
+
+    /* HUD/スキャンライン非表示(ヒーローと差別化) */
+    .sf-bg__hud,
+    .sf-bg__scan { display: none; }
+
+    /* ====================================================================
+       課題インフォグラフィック(VSG3.0中心のハブ&スポーク)
+    ==================================================================== */
+    .hub-orbit {
+      position: relative;
+      width: 100%;
+      max-width: 760px;
+      margin: 3rem auto 0;
+      aspect-ratio: 1 / 1;
+    }
+    .hub-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: visible;
+    }
+    .hub-lines line {
+      stroke: rgba(42,95,255,0.32);
+      stroke-width: 1.5;
+      stroke-dasharray: 5 4;
+      animation: hubFlow 1.8s linear infinite;
+    }
+    @keyframes hubFlow {
+      to { stroke-dashoffset: -18; }
+    }
+    /* center halo behind the hub */
+    .hub-lines circle.hub-halo {
+      fill: none;
+      stroke: rgba(42,95,255,0.15);
+      stroke-width: 1;
+      stroke-dasharray: 3 3;
+      animation: hubRotate 24s linear infinite;
+      transform-origin: 50% 50%;
+    }
+    @keyframes hubRotate {
+      to { transform: rotate(360deg); }
+    }
+
+    /* center: nanoSTEP / VSG3.0 */
+    .hub-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 28%;
+      aspect-ratio: 1 / 1;
+      min-width: 160px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2a5fff 55%, #0fa8a0 100%);
+      color: #fff;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      z-index: 3;
+      box-shadow:
+        0 0 0 8px rgba(255,255,255,0.7),
+        0 0 0 9px rgba(42,95,255,0.25),
+        0 20px 50px rgba(42,95,255,0.35);
+      padding: 1rem;
+      animation: hubPulse 3.4s ease-in-out infinite;
+    }
+    @keyframes hubPulse {
+      0%,100% { box-shadow: 0 0 0 8px rgba(255,255,255,0.7), 0 0 0 9px rgba(42,95,255,0.25), 0 20px 50px rgba(42,95,255,0.35); }
+      50%     { box-shadow: 0 0 0 8px rgba(255,255,255,0.7), 0 0 0 16px rgba(42,95,255,0.08), 0 20px 56px rgba(42,95,255,0.45); }
+    }
+    .hub-center__brand {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      opacity: 0.88;
+      font-weight: 800;
+    }
+    .hub-center__name {
+      font-size: clamp(1.3rem, 2vw + 0.4rem, 1.7rem);
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      margin: 0.18rem 0 0.25rem;
+      line-height: 1;
+    }
+    .hub-center__role {
+      font-size: 0.66rem;
+      opacity: 0.78;
+      letter-spacing: 0.04em;
+      line-height: 1.4;
+      padding: 0 0.3rem;
+    }
+
+    /* satellites (5 issue circles around center) */
+    .hub-sat {
+      position: absolute;
+      top: var(--y);
+      left: var(--x);
+      width: 22%;
+      aspect-ratio: 1 / 1;
+      min-width: 138px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #dbeafe;
+      box-shadow: 0 12px 32px rgba(15,23,42,0.08);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 0.7rem;
+      z-index: 2;
+      transform: translate(-50%, -50%) scale(1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .hub-sat:hover {
+      transform: translate(-50%, -50%) scale(1.06);
+      box-shadow: 0 18px 42px rgba(42,95,255,0.18);
+      border-color: #2a5fff;
+    }
+    .hub-sat__icon {
+      width: 32px; height: 32px;
+      color: #2a5fff;
+      margin-bottom: 0.35rem;
+    }
+    .hub-sat__icon svg {
+      width: 100%; height: 100%;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .hub-sat__title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.25;
+    }
+    .hub-sat__desc {
+      font-size: 0.68rem;
+      color: #64748b;
+      line-height: 1.45;
+      margin-top: 0.2rem;
+      padding: 0 0.1rem;
+    }
+
+    /* 5 satellite positions (angles 0°/72°/144°/216°/288° from top) */
+    .hub-sat--01 { --x: 50%;    --y: 11%; }
+    .hub-sat--02 { --x: 87.1%;  --y: 38.5%; }
+    .hub-sat--03 { --x: 72.5%;  --y: 81%; }
+    .hub-sat--04 { --x: 27.5%;  --y: 81%; }
+    .hub-sat--05 { --x: 12.9%;  --y: 38.5%; }
+
+    /* problem section heading wrapper */
+    .hub-section {
+      position: relative;
+      padding: 5rem 0;
+      overflow: hidden;
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+    .hub-section .container { position: relative; z-index: 2; }
+    .hub-section h2 {
+      font-size: clamp(1.5rem, 2.5vw + 0.5rem, 2.2rem);
+      color: #0f172a;
+      font-weight: 800;
+      margin: 0.4rem 0 1rem;
+      line-height: 1.35;
+    }
+    .hub-section .lead-text {
+      color: #475569;
+      font-size: 1rem;
+      line-height: 1.85;
+      margin-bottom: 1.5rem;
+      max-width: 760px;
+    }
+    .hub-section .lead-text strong { color: #1e3a8a; }
+    .hub-section__deco {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.6;
+      background-image:
+        linear-gradient(rgba(42,95,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42,95,255,0.04) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+      z-index: 0;
+    }
+
+    /* responsive */
+    @media (max-width: 760px) {
+      .hub-orbit {
+        aspect-ratio: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.9rem;
+        max-width: 480px;
+      }
+      .hub-lines { display: none; }
+      .hub-center {
+        position: static;
+        transform: none;
+        grid-column: 1 / -1;
+        width: 200px;
+        aspect-ratio: 1 / 1;
+        margin: 0 auto 0.5rem;
+        animation: none;
+      }
+      .hub-sat {
+        position: static;
+        transform: none;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        min-width: 0;
+      }
+      .hub-sat:hover { transform: scale(1.04); }
+    }
+
+    /* ====================================================================
+       3活用例カード — 各カードに動くSVGアイコン
+    ==================================================================== */
+    .nanostep-apps {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1rem;
-      margin-top: 1.2rem;
+      gap: 1.25rem;
+      margin-top: 2.5rem;
     }
-    .nanostep-problem-card {
-      padding: 1.25rem;
-      border-radius: 18px;
+    .nanostep-app {
       background: #fff;
       border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 0;
       box-shadow: 0 10px 26px rgba(15,23,42,0.06);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .nanostep-problem-card__num {
-      display: inline-flex;
+    .nanostep-app:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 44px rgba(42,95,255,0.12);
+    }
+    .nanostep-app__icon {
+      height: 180px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
-      margin-bottom: 0.85rem;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
-      color: #1d4ed8;
-      font-size: 0.9rem;
-      font-weight: 900;
+      position: relative;
+      overflow: hidden;
     }
-    .nanostep-problem-card h3 {
-      margin-bottom: 0.55rem;
-      color: #0f172a;
-      font-size: 1rem;
-      line-height: 1.55;
+    .nanostep-app--ar    .nanostep-app__icon { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); }
+    .nanostep-app--robot .nanostep-app__icon { background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%); }
+    .nanostep-app--qa    .nanostep-app__icon { background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%); }
+    .nanostep-app__icon svg {
+      width: 120px;
+      height: 120px;
+      overflow: visible;
     }
-    .nanostep-problem-card p {
-      margin: 0;
-      color: #475569;
-      font-size: 0.9rem;
-      line-height: 1.8;
+    .nanostep-app__body {
+      padding: 1.5rem 1.5rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      flex: 1;
     }
-    .nanostep-problem-insight {
-      margin-top: 1.2rem;
-      padding: 1rem 1.1rem;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
+    .nanostep-app__tag {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+    .nanostep-app--ar    .nanostep-app__tag { background: #fef3c7; color: #92400e; }
+    .nanostep-app--robot .nanostep-app__tag { background: #cffafe; color: #0e7490; }
+    .nanostep-app--qa    .nanostep-app__tag { background: #f3e8ff; color: #6b21a8; }
+    .nanostep-app h3 {
+      font-size: 1.05rem; font-weight: 800;
+      color: #0f172a; line-height: 1.5;
+    }
+    .nanostep-app p {
+      font-size: 0.88rem; color: #475569;
+      line-height: 1.8; margin: 0;
+    }
+    .nanostep-app__link {
+      margin-top: auto; padding-top: 0.4rem;
+      font-size: 0.85rem; font-weight: 700;
+      color: #2a5fff; text-decoration: none;
+    }
+    .nanostep-app__link::after { content: " →"; }
+
+    /* ── SVG アニメ: ARグラス(ハイライト点滅 + データ流入) ── */
+    @keyframes arGlow {
+      0%,40%  { opacity: 0.3; }
+      55%,75% { opacity: 1; }
+      90%,100%{ opacity: 0.3; }
+    }
+    @keyframes arBeam {
+      0%,25%  { stroke-dashoffset: 30; opacity: 0; }
+      50%     { stroke-dashoffset: 0;  opacity: 1; }
+      75%,100%{ stroke-dashoffset: -30; opacity: 0; }
+    }
+    .ar-icon .glass-lens { animation: arGlow 3s ease-in-out infinite; }
+    .ar-icon .glass-beam {
+      stroke-dasharray: 6 4;
+      animation: arBeam 3s ease-in-out infinite;
+    }
+
+    /* ── SVG アニメ: ロボットアーム(関節回転 + ピックアップ) ── */
+    @keyframes armSwing {
+      0%,15%  { transform: rotate(0deg); }
+      45%,55% { transform: rotate(-22deg); }
+      85%,100%{ transform: rotate(0deg); }
+    }
+    @keyframes gripPulse {
+      0%,40%  { transform: scaleX(1); }
+      55%,70% { transform: scaleX(0.55); }
+      85%,100%{ transform: scaleX(1); }
+    }
+    .robot-icon .arm-upper {
+      transform-origin: 60px 80px;
+      animation: armSwing 3.5s ease-in-out infinite;
+    }
+    .robot-icon .arm-grip-l,
+    .robot-icon .arm-grip-r {
+      transform-origin: 36px 30px;
+      animation: gripPulse 3.5s ease-in-out infinite;
+    }
+
+    /* ── SVG アニメ: 品質チェック(チェックマーク描画) ── */
+    @keyframes checkDraw {
+      0%,20%  { stroke-dashoffset: 60; opacity: 0; }
+      40%     { stroke-dashoffset: 0;  opacity: 1; }
+      85%,100%{ stroke-dashoffset: 0;  opacity: 1; }
+    }
+    @keyframes circleRotate {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    .qa-icon .qa-check {
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+      animation: checkDraw 3s ease-in-out infinite;
+    }
+    .qa-icon .qa-ring {
+      transform-origin: 60px 60px;
+      animation: circleRotate 8s linear infinite;
+    }
+
+    /* ====================================================================
+       ストーリーセクション(2カラム)
+    ==================================================================== */
+    .nanostep-story {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 2rem;
+      margin-top: 2.5rem;
+      align-items: center;
+    }
+    .nanostep-story--reverse { grid-template-columns: 1fr 1.05fr; }
+    .nanostep-story__media {
+      position: relative;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      border: 1px solid #e5e7eb;
+    }
+    .nanostep-story--reverse .nanostep-story__media { order: 2; }
+    .nanostep-story__fallback {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.6rem;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 1rem;
+      z-index: 1;
+    }
+    .nanostep-story__fallback-icon { font-size: 2.4rem; opacity: 0.5; }
+    .nanostep-story__media img {
+      position: relative;
+      z-index: 2;
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .nanostep-story__body h3 {
+      font-size: clamp(1.2rem, 1.6vw + 0.5rem, 1.6rem);
+      font-weight: 800; color: #0f172a;
+      margin-bottom: 0.9rem; line-height: 1.45;
+    }
+    .nanostep-story__body p {
+      color: #475569; font-size: 0.95rem;
+      line-height: 1.9; margin-bottom: 0.85rem;
+    }
+    .nanostep-story__highlight {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      background: linear-gradient(135deg, #f0f4ff 0%, #e8effe 100%);
       border: 1px solid #c7d2fe;
+      border-radius: 999px;
+      font-size: 0.85rem; font-weight: 700;
       color: #1e3a8a;
-      font-size: 0.95rem;
+      margin-top: 0.4rem;
+    }
+
+    /* ====================================================================
+       PoCタイムライン(週次・矢印接続)
+    ==================================================================== */
+    .poc-timeline-wrap {
+      margin-top: 2.5rem;
+      position: relative;
+    }
+    .poc-timeline {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      position: relative;
+    }
+    .poc-timeline::before {
+      content: "";
+      position: absolute;
+      top: 38px; left: 8%; right: 8%;
+      height: 2px;
+      background: linear-gradient(90deg, #2a5fff 0%, #0fa8a0 100%);
+      opacity: 0.25;
+      z-index: 0;
+    }
+    .poc-week {
+      position: relative;
+      padding: 0 0.45rem;
+      text-align: center;
+      z-index: 1;
+    }
+    .poc-week__dot {
+      width: 76px; height: 76px;
+      margin: 0 auto 0.9rem;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #2a5fff;
+      box-shadow: 0 8px 24px rgba(42,95,255,0.18);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; color: #2a5fff;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      position: relative;
+    }
+    .poc-week:nth-child(2) .poc-week__dot { border-color: #2a5fff; }
+    .poc-week:nth-child(3) .poc-week__dot { border-color: #2a85ff; }
+    .poc-week:nth-child(4) .poc-week__dot { border-color: #1aa0c0; }
+    .poc-week:nth-child(5) .poc-week__dot { border-color: #0fa8a0; color: #0fa8a0; }
+    .poc-week__dot svg {
+      width: 32px; height: 32px;
+    }
+    .poc-week h4 {
+      font-size: 0.92rem; font-weight: 800;
+      color: #0f172a; line-height: 1.45;
+      margin-bottom: 0.45rem;
+    }
+    .poc-week p {
+      font-size: 0.82rem; color: #6b7280;
+      line-height: 1.65; margin: 0;
+      padding: 0 0.2rem;
+    }
+    .poc-commit {
+      margin-top: 2.5rem;
+      padding: 1.5rem 1.75rem;
+      background: linear-gradient(135deg, #fff 0%, #f8faff 100%);
+      border: 1px solid #c7d2fe;
+      border-radius: 18px;
+      box-shadow: 0 12px 32px rgba(15,23,42,0.06);
+    }
+    .poc-commit h4 {
+      font-size: 1rem; font-weight: 800;
+      color: #1e3a8a; margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .poc-commit h4::before {
+      content: "📋"; font-size: 1.1rem;
+    }
+    .poc-commit ul {
+      margin: 0; padding: 0; list-style: none;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem;
+    }
+    .poc-commit li {
+      font-size: 0.88rem; color: #334155;
+      line-height: 1.7;
+      padding: 0.7rem 0.95rem;
+      background: #fff;
+      border: 1px solid #e0e7ff;
+      border-radius: 10px;
+    }
+    .poc-commit li strong { color: #1e3a8a; }
+
+    /* ====================================================================
+       PoCサービス内容(機能グリッド・チェックマーク)
+    ==================================================================== */
+    .scope-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+    .scope-item {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 1.25rem 1.4rem;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.05);
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+    }
+    .scope-item__check {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: #15803d; font-weight: 900; font-size: 1rem;
+    }
+    .scope-item__body { flex: 1; }
+    .scope-item h4 {
+      font-size: 0.95rem; font-weight: 800;
+      color: #0f172a; line-height: 1.5;
+      margin-bottom: 0.3rem;
+    }
+    .scope-item p {
+      font-size: 0.83rem; color: #6b7280;
+      line-height: 1.65; margin: 0;
+    }
+    .scope-options {
+      margin-top: 1.5rem;
+      padding: 1.1rem 1.4rem;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      color: #475569;
       line-height: 1.8;
     }
-    .nanostep-problem-insight strong {
-      color: #1e40af;
+    .scope-options strong { color: #334155; }
+
+    /* ====================================================================
+       PoC費用(クリーンなビジネス調)
+    ==================================================================== */
+    .pricing-frame {
+      margin-top: 2.5rem;
+      padding: 2.2rem 2.4rem;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+      border: 1px solid #c7d2fe;
+      border-radius: 22px;
+      box-shadow: 0 16px 40px rgba(15,23,42,0.08);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2rem;
+      align-items: center;
     }
+    .pricing-amount {
+      text-align: center;
+      padding-right: 2rem;
+      border-right: 1px solid #c7d2fe;
+    }
+    .pricing-amount__label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #2a5fff;
+      margin-bottom: 0.5rem;
+    }
+    .pricing-amount__num {
+      font-size: clamp(2rem, 3.5vw + 0.5rem, 2.8rem);
+      font-weight: 900;
+      color: #1e3a8a;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+    .pricing-amount__unit {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #475569;
+      margin-top: 0.45rem;
+    }
+    .pricing-detail h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.85rem;
+    }
+    .pricing-detail p {
+      color: #475569;
+      font-size: 0.92rem;
+      line-height: 1.9;
+      margin-bottom: 0.6rem;
+    }
+    .pricing-detail strong { color: #1e3a8a; }
+    .pricing-factors {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-top: 0.95rem;
+    }
+    .pricing-factor {
+      padding: 0.32rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(42,95,255,0.08);
+      border: 1px solid rgba(42,95,255,0.18);
+      color: #1e3a8a;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    /* ====================================================================
+       特長6カード — アイコン付き(SVG)
+    ==================================================================== */
+    .feature-card-v2 {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 1.5rem 1.75rem;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.06);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    .feature-card-v2:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(42,95,255,0.1);
+      border-color: #dbeafe;
+    }
+    .feature-card-v2__icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: #2a5fff;
+    }
+    .feature-card-v2__icon svg {
+      width: 26px; height: 26px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .feature-card-v2 h3 {
+      font-size: 1rem; font-weight: 800;
+      color: #0f172a; line-height: 1.5;
+    }
+    .feature-card-v2 p {
+      font-size: 0.86rem; color: #475569;
+      line-height: 1.8; margin: 0;
+    }
+
+    /* ====================================================================
+       FAQ
+    ==================================================================== */
+    .faq-list {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .faq-item {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 1.1rem 1.4rem;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.05);
+    }
+    .faq-item summary {
+      cursor: pointer;
+      font-size: 0.98rem; font-weight: 700;
+      color: #0f172a; line-height: 1.55;
+      list-style: none;
+      position: relative;
+      padding-right: 2rem;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: "+";
+      position: absolute; right: 0; top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.3rem; font-weight: 700;
+      color: #2a5fff;
+      transition: transform 0.2s ease;
+    }
+    .faq-item[open] summary::after { content: "−"; }
+    .faq-item p {
+      margin-top: 0.85rem; padding-top: 0.85rem;
+      border-top: 1px solid #f1f5f9;
+      font-size: 0.9rem; color: #475569;
+      line-height: 1.85;
+    }
+
+    /* ====================================================================
+       レスポンシブ
+    ==================================================================== */
     @media (max-width: 900px) {
-      .nanostep-problem-grid {
+      .nanostep-apps { grid-template-columns: 1fr; }
+      .nanostep-story,
+      .nanostep-story--reverse { grid-template-columns: 1fr; }
+      .nanostep-story--reverse .nanostep-story__media { order: 0; }
+      .poc-timeline { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .poc-timeline::before { display: none; }
+      .poc-commit ul { grid-template-columns: 1fr; }
+      .pricing-frame {
         grid-template-columns: 1fr;
+        padding: 1.6rem 1.4rem;
+      }
+      .pricing-amount {
+        padding-right: 0; padding-bottom: 1.4rem;
+        border-right: none; border-bottom: 1px solid #c7d2fe;
       }
     }
     @media (max-width: 480px) {
-      .nanostep-problem__frame {
-        padding: 1rem;
-        border-radius: 20px;
-      }
-      .nanostep-problem-card {
-        padding: 1rem;
-        border-radius: 16px;
-      }
-      .nanostep-problem-card h3 {
-        font-size: 0.95rem;
-      }
-      .nanostep-problem-card p,
-      .nanostep-problem-insight {
-        font-size: 0.9rem;
-        line-height: 1.75;
-      }
+      .poc-timeline { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -108,7 +1034,7 @@
       </button>
       <nav id="site-nav" class="nav">
         <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
-        <a class="nav__link nav__link--products" href="../nanostep-lp/">作業管理</a>
+        <a class="nav__link nav__link--products" href="../nanostep-lp/">作業認識AI</a>
         <a class="nav__link nav__link--products" href="../nanosi-lp/">AI検査</a>
         <a class="nav__link nav__link--products" href="../nanoguard-lp/">AI監視カメラ</a>
         <a class="nav__link nav__link--products" href="../sanicam-lp/hand.html">手指衛生</a>
@@ -120,118 +1046,522 @@
 
   <!-- Hero -->
   <section class="lp-hero lp-hero--blue">
+    <div class="hero-bg" aria-hidden="true">
+      <div class="hero-grid"></div>
+      <div class="hero-orb hero-orb--1"></div>
+      <div class="hero-orb hero-orb--2"></div>
+      <div class="hero-orb hero-orb--3"></div>
+      <div class="hero-hud hero-hud--tl"></div>
+      <div class="hero-hud hero-hud--tr"></div>
+      <div class="hero-hud hero-hud--bl"></div>
+      <div class="hero-hud hero-hud--br"></div>
+      <div class="hero-hud-data hero-hud-data--tl"><span></span><span></span><span></span></div>
+      <div class="hero-hud-data hero-hud-data--tr"><span></span><span></span><span></span></div>
+
+      <!-- スカウター・レチクル(JSで scan-word に位置合わせ) -->
+      <div id="scouter" class="scouter">
+        <div class="scouter__sweep"></div>
+        <div class="scouter__bracket scouter__bracket--tl"></div>
+        <div class="scouter__bracket scouter__bracket--tr"></div>
+        <div class="scouter__bracket scouter__bracket--bl"></div>
+        <div class="scouter__bracket scouter__bracket--br"></div>
+        <div class="scouter__cross"></div>
+        <div class="scouter__readout">
+          <span class="scouter__rd-status"></span>
+          <span class="scouter__rd-label">SCAN</span>
+          <span class="scouter__rd-value">----</span>
+        </div>
+      </div>
+    </div>
+
     <div class="lp-hero__inner container">
-      <div class="lp-kicker">nanoSTEP — AI作業管理・教育システム</div>
-      <h1 class="lp-h1">手順書×AIカメラで、<br>現場の作業品質を保証する</h1>
+      <div class="lp-kicker">nanoSTEP / 独自AIエージェント "VSG3.0"</div>
+      <h1 class="lp-h1">現場の動きをAIが読む。<br><span class="scan-word">教育</span>も、<span class="scan-word">自動化</span>も、<span class="scan-word">品質保証</span>も。</h1>
       <p class="lp-lead">
-        既存の手順書をAIが読み込み、現場カメラで作業動作をリアルタイム評価。<br>
-        ベテラン依存のOJTから脱却し、誰でも標準品質を出せる現場をつくります。
+        作業解析AIエージェント "VSG3.0" が、手順書と現場のカメラ映像を結びつけ、「正しい作業が行われているか」を客観データに。<br>
+        そのデータを起点に、現場改善 → 多能工化・教育負担削減 → フィジカルAI まで段階的に展開します。
       </p>
+      <div class="hero-tags">
+        <span class="hero-tag">VSG3.0</span>
+        <span class="hero-tag">現場改善</span>
+        <span class="hero-tag">多能工化</span>
+        <span class="hero-tag">フィジカルAI</span>
+        <span class="hero-tag">2〜3ヶ月PoC</span>
+      </div>
       <div class="lp-btns">
-        <a class="cta-button" href="#contact">デモを申し込む</a>
-        <a class="cta-button cta-button--outline" href="#features">特長を見る</a>
+        <a class="cta-button" href="#contact">PoCを相談する</a>
+        <a class="cta-button cta-button--outline" href="#stories">活用ストーリーを見る</a>
       </div>
     </div>
   </section>
 
-  <!-- 課題 -->
+  <!-- 課題インフォグラフィック(VSG3.0中心) -->
+  <section class="hub-section">
+    <div class="hub-section__deco"></div>
+    <div class="container">
+      <div class="lp-kicker">VSG3.0が応える現場の悩み</div>
+      <h2>人手不足・教育負担・属人化を、<br>ひとつのAIエージェントで解く</h2>
+      <p class="lead-text">バラバラに見える5つの課題、根っこは同じ。「作業をデータ化できていない」ことです。VSG3.0は手順書と現場のカメラ映像を結びつけ、ここを起点に一気に解きます。</p>
+
+      <div class="hub-orbit">
+        <!-- connecting lines (SVG layer) -->
+        <svg class="hub-lines" viewBox="0 0 600 600" aria-hidden="true">
+          <circle class="hub-halo" cx="300" cy="300" r="180"/>
+          <line x1="300" y1="300" x2="300" y2="66"/>
+          <line x1="300" y1="300" x2="523" y2="231"/>
+          <line x1="300" y1="300" x2="435" y2="486"/>
+          <line x1="300" y1="300" x2="165" y2="486"/>
+          <line x1="300" y1="300" x2="77"  y2="231"/>
+        </svg>
+
+        <!-- center -->
+        <div class="hub-center">
+          <div class="hub-center__brand">nanoSTEP</div>
+          <div class="hub-center__name">VSG3.0</div>
+          <div class="hub-center__role">作業解析AIエージェント</div>
+        </div>
+
+        <!-- 5 satellites -->
+        <div class="hub-sat hub-sat--01">
+          <div class="hub-sat__icon">
+            <svg viewBox="0 0 32 32">
+              <circle cx="11" cy="11" r="4"/>
+              <path d="M5 25 c0 -4 2.7 -7 6 -7 s6 3 6 7"/>
+              <circle cx="22" cy="13" r="3" stroke-dasharray="2.2 2"/>
+              <path d="M17 25 c0 -3 2 -5 5 -5 s5 2 5 5" stroke-dasharray="2.2 2"/>
+            </svg>
+          </div>
+          <div class="hub-sat__title">人手不足</div>
+          <div class="hub-sat__desc">採用しても定着しない。現場が回らない</div>
+        </div>
+
+        <div class="hub-sat hub-sat--02">
+          <div class="hub-sat__icon">
+            <svg viewBox="0 0 32 32">
+              <circle cx="13" cy="9" r="3"/>
+              <path d="M7 23 c0 -5 3 -8 6 -8 s6 3 6 8"/>
+              <rect x="20" y="13" width="9" height="7" rx="1"/>
+              <path d="M24.5 13 v7 M22 16 h5 M22 18 h5"/>
+            </svg>
+          </div>
+          <div class="hub-sat__title">教育負担</div>
+          <div class="hub-sat__desc">ベテラン張り付きOJTで本業が止まる</div>
+        </div>
+
+        <div class="hub-sat hub-sat--03">
+          <div class="hub-sat__icon">
+            <svg viewBox="0 0 32 32">
+              <rect x="7" y="14" width="18" height="13" rx="2"/>
+              <path d="M11 14 v-3 a5 5 0 0 1 10 0 v3"/>
+              <circle cx="16" cy="20" r="1.6"/>
+              <line x1="16" y1="21.6" x2="16" y2="24"/>
+            </svg>
+          </div>
+          <div class="hub-sat__title">ノウハウ属人化</div>
+          <div class="hub-sat__desc">退職・異動で品質再現が崩れる</div>
+        </div>
+
+        <div class="hub-sat hub-sat--04">
+          <div class="hub-sat__icon">
+            <svg viewBox="0 0 32 32">
+              <circle cx="16" cy="16" r="11"/>
+              <path d="M5 16 h22 M16 5 c-3.5 3.5 -5 7 -5 11 s1.5 7.5 5 11 c3.5 -3.5 5 -7 5 -11 s-1.5 -7.5 -5 -11"/>
+            </svg>
+          </div>
+          <div class="hub-sat__title">外国人教育</div>
+          <div class="hub-sat__desc">言葉の壁で戦力化に時間がかかる</div>
+        </div>
+
+        <div class="hub-sat hub-sat--05">
+          <div class="hub-sat__icon">
+            <svg viewBox="0 0 32 32">
+              <rect x="13" y="22" width="6" height="5" rx="1"/>
+              <line x1="16" y1="22" x2="10" y2="10"/>
+              <circle cx="10" cy="10" r="2"/>
+              <line x1="10" y1="10" x2="6" y2="6"/>
+              <line x1="10" y1="10" x2="13" y2="6"/>
+              <line x1="6" y1="27" x2="26" y2="27"/>
+            </svg>
+          </div>
+          <div class="hub-sat__title">自動化</div>
+          <div class="hub-sat__desc">機械化したいが、人の動きが標準化できない</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VSG3.0の3フェーズ進化 -->
+  <section id="stories" class="lp-section lp-section--futuristic">
+    <div class="sf-bg" aria-hidden="true">
+      <div class="sf-bg__grid"></div>
+      <div class="sf-bg__orb sf-bg__orb--1"></div>
+      <div class="sf-bg__orb sf-bg__orb--2"></div>
+      <div class="sf-bg__orb sf-bg__orb--3"></div>
+      <div class="sf-bg__hud sf-bg__hud--tl"></div>
+      <div class="sf-bg__hud sf-bg__hud--tr"></div>
+      <div class="sf-bg__hud sf-bg__hud--bl"></div>
+      <div class="sf-bg__hud sf-bg__hud--br"></div>
+      <div class="sf-bg__scan"></div>
+    </div>
+    <div class="container">
+      <div class="lp-kicker">VSG3.0の進化ステップ</div>
+      <h2>データ化 → リアルタイム作業解析 → フィジカルAI</h2>
+      <p class="lead-text">同じAIエージェントが、現場での使い方を段階的に進化させます。第一フェーズだけでも、ベテラン依存からの脱却に直結します。</p>
+      <div class="nanostep-apps">
+        <!-- Phase 01: データ化 -->
+        <article class="nanostep-app nanostep-app--qa">
+          <div class="nanostep-app__icon">
+            <svg class="qa-icon" viewBox="0 0 120 120" fill="none">
+              <g class="qa-ring">
+                <circle cx="60" cy="60" r="42" stroke="#6b21a8" stroke-opacity="0.18" stroke-width="2" stroke-dasharray="6 6"/>
+              </g>
+              <circle cx="60" cy="60" r="34" stroke="#7e22ce" stroke-width="3" stroke-opacity="0.4"/>
+              <polyline class="qa-check" points="44,62 56,74 78,50" stroke="#7e22ce" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="nanostep-app__body">
+            <span class="nanostep-app__tag">PHASE 01 — データ化</span>
+            <h3>作業を客観データに<br>—現場改善のエビデンス</h3>
+            <p>VSG3.0が手順書と現場映像を照合し、実行状況・遵守率・逸脱箇所を客観データに変換。不良の原因追跡、PDCA改善活動の起点になります。</p>
+            <a class="nanostep-app__link" href="#features">機能を見る</a>
+          </div>
+        </article>
+
+        <!-- Phase 02: リアルタイム作業解析 -->
+        <article class="nanostep-app nanostep-app--ar">
+          <div class="nanostep-app__icon">
+            <svg class="ar-icon" viewBox="0 0 120 120" stroke-width="3" fill="none">
+              <circle cx="60" cy="62" r="28" stroke="#92400e" stroke-opacity="0.6"/>
+              <g stroke="#b45309" stroke-linecap="round">
+                <rect class="glass-lens" x="34" y="50" width="22" height="14" rx="3" fill="rgba(245,158,11,0.35)" />
+                <rect class="glass-lens" x="64" y="50" width="22" height="14" rx="3" fill="rgba(245,158,11,0.35)" style="animation-delay:.3s"/>
+                <line x1="56" y1="57" x2="64" y2="57"/>
+                <line x1="34" y1="55" x2="28" y2="52"/>
+                <line x1="86" y1="55" x2="92" y2="52"/>
+              </g>
+              <g stroke="#f59e0b" stroke-linecap="round">
+                <line class="glass-beam" x1="45" y1="38" x2="45" y2="48" stroke-width="2.5"/>
+                <line class="glass-beam" x1="75" y1="38" x2="75" y2="48" stroke-width="2.5" style="animation-delay:.4s"/>
+                <line class="glass-beam" x1="60" y1="30" x2="60" y2="46" stroke-width="2.5" style="animation-delay:.8s"/>
+              </g>
+            </svg>
+          </div>
+          <div class="nanostep-app__body">
+            <span class="nanostep-app__tag">PHASE 02 — リアルタイム作業解析</span>
+            <h3>多能工化・教育負担削減<br>—人手不足対策の本命</h3>
+            <p>蓄積データをリアルタイムにフィードバック。ARグラスで手順を投影することで、誰でも標準作業を再現。外国人実習生も即戦力化し、ベテラン張り付きのOJTから卒業します。</p>
+            <a class="nanostep-app__link" href="#story-ar">ARストーリーを見る</a>
+          </div>
+        </article>
+
+        <!-- Phase 03: フィジカルAI -->
+        <article class="nanostep-app nanostep-app--robot">
+          <div class="nanostep-app__icon">
+            <svg class="robot-icon" viewBox="0 0 120 120" stroke-width="3" fill="none">
+              <rect x="48" y="92" width="24" height="14" rx="2" stroke="#0e7490"/>
+              <line x1="40" y1="106" x2="80" y2="106" stroke="#0e7490"/>
+              <g class="arm-upper" stroke="#0891b2" stroke-linecap="round">
+                <line x1="60" y1="80" x2="36" y2="30" stroke-width="6"/>
+                <circle cx="60" cy="80" r="4" fill="#0891b2" stroke="none"/>
+                <circle cx="36" cy="30" r="4" fill="#0891b2" stroke="none"/>
+                <line class="arm-grip-l" x1="36" y1="30" x2="26" y2="22" stroke-width="3"/>
+                <line class="arm-grip-r" x1="36" y1="30" x2="46" y2="22" stroke-width="3"/>
+              </g>
+            </svg>
+          </div>
+          <div class="nanostep-app__body">
+            <span class="nanostep-app__tag">PHASE 03 — フィジカルAI</span>
+            <h3>人の動きを機械に移管<br>—自動化のその先へ</h3>
+            <p>蓄積した作業データをロボット制御の学習入力に。ベテランの動きをそのまま再現できれば、重作業・反復作業を機械に任せられます。フィジカルAIの世界です。</p>
+            <a class="nanostep-app__link" href="#story-robot">ロボットストーリーを見る</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY 01: AR×実習生 -->
+  <section id="story-ar" class="lp-section lp-section--white">
+    <div class="container">
+      <div class="lp-kicker">STORY / PHASE 02 — リアルタイム作業解析</div>
+      <h2>ARグラス越しに、言葉の壁を越える現場教育</h2>
+      <div class="nanostep-story">
+        <div class="nanostep-story__media">
+          <div class="nanostep-story__fallback">
+            <span class="nanostep-story__fallback-icon">🥽</span>
+            <span>※ AR×実習生の実写を配置予定</span>
+          </div>
+          <img src="../assets/story-ar-trainee.jpg" alt="ARグラスを着用した実習生" onerror="this.style.display='none'" />
+        </div>
+        <div class="nanostep-story__body">
+          <h3>言葉が通じなくても、<br>AIが「次の動き」を見せる。</h3>
+          <p>外国人実習生がARグラスを着用すると、視界の中に作業手順がリアルタイムで投影されます。AIが現在の作業を認識し、次に行うべき動作・注意点を表示する仕組みです。</p>
+          <p>これにより、母国語の手順書がなくても、ベテランが横に立たなくても、<strong>標準作業をその場で再現</strong>できます。教育担当者は「最初の数回だけ」を見てあげれば十分。OJT工数を大きく圧縮できます。</p>
+          <span class="nanostep-story__highlight">OJT工数 ▲60% 目標(現場検証中)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY 02: ロボット -->
+  <section id="story-robot" class="lp-section lp-section--surface">
+    <div class="container">
+      <div class="lp-kicker">STORY / PHASE 03 — フィジカルAI</div>
+      <h2>人の動きをAIが学び、ロボットが代替する</h2>
+      <div class="nanostep-story nanostep-story--reverse">
+        <div class="nanostep-story__media">
+          <div class="nanostep-story__fallback">
+            <span class="nanostep-story__fallback-icon">🤖</span>
+            <span>※ ロボット×フィジカルAI写真を配置予定</span>
+          </div>
+          <img src="../assets/story-physical-ai-robot.jpg" alt="ロボットアームによる作業代替" onerror="this.style.display='none'" />
+        </div>
+        <div class="nanostep-story__body">
+          <h3>「人がやる作業」を、<br>そのまま機械に任せる。</h3>
+          <p>AIが現場の動作を認識する仕組みは、そのままロボット制御の入力としても使えます。ベテランの動きを学習データにして、ロボットアームに同じ作業を実行させる——いわゆるフィジカルAIです。</p>
+          <p>重作業・単純反復作業・夜勤帯の作業など、<strong>人がやらなくていい仕事を機械側に逃がす</strong>。人手不足の現場ほど効きます。</p>
+          <span class="nanostep-story__highlight">作業認識AI + ロボット制御を一括で検証</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PoC進め方(週次タイムライン) -->
   <section class="lp-section lp-section--white">
     <div class="container">
-      <div class="lp-kicker">こんな課題はありませんか</div>
-      <h2>製造現場の「属人化」が、品質リスクになっていませんか？</h2>
-      <p class="lead-text">起きている問題は個別に見えても、根っこは同じです。<strong>教育・確認・改善を人に依存したまま</strong>なので、品質を安定して再現できません。</p>
-      <div class="nanostep-problem__frame">
-        <div class="nanostep-problem-grid">
-          <article class="nanostep-problem-card">
-            <div class="nanostep-problem-card__num">01</div>
-            <h3>教育がベテラン依存で、<br>現場の時間が奪われる</h3>
-            <p>新人教育のたびにベテランが張り付き、本来業務が止まります。ノウハウが人に閉じたままだと、退職や異動のたびに品質リスクが増えます。</p>
-          </article>
-          <article class="nanostep-problem-card">
-            <div class="nanostep-problem-card__num">02</div>
-            <h3>手順遵守を見切れず、<br>品質ばらつきが残る</h3>
-            <p>手順書があっても、現場でその通りに実行されているかは常時確認できません。人による作業差が残り、不良の原因特定にも時間がかかります。</p>
-          </article>
-          <article class="nanostep-problem-card">
-            <div class="nanostep-problem-card__num">03</div>
-            <h3>データが残らず、<br>改善活動が続かない</h3>
-            <p>多品種化で手順が増えるほど、管理も教育も追いつきにくくなります。作業実績データがないため、改善のPDCAを回しづらい状態が続きます。</p>
-          </article>
+      <div class="lp-kicker">導入プロセス</div>
+      <h2>2〜3ヶ月のPoCで、お客様の現場での効果を見える化します</h2>
+      <p class="lead-text">いきなり本番導入するのではなく、現場でAIを動かして効果を測ってから判断する。シンプルなステップで進めます。</p>
+      <div class="poc-timeline-wrap">
+        <div class="poc-timeline">
+          <div class="poc-week">
+            <div class="poc-week__dot">
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 12 h16 M8 18 h12 M8 24 h8"/>
+                <rect x="6" y="6" width="20" height="22" rx="2"/>
+              </svg>
+            </div>
+            <h4>STEP 01<br>ヒアリング</h4>
+            <p>困りごとを工程レベルで整理し、検証範囲・成功基準・本番移行判定を文書化します。<strong>(約2週間)</strong></p>
+          </div>
+          <div class="poc-week">
+            <div class="poc-week__dot">
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6" y="10" width="20" height="14" rx="2"/>
+                <circle cx="16" cy="17" r="3"/>
+                <path d="M11 10 v-2 h10 v2"/>
+              </svg>
+            </div>
+            <h4>STEP 02<br>セットアップ</h4>
+            <p>AIカメラ設置・既存設備接続・手順書読込。立ち合いで初期動作を確認します。<strong>(約2週間)</strong></p>
+          </div>
+          <div class="poc-week">
+            <div class="poc-week__dot">
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 22 L12 16 L18 20 L26 10"/>
+                <path d="M22 10 h4 v4"/>
+              </svg>
+            </div>
+            <h4>STEP 03<br>現場検証 ①</h4>
+            <p>実作業データでAIをチューニング。認識精度・通知タイミングを現場の声で調整します。<strong>(約1ヶ月)</strong></p>
+          </div>
+          <div class="poc-week">
+            <div class="poc-week__dot">
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="16" cy="16" r="10"/>
+                <path d="M16 11 v5 l3 3"/>
+              </svg>
+            </div>
+            <h4>STEP 04<br>現場検証 ②</h4>
+            <p>本番想定の運用で連続稼働。3領域それぞれのKPIを実データで取得します。<strong>(3〜4週間)</strong></p>
+          </div>
+          <div class="poc-week">
+            <div class="poc-week__dot">
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 14 h16 v12 H8 z"/>
+                <path d="M12 14 V8 h8 v6"/>
+                <path d="M14 20 l2 2 4-4"/>
+              </svg>
+            </div>
+            <h4>STEP 05<br>レポート &amp; 判定</h4>
+            <p>取得KPIと現場の声をまとめ、本番移行可否を契約時の判定基準に照らして報告します。<strong>(1〜2週間)</strong></p>
+          </div>
         </div>
-        <div class="nanostep-problem-insight">
-          つまり必要なのは、<strong>教育そのものを増やすことではなく、標準作業が再現される運用をつくること</strong>です。nanoSTEPは、既存の手順書をもとに教育・確認・記録を一体で支援します。
+        <div class="poc-commit">
+          <h4>PoC着手前に、契約書面で合意する3点</h4>
+          <ul>
+            <li><strong>成功判定基準</strong><br>何を満たせば「成功」とみなすかを、工程レベルの数値で定義</li>
+            <li><strong>成果物の範囲</strong><br>納品物・取得データの所有・利用権を文書で明確化</li>
+            <li><strong>本番移行の判断方法</strong><br>PoC終了時にどの選択肢を取れるか、事前に整理</li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 特長 -->
-  <section id="features" class="lp-section lp-section--surface">
+  <!-- PoCサービス内容 -->
+  <section class="lp-section lp-section--tinted">
     <div class="container">
-      <div class="lp-kicker">nanoSTEPの特長</div>
-      <h2>既存の手順書がそのまま「AIの教科書」になる</h2>
-      <p class="lead-text">新しい手順書を作り直す必要はありません。現在お使いの手順書・マニュアルをAIに読み込ませるだけで現場監視がスタートします。</p>
+      <div class="lp-kicker">PoCサービス内容</div>
+      <h2>2〜3ヶ月のPoCに含まれるもの</h2>
+      <p class="lead-text">作業認識AIの設定からハードウェア貸与・レポーティングまで、PoC完遂に必要なものを一式提供します。</p>
+      <div class="scope-grid">
+        <div class="scope-item">
+          <div class="scope-item__check">✓</div>
+          <div class="scope-item__body">
+            <h4>作業認識AIの設定・チューニング</h4>
+            <p>手順書解析・モデル構築・現場データでの精度調整。</p>
+          </div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-item__check">✓</div>
+          <div class="scope-item__body">
+            <h4>AIカメラ・ARグラスの貸与</h4>
+            <p>PoC期間中、必要な機材をすべて貸与。設置・調整も当社対応。</p>
+          </div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-item__check">✓</div>
+          <div class="scope-item__body">
+            <h4>現場立ち合い・週次進捗レポート</h4>
+            <p>セットアップ・検証フェーズで現場常駐。週次の進捗を可視化。</p>
+          </div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-item__check">✓</div>
+          <div class="scope-item__body">
+            <h4>取得KPIの分析・改善提案</h4>
+            <p>OJT工数・手順遵守率・認識精度などのKPIを定量分析。</p>
+          </div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-item__check">✓</div>
+          <div class="scope-item__body">
+            <h4>本番移行判定レポート</h4>
+            <p>契約時の成功基準に照らした評価と、本番移行の選択肢を提示。</p>
+          </div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-item__check">✓</div>
+          <div class="scope-item__body">
+            <h4>エッジ処理環境の構築</h4>
+            <p>映像処理は社内エッジ完結。クラウド送信なしで運用可能。</p>
+          </div>
+        </div>
+      </div>
+      <div class="scope-options">
+        <strong>本番運用フェーズで対応するもの(別途お見積もり):</strong>　既存LMS/MES/基幹システム連携の開発、24時間監視オペレーション、大規模な現場改修工事、本番運用後の継続モデル再学習、業務フロー再設計コンサルティング。
+      </div>
+    </div>
+  </section>
+
+  <!-- PoC費用 -->
+  <section class="lp-section lp-section--white">
+    <div class="container">
+      <div class="lp-kicker">PoC費用</div>
+      <h2>2〜3ヶ月PoCの費用感</h2>
+      <div class="pricing-frame">
+        <div class="pricing-amount">
+          <div class="pricing-amount__label">PRICE RANGE</div>
+          <div class="pricing-amount__num">100〜400<span style="font-size:0.6em;">万円</span></div>
+          <div class="pricing-amount__unit">／ 2〜3ヶ月PoC</div>
+        </div>
+        <div class="pricing-detail">
+          <h3>規模・工程数・現場条件に応じて変動します</h3>
+          <p>製造業AI領域のPoC費用は、概ね <strong>100〜400万円</strong> がボリュームゾーンです。検証する工程数・カメラ台数・現場立ち合い回数によって、案件ごとに最適化したお見積もりを作成します。</p>
+          <p>初回ヒアリングで <strong>困りごとを工程レベルで整理</strong>した上で、必要なスコープに絞った詳細見積をご提示します。</p>
+          <div class="pricing-factors">
+            <span class="pricing-factor">検証工程数</span>
+            <span class="pricing-factor">カメラ台数</span>
+            <span class="pricing-factor">対応言語数</span>
+            <span class="pricing-factor">現場立ち合い頻度</span>
+            <span class="pricing-factor">既存設備連携</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 基盤の中身(特長6カード) -->
+  <section id="features" class="lp-section lp-section--futuristic">
+    <div class="sf-bg" aria-hidden="true">
+      <div class="sf-bg__grid"></div>
+      <div class="sf-bg__orb sf-bg__orb--1"></div>
+      <div class="sf-bg__orb sf-bg__orb--2"></div>
+      <div class="sf-bg__orb sf-bg__orb--3"></div>
+      <div class="sf-bg__hud sf-bg__hud--tl"></div>
+      <div class="sf-bg__hud sf-bg__hud--tr"></div>
+      <div class="sf-bg__hud sf-bg__hud--bl"></div>
+      <div class="sf-bg__hud sf-bg__hud--br"></div>
+      <div class="sf-bg__scan" style="animation-delay:3s;"></div>
+    </div>
+    <div class="container">
+      <div class="lp-kicker">VSG3.0の中身</div>
+      <h2>作業解析AIエージェント "VSG3.0" は、6つの機能で構成されています</h2>
+      <p class="lead-text">データ化 → リアルタイム作業解析 → フィジカルAI の3フェーズはすべて、VSG3.0を起点に動きます。</p>
       <div class="feature-grid">
-        <div class="feature-card">
-          <div class="feature-card__num">01</div>
+        <div class="feature-card-v2">
+          <div class="feature-card-v2__icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 6 h16 M4 10 h16 M4 14 h10 M4 18 h6"/>
+              <rect x="2" y="3" width="20" height="18" rx="2"/>
+            </svg>
+          </div>
           <h3>手順書解析AI</h3>
           <p>既存のPDF・Excel・紙の手順書をAIが解析。工程ごとの作業要素を自動抽出し、判定モデルを構築します。</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-card__num">02</div>
-          <h3>リアルタイム作業評価</h3>
+        <div class="feature-card-v2">
+          <div class="feature-card-v2__icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="6" width="18" height="12" rx="2"/>
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M9 6 V4 h6 V6"/>
+            </svg>
+          </div>
+          <h3>リアルタイム作業認識</h3>
           <p>現場のAIカメラが作業動作を解析し、手順の抜け・順序ミス・品質逸脱をリアルタイムで検知・通知します。</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-card__num">03</div>
+        <div class="feature-card-v2">
+          <div class="feature-card-v2__icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 17 l5 -5 l4 4 l9 -9"/>
+              <path d="M14 7 h7 v7"/>
+            </svg>
+          </div>
           <h3>作業データの自動蓄積</h3>
           <p>作業時間・手順遵守率・頻出ミス箇所などを自動蓄積。改善活動のエビデンスとして活用できます。</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-card__num">04</div>
-          <h3>OJT自動化モード</h3>
-          <p>新人向けに手順をステップ表示しながらリアルタイム採点。ベテランが隣につかなくても標準品質の教育が可能です。</p>
+        <div class="feature-card-v2">
+          <div class="feature-card-v2__icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 5 v2 M12 17 v2 M5 12 h2 M17 12 h2 M7 7 l1.5 1.5 M15.5 15.5 l1.5 1.5 M7 17 l1.5 -1.5 M15.5 8.5 l1.5 -1.5"/>
+            </svg>
+          </div>
+          <h3>AR / ロボット出力</h3>
+          <p>認識結果はARグラスへの投影・ロボット制御の入力として転送可能。教育にも自動化にも使えます。</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-card__num">05</div>
+        <div class="feature-card-v2">
+          <div class="feature-card-v2__icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3 l8 4 v5 c0 5 -4 8 -8 9 c-4 -1 -8 -4 -8 -9 V7 z"/>
+              <path d="M9 12 l2 2 l4 -4"/>
+            </svg>
+          </div>
           <h3>エッジ処理で情報漏洩なし</h3>
           <p>映像処理は社内のエッジデバイスで完結。製造ノウハウや作業映像が外部に出ることはありません。</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-card__num">06</div>
+        <div class="feature-card-v2">
+          <div class="feature-card-v2__icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </div>
           <h3>多品種・多工程に対応</h3>
           <p>製品・工程ごとに複数の手順書を登録可能。QRコード読み取りで自動切替できます。</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 導入フロー -->
-  <section class="lp-section lp-section--tinted">
-    <div class="container">
-      <div class="lp-kicker">導入の流れ</div>
-      <h2>手順書を登録するだけで、翌週には現場監視がスタート</h2>
-      <p class="lead-text">大規模なシステム改修は不要。既存設備にAIカメラを追加するだけで導入できます。</p>
-      <div class="flow-steps">
-        <div class="flow-step">
-          <div class="flow-step__icon">📄</div>
-          <h3>STEP 1<br>手順書を登録</h3>
-          <p>既存の手順書をアップロード。AIが工程要素を自動抽出します。</p>
-        </div>
-        <div class="flow-step">
-          <div class="flow-step__icon">📷</div>
-          <h3>STEP 2<br>カメラを設置</h3>
-          <p>作業台上部にAIカメラを設置。既存カメラの流用も可能です。</p>
-        </div>
-        <div class="flow-step">
-          <div class="flow-step__icon">🤖</div>
-          <h3>STEP 3<br>AI学習</h3>
-          <p>数回の作業映像でAIが学習完了。特殊な環境構築は不要です。</p>
-        </div>
-        <div class="flow-step">
-          <div class="flow-step__icon">📊</div>
-          <h3>STEP 4<br>監視・改善</h3>
-          <p>リアルタイム監視と作業データ蓄積が開始。改善サイクルが回り始めます。</p>
         </div>
       </div>
     </div>
@@ -240,9 +1570,9 @@
   <!-- 業種別活用シーン -->
   <section class="lp-section lp-section--white">
     <div class="container">
-      <div class="lp-kicker">業種別活用シーン</div>
-      <h2>製造業・医療・飲食——どの現場にも対応</h2>
-      <p class="lead-text">nanoSTEPの「手順書×AIカメラ」は業種を問いません。あなたの現場に合った活用イメージをご覧ください。</p>
+      <div class="lp-kicker">業種別のVSG3.0活用例</div>
+      <h2>製造業・医療・飲食——業種を問わず使えます</h2>
+      <p class="lead-text">VSG3.0は業種を問いません。あなたの現場に近い使い方からご覧ください。</p>
       <div class="tab-group">
         <div class="usecase-tabs">
           <button class="usecase-tab is-active" data-tab="mfg">🏭 製造業</button>
@@ -250,29 +1580,27 @@
           <button class="usecase-tab" data-tab="food">🍽️ 飲食店・食品工場</button>
         </div>
         <ul class="usecase-list">
-          <!-- 製造業 -->
           <div class="usecase-panel is-active" data-panel="mfg">
             <ul class="usecase-list">
               <li class="usecase-item">
-                <h4>ライン作業の標準化・OJT自動化</h4>
-                <p>ベテラン不在でも標準品質を維持。新人が手順書の通りに作業できているかをAIが自動採点し、ミスをリアルタイムで通知。多言語音声ガイドで外国人スタッフにも対応します。</p>
+                <h4>AR×実習生のOJT自動化</h4>
+                <p>ARグラスで手順をリアルタイム投影。言葉の壁があってもベテランと同じ品質で作業可能に。多言語対応で外国人スタッフの戦力化を加速します。</p>
               </li>
               <li class="usecase-item">
-                <h4>作業品質データの自動蓄積</h4>
-                <p>各作業員の手順遵守率・頻出ミス箇所・作業時間を自動記録。クレーム発生時のトレーサビリティ確保と、改善活動のエビデンスとして活用できます。</p>
+                <h4>ロボット連携での重作業代替</h4>
+                <p>ベテランの動きをAIが学び、ロボットアームに作業を移管。重量物・反復作業・夜勤帯の人手依存を切り離します。</p>
               </li>
               <li class="usecase-item">
-                <h4>多品種小ロット対応</h4>
+                <h4>多品種小ロットの手順遵守保証</h4>
                 <p>QRコード読み取りで製品切り替え時に手順書を自動切替。段取り変えのミスを防ぎ、多品種化が進む現場でも教育コストをかけずに対応できます。</p>
               </li>
             </ul>
           </div>
-          <!-- 医療機関 -->
           <div class="usecase-panel" data-panel="med">
             <ul class="usecase-list">
               <li class="usecase-item">
                 <h4>看護・処置手順の標準化</h4>
-                <p>医療処置・感染対策プロトコルをAIカメラが監視。新人看護師・スタッフのインシデント防止と、OJT担当なしでの研修効率化を同時に実現します。</p>
+                <p>医療処置・感染対策プロトコルをAIカメラが認識・記録。新人スタッフのインシデント防止と、OJT担当なしでの研修効率化を同時に実現します。</p>
               </li>
               <li class="usecase-item">
                 <h4>手順遵守の記録・エビデンス化</h4>
@@ -284,7 +1612,6 @@
               </li>
             </ul>
           </div>
-          <!-- 飲食店 -->
           <div class="usecase-panel" data-panel="food">
             <ul class="usecase-list">
               <li class="usecase-item">
@@ -306,17 +1633,47 @@
     </div>
   </section>
 
+  <!-- FAQ -->
+  <section class="lp-section lp-section--surface">
+    <div class="container">
+      <div class="lp-kicker">よくあるご質問</div>
+      <h2>PoC着手前に気になる点</h2>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>作業映像や手順書のデータが外部に流出することはありませんか？</summary>
+          <p>映像処理は社内に設置するエッジデバイス上で完結します。クラウドへの送信は行わず、製造ノウハウや作業映像が外部に出ることはありません。データ保管・削除のポリシーもPoC契約時に明示します。</p>
+        </details>
+        <details class="faq-item">
+          <summary>PoCで期待した結果が出なかった場合、費用はどうなりますか？</summary>
+          <p>PoC着手前に「成功判定基準」を文書で合意します。判定結果に関わらずPoC費用は発生しますが、本番移行の判断はその基準に照らして冷静に行えます。曖昧な基準で本番移行を促すことはありません。</p>
+        </details>
+        <details class="faq-item">
+          <summary>ARグラスやAIカメラは、こちらで用意する必要がありますか？</summary>
+          <p>PoC期間中はnanoSTEP側からARグラス・AIカメラを貸与します。本番移行時には買取・継続レンタル・他社製ハードへの移行など、選択肢を一緒に検討します。</p>
+        </details>
+        <details class="faq-item">
+          <summary>外国人実習生向けの多言語対応はどこまでできますか？</summary>
+          <p>ベトナム語・中国語・英語など主要言語の手順表示・音声ガイドに対応します。対応言語はPoCスコープに含まれるため、現場で使う言語を事前にヒアリングします。</p>
+        </details>
+        <details class="faq-item">
+          <summary>既に現場に設置済みの監視カメラは流用できますか？</summary>
+          <p>カメラの仕様・設置位置・解像度によります。流用可否はヒアリング時に確認します。流用できる場合はカメラ追加コストを抑えられます。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section id="contact" class="section cta-section">
     <div class="container">
-      <h2>nanoSTEP の詳細・デモのご相談</h2>
+      <h2>PoCのご相談・お見積もり</h2>
       <p class="lead-text">
-        導入事例・デモ映像・お見積もりはお問い合わせください。<br>
-        オンラインデモも承っております。
+        現場の困りごと・PoCの進め方・お見積もり、まずはお気軽にご相談ください。<br>
+        オンラインでのヒアリングも承っております。
       </p>
       <div class="cta-buttons">
         <a class="cta-button" id="nanostep-mail-btn" href="#">メールで相談する</a>
-        <a class="cta-button cta-button--outline" href="../products-services/">製品一覧に戻る</a>
+        <a class="cta-button cta-button--outline" href="../products-services/">事業一覧に戻る</a>
       </div>
     </div>
   </section>
@@ -331,6 +1688,89 @@
     const email = "contact@nano-factory.jp";
     const btn = document.getElementById("nanostep-mail-btn");
     if (btn) btn.href = `mailto:${email}`;
+
+    // ── スカウター ロックオンサイクル ──
+    (function () {
+      const hero     = document.querySelector('.lp-hero--blue');
+      const scouter  = document.getElementById('scouter');
+      const targets  = [...document.querySelectorAll('.scan-word')];
+      if (!hero || !scouter || !targets.length) return;
+
+      const readoutValue = scouter.querySelector('.scouter__rd-value');
+      const readoutLabel = scouter.querySelector('.scouter__rd-label');
+
+      const MOVE_MS  = 520;   // brackets fly to target
+      const SCAN_MS  = 850;   // numbers tick up
+      const HOLD_MS  = 1800;  // hold lock state
+      const NEXT_MS  = 280;   // brief blank before next target
+
+      let idx = 0;
+      let activeTarget = null;
+
+      function positionScouterTo(el) {
+        const r  = el.getBoundingClientRect();
+        const hr = hero.getBoundingClientRect();
+        scouter.style.left   = (r.left - hr.left - 10) + 'px';
+        scouter.style.top    = (r.top  - hr.top  - 10) + 'px';
+        scouter.style.width  = (r.width  + 20) + 'px';
+        scouter.style.height = (r.height + 20) + 'px';
+      }
+
+      function tickNumbers(finalVal, duration, onDone) {
+        const start = performance.now();
+        function step(now) {
+          const p = Math.min((now - start) / duration, 1);
+          // ease-out
+          const eased = 1 - Math.pow(1 - p, 2);
+          const curr  = Math.floor(eased * finalVal);
+          readoutValue.textContent = String(curr).padStart(4, '0');
+          if (p < 1) requestAnimationFrame(step);
+          else onDone && onDone();
+        }
+        requestAnimationFrame(step);
+      }
+
+      function lockOn(i) {
+        const el = targets[i];
+        activeTarget = el;
+
+        // 1) move brackets to target (no lit yet)
+        positionScouterTo(el);
+        scouter.classList.remove('locked');
+        scouter.classList.add('active');
+        readoutLabel.textContent = 'SCAN';
+        readoutValue.textContent = '----';
+
+        // 2) after move completes, start number tick
+        setTimeout(() => {
+          const finalVal = Math.floor(Math.random() * 8500 + 1500);
+          tickNumbers(finalVal, SCAN_MS, () => {
+            // 3) lock-on: green + word lights up
+            scouter.classList.add('locked');
+            readoutLabel.textContent = 'OK';
+            el.classList.add('lit');
+
+            // 4) hold, then proceed
+            setTimeout(() => {
+              el.classList.remove('lit');
+              scouter.classList.remove('active');
+              setTimeout(() => {
+                idx = (idx + 1) % targets.length;
+                lockOn(idx);
+              }, NEXT_MS);
+            }, HOLD_MS);
+          });
+        }, MOVE_MS);
+      }
+
+      // resize: keep scouter on current target
+      window.addEventListener('resize', () => {
+        if (activeTarget) positionScouterTo(activeTarget);
+      });
+
+      // kick off after fonts settle
+      setTimeout(() => lockOn(0), 800);
+    })();
   </script>
   <script src="../script.js"></script>
 </body>
