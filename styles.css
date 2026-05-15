@@ -1689,7 +1689,7 @@
   width: 100%;
   max-width: 320px;
   padding: 1.5rem 1.4rem;
-  transition: opacity 0.45s ease;
+  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1);
 }
 /* コンテンツ(アイコン・テキスト)は ::before の上にレイヤー */
 .vsg-slider__inner > * {
@@ -1708,7 +1708,9 @@
   mask-image: radial-gradient(ellipse 58% 56% at center, #000 22%, rgba(0,0,0,0.55) 55%, transparent 96%);
   pointer-events: none;
   z-index: 0;
-  transition: backdrop-filter 0.45s ease, -webkit-backdrop-filter 0.45s ease, background 0.45s ease;
+  transition: backdrop-filter 0.75s cubic-bezier(0.4, 0, 0.2, 1),
+              -webkit-backdrop-filter 0.75s cubic-bezier(0.4, 0, 0.2, 1),
+              background 0.75s cubic-bezier(0.4, 0, 0.2, 1);
 }
 /* フェード切替: ぼかしも背景も全部消えて画像がはっきり見える */
 .vsg-slider__inner.is-fading {

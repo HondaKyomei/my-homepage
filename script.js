@@ -181,8 +181,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!slides.length || !inner) return;
       var current = 0;
       var timer = null;
-      var DURATION = 3800;
-      var FADE_MS  = 400;
+      var DURATION = 5800;
+      var FADE_MS  = 780;
 
       function goTo(idx) {
         inner.classList.add("is-fading");
