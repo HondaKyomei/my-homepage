@@ -1689,7 +1689,8 @@
   width: 100%;
   max-width: 320px;
   padding: 1.5rem 1.4rem;
-  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+  /* フェードイン(is-fading が外れる方向)— 長めに取って本当にじわじわ立ち上げる */
+  transition: opacity 1.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 /* コンテンツ(アイコン・テキスト)は ::before の上にレイヤー */
 .vsg-slider__inner > * {
@@ -1711,10 +1712,11 @@
   pointer-events: none;
   z-index: 0;
 }
-/* フェード切替: 親の opacity が 0 になると ::before も一緒に透明化 →
-   暗化もぼかしも同じカーブで滑らかに消失/再出現する */
+/* フェードアウト(is-fading が付与される方向)— 適度な速さでスムーズに消す。
+   フェードインは親ルールの 1.6s が適用される(非対称transition) */
 .vsg-slider__inner.is-fading {
   opacity: 0;
+  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .vsg-slider__track {
   position: relative;
