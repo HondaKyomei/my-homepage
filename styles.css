@@ -1696,7 +1696,9 @@
   position: relative;
   z-index: 1;
 }
-/* ぼかし背景 — 外側に向かってradialグラデでフェードし境界が見えない */
+/* ぼかし背景 — 外側に向かってradialグラデでフェードし境界が見えない
+   ※ backdrop-filter は値自体を変えるとブラウザによって補間が効かず急に切替わるため、
+     常に blur(22px) を維持し、親 .vsg-slider__inner の opacity だけで一括フェードする */
 .vsg-slider__inner::before {
   content: "";
   position: absolute;
@@ -1708,18 +1710,11 @@
   mask-image: radial-gradient(ellipse 58% 56% at center, #000 22%, rgba(0,0,0,0.55) 55%, transparent 96%);
   pointer-events: none;
   z-index: 0;
-  transition: backdrop-filter 0.75s cubic-bezier(0.4, 0, 0.2, 1),
-              -webkit-backdrop-filter 0.75s cubic-bezier(0.4, 0, 0.2, 1),
-              background 0.75s cubic-bezier(0.4, 0, 0.2, 1);
 }
-/* フェード切替: ぼかしも背景も全部消えて画像がはっきり見える */
+/* フェード切替: 親の opacity が 0 になると ::before も一緒に透明化 →
+   暗化もぼかしも同じカーブで滑らかに消失/再出現する */
 .vsg-slider__inner.is-fading {
   opacity: 0;
-}
-.vsg-slider__inner.is-fading::before {
-  backdrop-filter: blur(0px) saturate(100%);
-  -webkit-backdrop-filter: blur(0px) saturate(100%);
-  background: rgba(8, 14, 32, 0);
 }
 .vsg-slider__track {
   position: relative;
