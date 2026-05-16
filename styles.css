@@ -1697,16 +1697,13 @@
   position: relative;
   z-index: 1;
 }
-/* ぼかし背景 — 外側に向かってradialグラデでフェードし境界が見えない
-   ※ backdrop-filter は値自体を変えるとブラウザによって補間が効かず急に切替わるため、
-     常に blur(22px) を維持し、親 .vsg-slider__inner の opacity だけで一括フェードする */
+/* 暗化背景のみ — backdrop-filter のアニメーション不安定問題を回避するため
+   一旦ぼかしは外し、テキスト視認性を保つための暗化グラデだけ残す */
 .vsg-slider__inner::before {
   content: "";
   position: absolute;
   inset: -50px -60px;
-  background: rgba(8, 14, 32, 0.32);
-  backdrop-filter: blur(22px) saturate(125%);
-  -webkit-backdrop-filter: blur(22px) saturate(125%);
+  background: rgba(8, 14, 32, 0.55);
   -webkit-mask-image: radial-gradient(ellipse 58% 56% at center, #000 22%, rgba(0,0,0,0.55) 55%, transparent 96%);
   mask-image: radial-gradient(ellipse 58% 56% at center, #000 22%, rgba(0,0,0,0.55) 55%, transparent 96%);
   pointer-events: none;
