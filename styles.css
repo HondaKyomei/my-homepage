@@ -197,8 +197,9 @@
   }
   .hero.hero--mfg{
     background-image:
-      linear-gradient(rgba(7, 18, 40, 0.26), rgba(7, 18, 40, 0.26)),
-      url('assets/homepage-hero-background.png');
+      linear-gradient(rgba(7, 18, 40, 0.42), rgba(7, 18, 40, 0.42)),
+      url('assets/story-ar-trainee.jpg');
+    background-position: center;
   }
   .hero.hero--med{
     background-image:

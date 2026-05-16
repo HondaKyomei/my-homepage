@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>nanoSTEP | 作業解析AIエージェント VSG3.0 | nanoFACTORY</title>
-  <meta name="description" content="独自AIエージェント「VSG3.0」が手順書と現場のカメラ映像を結びつけ、作業を客観データに。現場改善 → 多能工化・教育負担削減 → フィジカルAI まで段階的に展開する、nanoSTEPの特設ページ。" />
+  <title>nanoSTEP | 作業解析AIエージェント VF3.0 | nanoFACTORY</title>
+  <meta name="description" content="独自AIエージェント「VF3.0」が手順書と現場のカメラ映像を結びつけ、作業を客観データに。現場改善 → 多能工化・教育負担削減 → フィジカルAI まで段階的に展開する、nanoSTEPの特設ページ。" />
   <link rel="stylesheet" href="../styles.css" />
   <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" />
   <style>
@@ -235,7 +235,7 @@
     }
 
     /* ====================================================================
-       近未来背景(さわやか版) — VSG3.0進化ステップ・中身セクション用
+       近未来背景(さわやか版) — VF3.0進化ステップ・中身セクション用
     ==================================================================== */
     .lp-section--futuristic {
       position: relative;
@@ -304,7 +304,7 @@
     .sf-bg__scan { display: none; }
 
     /* ====================================================================
-       課題インフォグラフィック(VSG3.0中心のハブ&スポーク)
+       課題インフォグラフィック(VF3.0中心のハブ&スポーク)
     ==================================================================== */
     .hub-orbit {
       position: relative;
@@ -343,7 +343,7 @@
       to { transform: rotate(360deg); }
     }
 
-    /* center: nanoSTEP / VSG3.0 */
+    /* center: nanoSTEP / VF3.0 */
     .hub-center {
       position: absolute;
       top: 50%; left: 50%;
@@ -492,18 +492,28 @@
         aspect-ratio: auto;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 0.9rem;
+        gap: 0.9rem 1.3rem;
         max-width: 480px;
+        padding-top: 0.6rem;
       }
-      .hub-lines { display: none; }
+      /* SVG ラインは表示維持(JSが座標を毎回更新) */
+      .hub-lines {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
       .hub-center {
         position: static;
         transform: none;
         grid-column: 1 / -1;
-        width: 200px;
+        width: 180px;
         aspect-ratio: 1 / 1;
-        margin: 0 auto 0.5rem;
+        margin: 0 auto 0.8rem;
         animation: none;
+        z-index: 3;
       }
       .hub-sat {
         position: static;
@@ -511,8 +521,11 @@
         width: 100%;
         aspect-ratio: 1 / 1;
         min-width: 0;
+        z-index: 2;
       }
       .hub-sat:hover { transform: scale(1.04); }
+      /* halo は丸が小さくなりすぎるので非表示に */
+      .hub-lines circle.hub-halo { display: none; }
     }
 
     /* ====================================================================
@@ -1075,14 +1088,14 @@
     </div>
 
     <div class="lp-hero__inner container">
-      <div class="lp-kicker">nanoSTEP / 独自AIエージェント "VSG3.0"</div>
+      <div class="lp-kicker">nanoSTEP / 独自AIエージェント "VF3.0"</div>
       <h1 class="lp-h1">現場の動きをAIが読む。<br><span class="scan-word">教育</span>も、<span class="scan-word">自動化</span>も、<span class="scan-word">品質保証</span>も。</h1>
       <p class="lp-lead">
-        作業解析AIエージェント "VSG3.0" が、手順書と現場のカメラ映像を結びつけ、「正しい作業が行われているか」を客観データに。<br>
+        作業解析AIエージェント "VF3.0" が、手順書と現場のカメラ映像を結びつけ、「正しい作業が行われているか」を客観データに。<br>
         そのデータを起点に、現場改善 → 多能工化・教育負担削減 → フィジカルAI まで段階的に展開します。
       </p>
       <div class="hero-tags">
-        <span class="hero-tag">VSG3.0</span>
+        <span class="hero-tag">VF3.0</span>
         <span class="hero-tag">現場改善</span>
         <span class="hero-tag">多能工化</span>
         <span class="hero-tag">フィジカルAI</span>
@@ -1095,29 +1108,25 @@
     </div>
   </section>
 
-  <!-- 課題インフォグラフィック(VSG3.0中心) -->
+  <!-- 課題インフォグラフィック(VF3.0中心) -->
   <section class="hub-section">
     <div class="hub-section__deco"></div>
     <div class="container">
-      <div class="lp-kicker">VSG3.0が応える現場の悩み</div>
+      <div class="lp-kicker">VF3.0が応える現場の悩み</div>
       <h2>人手不足・教育負担・属人化を、<br>ひとつのAIエージェントで解く</h2>
-      <p class="lead-text">バラバラに見える5つの課題、根っこは同じ。「作業をデータ化できていない」ことです。VSG3.0は手順書と現場のカメラ映像を結びつけ、ここを起点に一気に解きます。</p>
+      <p class="lead-text">バラバラに見える5つの課題、根っこは同じ。「作業をデータ化できていない」ことです。VF3.0は手順書と現場のカメラ映像を結びつけ、ここを起点に一気に解きます。</p>
 
       <div class="hub-orbit">
-        <!-- connecting lines (SVG layer) -->
-        <svg class="hub-lines" viewBox="0 0 600 600" aria-hidden="true">
+        <!-- connecting lines (SVG layer, JSが座標を毎回計算) -->
+        <svg class="hub-lines" viewBox="0 0 600 600" aria-hidden="true" data-hub-lines>
           <circle class="hub-halo" cx="300" cy="300" r="180"/>
-          <line x1="300" y1="300" x2="300" y2="66"/>
-          <line x1="300" y1="300" x2="523" y2="231"/>
-          <line x1="300" y1="300" x2="435" y2="486"/>
-          <line x1="300" y1="300" x2="165" y2="486"/>
-          <line x1="300" y1="300" x2="77"  y2="231"/>
+          <!-- <line> 要素は JS で center→各 sat の位置に動的に挿入 -->
         </svg>
 
         <!-- center -->
         <div class="hub-center">
           <div class="hub-center__brand">nanoSTEP</div>
-          <div class="hub-center__name">VSG3.0</div>
+          <div class="hub-center__name">VF3.0</div>
           <div class="hub-center__role">作業解析AIエージェント</div>
         </div>
 
@@ -1190,7 +1199,7 @@
     </div>
   </section>
 
-  <!-- VSG3.0の3フェーズ進化 -->
+  <!-- VF3.0の3フェーズ進化 -->
   <section id="stories" class="lp-section lp-section--futuristic">
     <div class="sf-bg" aria-hidden="true">
       <div class="sf-bg__grid"></div>
@@ -1204,7 +1213,7 @@
       <div class="sf-bg__scan"></div>
     </div>
     <div class="container">
-      <div class="lp-kicker">VSG3.0の進化ステップ</div>
+      <div class="lp-kicker">VF3.0の進化ステップ</div>
       <h2>データ化 → リアルタイム作業解析 → フィジカルAI</h2>
       <p class="lead-text">同じAIエージェントが、現場での使い方を段階的に進化させます。第一フェーズだけでも、ベテラン依存からの脱却に直結します。</p>
       <div class="nanostep-apps">
@@ -1222,7 +1231,7 @@
           <div class="nanostep-app__body">
             <span class="nanostep-app__tag">PHASE 01 — データ化</span>
             <h3>作業を客観データに<br>—現場改善のエビデンス</h3>
-            <p>VSG3.0が手順書と現場映像を照合し、実行状況・遵守率・逸脱箇所を客観データに変換。不良の原因追跡、PDCA改善活動の起点になります。</p>
+            <p>VF3.0が手順書と現場映像を照合し、実行状況・遵守率・逸脱箇所を客観データに変換。不良の原因追跡、PDCA改善活動の起点になります。</p>
             <a class="nanostep-app__link" href="#features">機能を見る</a>
           </div>
         </article>
@@ -1496,9 +1505,9 @@
       <div class="sf-bg__scan" style="animation-delay:3s;"></div>
     </div>
     <div class="container">
-      <div class="lp-kicker">VSG3.0の中身</div>
-      <h2>作業解析AIエージェント "VSG3.0" は、6つの機能で構成されています</h2>
-      <p class="lead-text">データ化 → リアルタイム作業解析 → フィジカルAI の3フェーズはすべて、VSG3.0を起点に動きます。</p>
+      <div class="lp-kicker">VF3.0の中身</div>
+      <h2>作業解析AIエージェント "VF3.0" は、6つの機能で構成されています</h2>
+      <p class="lead-text">データ化 → リアルタイム作業解析 → フィジカルAI の3フェーズはすべて、VF3.0を起点に動きます。</p>
       <div class="feature-grid">
         <div class="feature-card-v2">
           <div class="feature-card-v2__icon">
@@ -1570,9 +1579,9 @@
   <!-- 業種別活用シーン -->
   <section class="lp-section lp-section--white">
     <div class="container">
-      <div class="lp-kicker">業種別のVSG3.0活用例</div>
+      <div class="lp-kicker">業種別のVF3.0活用例</div>
       <h2>製造業・医療・飲食——業種を問わず使えます</h2>
-      <p class="lead-text">VSG3.0は業種を問いません。あなたの現場に近い使い方からご覧ください。</p>
+      <p class="lead-text">VF3.0は業種を問いません。あなたの現場に近い使い方からご覧ください。</p>
       <div class="tab-group">
         <div class="usecase-tabs">
           <button class="usecase-tab is-active" data-tab="mfg">🏭 製造業</button>
@@ -1688,6 +1697,71 @@
     const email = "contact@nano-factory.jp";
     const btn = document.getElementById("nanostep-mail-btn");
     if (btn) btn.href = `mailto:${email}`;
+
+    // ── ハブオービット: center → 各 sat への枝ラインを動的描画(モバイル/デスクトップ両対応) ──
+    (function () {
+      const SVG_NS = 'http://www.w3.org/2000/svg';
+
+      function drawHubLines() {
+        document.querySelectorAll('[data-hub-lines]').forEach(function (svg) {
+          const orbit  = svg.closest('.hub-orbit');
+          if (!orbit) return;
+          const center = orbit.querySelector('.hub-center');
+          const sats   = orbit.querySelectorAll('.hub-sat');
+          if (!center || !sats.length) return;
+
+          const orbitRect  = orbit.getBoundingClientRect();
+          if (orbitRect.width === 0 || orbitRect.height === 0) return;
+
+          // viewBox を orbit の実寸に合わせる(モバイルでも線が正確な位置)
+          svg.setAttribute('viewBox', '0 0 ' + orbitRect.width + ' ' + orbitRect.height);
+          svg.setAttribute('preserveAspectRatio', 'none');
+
+          const cr = center.getBoundingClientRect();
+          const cx = cr.left + cr.width  / 2 - orbitRect.left;
+          const cy = cr.top  + cr.height / 2 - orbitRect.top;
+
+          // halo もセンターに追従させる
+          const halo = svg.querySelector('circle.hub-halo');
+          if (halo) {
+            halo.setAttribute('cx', cx);
+            halo.setAttribute('cy', cy);
+            halo.setAttribute('r',  Math.min(cr.width, cr.height) * 0.95);
+          }
+
+          // 既存の動的ラインを削除
+          Array.from(svg.querySelectorAll('line[data-dyn]')).forEach(function (l) { l.remove(); });
+
+          sats.forEach(function (sat) {
+            const r  = sat.getBoundingClientRect();
+            const sx = r.left + r.width  / 2 - orbitRect.left;
+            const sy = r.top  + r.height / 2 - orbitRect.top;
+            const line = document.createElementNS(SVG_NS, 'line');
+            line.setAttribute('x1', cx);
+            line.setAttribute('y1', cy);
+            line.setAttribute('x2', sx);
+            line.setAttribute('y2', sy);
+            line.setAttribute('data-dyn', '1');
+            svg.appendChild(line);
+          });
+        });
+      }
+
+      // 初期描画(レイアウト確定後)
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', drawHubLines);
+      } else {
+        drawHubLines();
+      }
+      // フォント読み込みでサイズが変わるケースも拾う
+      window.addEventListener('load', drawHubLines);
+      // リサイズ(モバイル/デスクトップ切替・ローテーション)
+      let resizeTimer = null;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(drawHubLines, 80);
+      });
+    })();
 
     // ── スカウター ロックオンサイクル ──
     (function () {

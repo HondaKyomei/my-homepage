@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.2, rootMargin: "0px 0px -40px 0px" });
     document.querySelectorAll(".js-tech-anim").forEach(function(el) { techAnimObserver.observe(el); });
 
-    // VSG3.0 オーバーレイ・スライドショー(ぼかし消失→画像表示→次スライドへ)
+    // VF3.0 オーバーレイ・スライドショー(ぼかし消失→画像表示→次スライドへ)
     document.querySelectorAll("[data-vsg-slider]").forEach(function(slider) {
       var inner  = slider.querySelector(".vsg-slider__inner");
       var slides = slider.querySelectorAll(".vsg-slide");
