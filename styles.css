@@ -1847,14 +1847,45 @@
 
 /* テキスト */
 .ind-solution__num {
-  font-size: 5.5rem;
+  font-size: 6rem;
   font-weight: 900;
   line-height: 0.85;
-  color: rgba(255,255,255,0.04);
-  letter-spacing: -0.05em;
+  /* シアン透過 + グロー で「目立つけど主役でない」バランス */
+  color: rgba(86,204,242,0.55);
+  text-shadow:
+    0 0 14px rgba(86,204,242,0.35),
+    0 0 32px rgba(42,95,255,0.18);
+  letter-spacing: -0.04em;
   display: block;
   margin-bottom: -0.75rem;
   font-variant-numeric: tabular-nums;
+}
+
+/* 「3つの課題」シアンネオン */
+@keyframes kadaiNeonPulse {
+  0%, 100% {
+    color: #56ccf2;
+    text-shadow:
+      0 0 8px  rgba(86,204,242,0.70),
+      0 0 18px rgba(86,204,242,0.50),
+      0 0 36px rgba(42,95,255,0.30);
+  }
+  50% {
+    color: #aef2ff;
+    text-shadow:
+      0 0 14px rgba(86,204,242,1),
+      0 0 28px rgba(86,204,242,0.80),
+      0 0 56px rgba(42,95,255,0.50);
+  }
+}
+.kadai-neon {
+  color: #56ccf2;
+  font-weight: 900;
+  font-size: 1.08em;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 12px rgba(86,204,242,0.6);
+  animation: kadaiNeonPulse 2.6s ease-in-out infinite;
+  padding: 0 0.05em;
 }
 .ind-solution__badge {
   display: inline-flex;
