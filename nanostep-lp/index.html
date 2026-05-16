@@ -640,25 +640,46 @@
       animation: gripPulse 3.5s ease-in-out infinite;
     }
 
-    /* ── SVG アニメ: 品質チェック(チェックマーク描画) ── */
-    @keyframes checkDraw {
-      0%,20%  { stroke-dashoffset: 60; opacity: 0; }
-      40%     { stroke-dashoffset: 0;  opacity: 1; }
-      85%,100%{ stroke-dashoffset: 0;  opacity: 1; }
+    /* ── SVG アニメ: データ解析(バー高さの波打ち + トレンドライン描画) ── */
+    @keyframes dataBarPulse {
+      0%, 100% { transform: scaleY(0.45); }
+      50%      { transform: scaleY(1); }
     }
-    @keyframes circleRotate {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
+    @keyframes trendDraw {
+      0%   { stroke-dashoffset: 90; opacity: 0; }
+      15%  { opacity: 1; }
+      55%  { stroke-dashoffset: 0;  opacity: 1; }
+      80%  { stroke-dashoffset: 0;  opacity: 1; }
+      100% { stroke-dashoffset: -90; opacity: 0; }
     }
-    .qa-icon .qa-check {
-      stroke-dasharray: 60;
-      stroke-dashoffset: 60;
-      animation: checkDraw 3s ease-in-out infinite;
+    @keyframes trendDotsBlink {
+      0%, 35%   { opacity: 0; transform: scale(0.6); }
+      55%, 80%  { opacity: 1; transform: scale(1); }
+      100%      { opacity: 0; transform: scale(0.6); }
     }
-    .qa-icon .qa-ring {
-      transform-origin: 60px 60px;
-      animation: circleRotate 8s linear infinite;
+    .qa-icon .qa-bar {
+      transform-box: fill-box;
+      transform-origin: center bottom;
+      animation: dataBarPulse 2.6s ease-in-out infinite;
     }
+    .qa-icon .qa-bar--1 { animation-delay: 0s; }
+    .qa-icon .qa-bar--2 { animation-delay: 0.18s; }
+    .qa-icon .qa-bar--3 { animation-delay: 0.36s; }
+    .qa-icon .qa-bar--4 { animation-delay: 0.54s; }
+    .qa-icon .qa-trend {
+      stroke-dasharray: 90;
+      stroke-dashoffset: 90;
+      animation: trendDraw 3.2s ease-in-out infinite;
+    }
+    .qa-icon .qa-trend-dot {
+      transform-box: fill-box;
+      transform-origin: center center;
+      animation: trendDotsBlink 3.2s ease-in-out infinite;
+    }
+    .qa-icon .qa-trend-dot--1 { animation-delay: 0s; }
+    .qa-icon .qa-trend-dot--2 { animation-delay: 0.1s; }
+    .qa-icon .qa-trend-dot--3 { animation-delay: 0.2s; }
+    .qa-icon .qa-trend-dot--4 { animation-delay: 0.3s; }
 
     /* ====================================================================
        ストーリーセクション(2カラム)
@@ -1221,11 +1242,26 @@
         <article class="nanostep-app nanostep-app--qa">
           <div class="nanostep-app__icon">
             <svg class="qa-icon" viewBox="0 0 120 120" fill="none">
-              <g class="qa-ring">
-                <circle cx="60" cy="60" r="42" stroke="#6b21a8" stroke-opacity="0.18" stroke-width="2" stroke-dasharray="6 6"/>
+              <!-- baseline -->
+              <line x1="20" y1="100" x2="106" y2="100" stroke="#6b21a8" stroke-width="2.2" stroke-linecap="round"/>
+              <!-- animated bars (data accumulating) -->
+              <g class="qa-bars">
+                <rect class="qa-bar qa-bar--1" x="26" y="70" width="14" height="30" rx="2.5" fill="#c4b5fd"/>
+                <rect class="qa-bar qa-bar--2" x="46" y="54" width="14" height="46" rx="2.5" fill="#a78bfa"/>
+                <rect class="qa-bar qa-bar--3" x="66" y="62" width="14" height="38" rx="2.5" fill="#8b5cf6"/>
+                <rect class="qa-bar qa-bar--4" x="86" y="40" width="14" height="60" rx="2.5" fill="#7c3aed"/>
               </g>
-              <circle cx="60" cy="60" r="34" stroke="#7e22ce" stroke-width="3" stroke-opacity="0.4"/>
-              <polyline class="qa-check" points="44,62 56,74 78,50" stroke="#7e22ce" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- trend line (analysis drawing over bars) -->
+              <polyline class="qa-trend" points="33,70 53,54 73,62 93,42"
+                        fill="none" stroke="#581c87" stroke-width="2.8"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- data points on the trend -->
+              <g fill="#581c87">
+                <circle class="qa-trend-dot qa-trend-dot--1" cx="33" cy="70" r="2.6"/>
+                <circle class="qa-trend-dot qa-trend-dot--2" cx="53" cy="54" r="2.6"/>
+                <circle class="qa-trend-dot qa-trend-dot--3" cx="73" cy="62" r="2.6"/>
+                <circle class="qa-trend-dot qa-trend-dot--4" cx="93" cy="42" r="2.6"/>
+              </g>
             </svg>
           </div>
           <div class="nanostep-app__body">
