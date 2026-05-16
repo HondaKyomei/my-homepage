@@ -1585,6 +1585,13 @@
   text-shadow: 0 1px 6px rgba(0,0,0,0.35);
   text-align: center;
 }
+/* PC: 「日本の現場のために。〜」 / モバイル: 元の1行コピー */
+.hero-industry-lead__desktop { display: inline; }
+.hero-industry-lead__mobile { display: none; }
+@media (max-width: 760px) {
+  .hero-industry-lead__desktop { display: none; }
+  .hero-industry-lead__mobile { display: inline; }
+}
 /* ===== /Hero 業種タブ ===== */
 
 /* ===== 業種詳細セクション ===== */
