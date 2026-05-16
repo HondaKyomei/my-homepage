@@ -1902,25 +1902,52 @@
 .industry-detail--med .ind-solution__badge { background: rgba(13,148,136,0.15); color: #5eead4; border: 1px solid rgba(13,148,136,0.3); }
 .industry-detail--food .ind-solution__badge { background: rgba(234,88,12,0.15); color: #fdba74; border: 1px solid rgba(234,88,12,0.3); }
 
-/* バッジをLPリンク化するモディファイア */
+/* バッジをLPリンク化するモディファイア(2段構成: 大ラベル + 詳細はこちら) */
 .ind-solution__badge--link {
   cursor: pointer;
   text-decoration: none;
-  gap: 0.4rem;
-  transition: gap 0.2s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
-}
-.ind-solution__badge--link::after {
-  content: "→";
-  display: inline-block;
-  font-size: 0.85rem;
+  /* 親 .ind-solution__badge の display: inline-flex / align-items: center を上書き */
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0.6rem 0.95rem 0.55rem;
+  border-radius: 8px;
+  text-transform: none;
   letter-spacing: 0;
-  transition: transform 0.25s ease;
+  font-size: inherit;
+  line-height: 1.2;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
 }
+.ind-solution__badge--link::after { content: none; } /* 親の矢印は無効化 */
+
+.ind-solution__badge-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+.ind-solution__badge-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+  transition: gap 0.22s ease, opacity 0.22s ease;
+}
+.ind-solution__badge-cta::after {
+  content: "→";
+  font-size: 0.85rem;
+  transition: transform 0.22s ease;
+}
+
 .industry-detail--mfg .ind-solution__badge--link:hover { background: rgba(59,130,246,0.28); color: #dbeafe; border-color: rgba(59,130,246,0.55); }
 .industry-detail--med .ind-solution__badge--link:hover { background: rgba(13,148,136,0.28); color: #a7f3d0; border-color: rgba(13,148,136,0.55); }
 .industry-detail--food .ind-solution__badge--link:hover { background: rgba(234,88,12,0.28); color: #fed7aa; border-color: rgba(234,88,12,0.55); }
-.ind-solution__badge--link:hover { gap: 0.6rem; }
-.ind-solution__badge--link:hover::after { transform: translateX(3px); }
+.ind-solution__badge--link:hover .ind-solution__badge-cta { opacity: 1; gap: 0.5rem; }
+.ind-solution__badge--link:hover .ind-solution__badge-cta::after { transform: translateX(4px); }
 
 .ind-solution__headline {
   font-size: clamp(1.25rem, 2.4vw, 1.75rem);
