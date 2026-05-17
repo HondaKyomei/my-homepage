@@ -2701,6 +2701,63 @@
 }
 
 /* ====================================================================
+   事例カード(news/index.html) — 全体がLPへの<a>リンク
+==================================================================== */
+.case-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 24px;
+  padding: 1.75rem 1.75rem 2rem;
+  margin-top: 2rem;
+  box-shadow: 0 12px 32px rgba(15,23,42,0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.case-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px rgba(42,95,255,0.14);
+  border-color: #c7d2fe;
+}
+.case-card::after {
+  content: "→";
+  position: absolute;
+  top: 1.6rem;
+  right: 1.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2a5fff;
+  opacity: 0.55;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.case-card:hover::after {
+  transform: translateX(6px);
+  opacity: 1;
+}
+.case-card__kicker {
+  display: inline-block;
+  padding: 0.32rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  background: rgba(42,95,255,0.1);
+  border: 1px solid rgba(42,95,255,0.22);
+  color: #2a5fff;
+}
+.case-card__title {
+  font-size: clamp(1.2rem, 1.8vw + 0.4rem, 1.6rem);
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0.7rem 0 0;
+  line-height: 1.4;
+}
+.case-card .nanostep-story { margin-top: 1.5rem; }
+
+/* ====================================================================
    ストーリー/事例セクション(2カラム: 画像 + 本文) — 共通化
    nanoSTEP LP と news/事例ページで共有
 ==================================================================== */
