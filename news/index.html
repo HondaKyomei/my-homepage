@@ -4,12 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>ニュース・事例 | nanoFACTORY</title>
-  <meta name="description" content="nanoFACTORYからのお知らせと、作業認識AIの現場取り組み事例(AR×実習生教育、フィジカルAI/ロボット連携)をお届けします。" />
+  <meta name="description" content="nanoFACTORYからのお知らせと、全事業(作業認識AI・AI検査・AI監視カメラ)の現場取り組み事例をお届けします。" />
   <link rel="stylesheet" href="../styles.css" />
   <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" />
   <style>
-    /* 親 styles.css の scroll-snap が news ページで暴れる(意図しないスナップ)
-       のを抑制 — nanostep-lp と同じ扱い */
+    /* 親 styles.css の scroll-snap が news ページで暴れるのを抑制 */
     html, body { scroll-snap-type: none !important; }
   </style>
 </head>
@@ -39,71 +38,70 @@
 
   <main>
     <!-- ページ見出し -->
-    <section class="lp-section lp-section--white" style="padding-bottom: 1.5rem;">
+    <section class="lp-section lp-section--white" style="padding-bottom: 1rem;">
       <div class="container" style="text-align: center;">
         <div class="lp-kicker">NEWS &amp; CASE STUDIES</div>
         <h2 style="margin-top: 0.4rem;">ニュース・事例</h2>
         <p class="lead-text" style="max-width: 640px; margin: 0 auto;">
-          nanoFACTORYからのお知らせと、現場での取り組み事例をお届けします。
+          全事業の取り組みとお知らせをまとめてお届けします。新しいものから順に表示しています。
         </p>
       </div>
     </section>
 
-    <!-- 事例カード(クリックで該当LPへ) -->
-    <section class="lp-section lp-section--surface" style="padding-top: 1rem;">
+    <!-- カードリスト + ページネーション(JSが日付降順ソート・1ページ5件) -->
+    <section id="case-list-section" class="lp-section lp-section--surface" style="padding-top: 1rem;">
       <div class="container">
-        <div class="lp-kicker">事例 / CASE STUDIES</div>
-        <h2>作業認識AIの取り組み事例</h2>
-        <p class="lead-text">カードをタップすると、作業認識AIの詳細ページへ移動します。</p>
+        <div class="case-list" data-cases data-page-size="5">
 
-        <!-- CASE 01 -->
-        <a class="case-card" href="../nanostep-lp/#story-ar">
-          <span class="case-card__kicker">CASE 01 / 作業認識AI</span>
-          <h3 class="case-card__title">ARグラス越しに、言葉の壁を越える現場教育</h3>
-          <div class="nanostep-story">
-            <div class="nanostep-story__media">
-              <div class="nanostep-story__fallback">
-                <span class="nanostep-story__fallback-icon">🥽</span>
-                <span>※ AR×実習生の実写を配置予定</span>
+          <!-- ===== ここに追加していく(data-date は YYYY-MM-DD で必ず付与) ===== -->
+
+          <a class="case-card" href="../nanostep-lp/#story-ar" data-date="2026-05-17">
+            <div class="case-card__meta">
+              <time class="case-card__date" datetime="2026-05-17">2026.05.17</time>
+              <span class="case-card__kicker">作業認識AI</span>
+            </div>
+            <h3 class="case-card__title">ARグラス越しに、言葉の壁を越える現場教育</h3>
+            <div class="nanostep-story">
+              <div class="nanostep-story__media">
+                <div class="nanostep-story__fallback">
+                  <span class="nanostep-story__fallback-icon">🥽</span>
+                  <span>※ AR×実習生の実写を配置予定</span>
+                </div>
+                <img src="../assets/story-ar-trainee.jpg" alt="ARグラスを着用した実習生" onerror="this.style.display='none'" />
               </div>
-              <img src="../assets/story-ar-trainee.jpg" alt="ARグラスを着用した実習生" onerror="this.style.display='none'" />
-            </div>
-            <div class="nanostep-story__body">
-              <p>外国人実習生がARグラスを着用すると、視界の中に作業手順がリアルタイムで投影されます。AIが現在の作業を認識し、次に行うべき動作・注意点を表示する仕組みです。</p>
-              <p>母国語の手順書がなくても、ベテランが横に立たなくても、<strong>標準作業をその場で再現</strong>。教育担当者は「最初の数回だけ」を見てあげれば十分。OJT工数を大きく圧縮できます。</p>
-              <span class="nanostep-story__highlight">OJT工数 ▲60% 目標(現場検証中)</span>
-            </div>
-          </div>
-        </a>
-
-        <!-- CASE 02 -->
-        <a class="case-card" href="../nanostep-lp/#story-robot">
-          <span class="case-card__kicker">CASE 02 / 作業認識AI</span>
-          <h3 class="case-card__title">人の動きをAIが学び、ロボットが代替する</h3>
-          <div class="nanostep-story nanostep-story--reverse">
-            <div class="nanostep-story__media">
-              <div class="nanostep-story__fallback">
-                <span class="nanostep-story__fallback-icon">🤖</span>
-                <span>※ ロボット×フィジカルAI写真を配置予定</span>
+              <div class="nanostep-story__body">
+                <p>外国人実習生がARグラスを着用すると、視界の中に作業手順がリアルタイムで投影されます。AIが現在の作業を認識し、次に行うべき動作・注意点を表示する仕組みです。</p>
+                <p>母国語の手順書がなくても、ベテランが横に立たなくても、<strong>標準作業をその場で再現</strong>。教育担当者は「最初の数回だけ」を見てあげれば十分。OJT工数を大きく圧縮できます。</p>
+                <span class="nanostep-story__highlight">OJT工数 ▲60% 目標(現場検証中)</span>
               </div>
-              <img src="../assets/story-physical-ai-robot.jpg" alt="ロボットアームによる作業代替" onerror="this.style.display='none'" />
             </div>
-            <div class="nanostep-story__body">
-              <p>AIが現場の動作を認識する仕組みは、そのままロボット制御の入力としても使えます。ベテランの動きを学習データにして、ロボットアームに同じ作業を実行させる——いわゆるフィジカルAIです。</p>
-              <p>重作業・単純反復作業・夜勤帯の作業など、<strong>人がやらなくていい仕事を機械側に逃がす</strong>。人手不足の現場ほど効きます。</p>
-              <span class="nanostep-story__highlight">作業認識AI + ロボット制御を一括で検証</span>
-            </div>
-          </div>
-        </a>
-      </div>
-    </section>
+          </a>
 
-    <!-- ニュース(準備中) -->
-    <section class="lp-section lp-section--tinted">
-      <div class="container">
-        <div class="lp-kicker">ニュース</div>
-        <h2>最新のお知らせ</h2>
-        <p class="lead-text">現在、最新ニュースの準備を進めております。公開まで今しばらくお待ちください。</p>
+          <a class="case-card" href="../nanostep-lp/#story-robot" data-date="2026-05-10">
+            <div class="case-card__meta">
+              <time class="case-card__date" datetime="2026-05-10">2026.05.10</time>
+              <span class="case-card__kicker">作業認識AI</span>
+            </div>
+            <h3 class="case-card__title">人の動きをAIが学び、ロボットが代替する</h3>
+            <div class="nanostep-story nanostep-story--reverse">
+              <div class="nanostep-story__media">
+                <div class="nanostep-story__fallback">
+                  <span class="nanostep-story__fallback-icon">🤖</span>
+                  <span>※ ロボット×フィジカルAI写真を配置予定</span>
+                </div>
+                <img src="../assets/story-physical-ai-robot.jpg" alt="ロボットアームによる作業代替" onerror="this.style.display='none'" />
+              </div>
+              <div class="nanostep-story__body">
+                <p>AIが現場の動作を認識する仕組みは、そのままロボット制御の入力としても使えます。ベテランの動きを学習データにして、ロボットアームに同じ作業を実行させる——いわゆるフィジカルAIです。</p>
+                <p>重作業・単純反復作業・夜勤帯の作業など、<strong>人がやらなくていい仕事を機械側に逃がす</strong>。人手不足の現場ほど効きます。</p>
+                <span class="nanostep-story__highlight">作業認識AI + ロボット制御を一括で検証</span>
+              </div>
+            </div>
+          </a>
+
+        </div>
+
+        <nav class="case-pager" data-cases-pager aria-label="ページネーション"></nav>
       </div>
     </section>
   </main>
@@ -115,5 +113,61 @@
   </footer>
 
   <script src="../script.js"></script>
+  <script>
+    // 事例リスト: 日付降順ソート + ページネーション(5件/page)
+    (function () {
+      const list  = document.querySelector('[data-cases]');
+      const pager = document.querySelector('[data-cases-pager]');
+      if (!list) return;
+
+      const pageSize = parseInt(list.dataset.pageSize || '5', 10);
+      const cards    = Array.from(list.querySelectorAll('.case-card'));
+
+      // 日付降順(data-date: YYYY-MM-DD)で並べ直し
+      cards.sort(function (a, b) {
+        return (b.dataset.date || '').localeCompare(a.dataset.date || '');
+      });
+      cards.forEach(function (c) { list.appendChild(c); });
+
+      const totalPages = Math.max(1, Math.ceil(cards.length / pageSize));
+      let current = 1;
+
+      function render() {
+        cards.forEach(function (c, i) {
+          const inPage = (Math.floor(i / pageSize) + 1) === current;
+          c.style.display = inPage ? '' : 'none';
+        });
+        if (!pager) return;
+        pager.innerHTML = '';
+        if (totalPages <= 1) return; // 1ページのみなら非表示
+
+        function mkBtn(label, page, opts) {
+          opts = opts || {};
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'case-pager__btn' + (opts.nav ? ' case-pager__btn--nav' : '') + (opts.active ? ' is-active' : '');
+          b.textContent = label;
+          if (opts.disabled) { b.disabled = true; }
+          else {
+            b.addEventListener('click', function () {
+              current = page;
+              render();
+              const section = document.getElementById('case-list-section');
+              if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+          }
+          return b;
+        }
+
+        pager.appendChild(mkBtn('‹', current - 1, { nav: true, disabled: current === 1 }));
+        for (let p = 1; p <= totalPages; p++) {
+          pager.appendChild(mkBtn(String(p), p, { active: p === current }));
+        }
+        pager.appendChild(mkBtn('›', current + 1, { nav: true, disabled: current === totalPages }));
+      }
+
+      render();
+    })();
+  </script>
 </body>
 </html>
