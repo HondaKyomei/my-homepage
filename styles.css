@@ -2699,3 +2699,67 @@
     min-height: 190px;
   }
 }
+
+/* ====================================================================
+   ストーリー/事例セクション(2カラム: 画像 + 本文) — 共通化
+   nanoSTEP LP と news/事例ページで共有
+==================================================================== */
+.nanostep-story {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  align-items: center;
+}
+.nanostep-story--reverse { grid-template-columns: 1fr 1.05fr; }
+.nanostep-story__media {
+  position: relative;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border: 1px solid #e5e7eb;
+}
+.nanostep-story--reverse .nanostep-story__media { order: 2; }
+.nanostep-story__fallback {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 0.6rem;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 1rem;
+  z-index: 1;
+}
+.nanostep-story__fallback-icon { font-size: 2.4rem; opacity: 0.5; }
+.nanostep-story__media img {
+  position: relative;
+  z-index: 2;
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.nanostep-story__body h3 {
+  font-size: clamp(1.2rem, 1.6vw + 0.5rem, 1.6rem);
+  font-weight: 800; color: #0f172a;
+  margin-bottom: 0.9rem; line-height: 1.45;
+}
+.nanostep-story__body p {
+  color: #475569; font-size: 0.95rem;
+  line-height: 1.9; margin-bottom: 0.85rem;
+}
+.nanostep-story__highlight {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8effe 100%);
+  border: 1px solid #c7d2fe;
+  border-radius: 999px;
+  font-size: 0.85rem; font-weight: 700;
+  color: #1e3a8a;
+  margin-top: 0.4rem;
+}
+@media (max-width: 900px) {
+  .nanostep-story,
+  .nanostep-story--reverse { grid-template-columns: 1fr; }
+  .nanostep-story--reverse .nanostep-story__media { order: 0; }
+}

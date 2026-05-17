@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>ニュース | nanoFACTORY</title>
+  <title>ニュース・事例 | nanoFACTORY</title>
+  <meta name="description" content="nanoFACTORYからのお知らせと、作業認識AIの現場取り組み事例(AR×実習生教育、フィジカルAI/ロボット連携)をお届けします。" />
   <link rel="stylesheet" href="../styles.css" />
+  <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" />
 </head>
 <body>
   <header class="site-header">
@@ -30,12 +32,78 @@
     </div>
   </header>
 
-  <main class="section">
-    <div class="container">
-      <h1>ニュース</h1>
-      <p>nanoFACTORYからのお知らせやイベント情報をこちらでお届けします。</p>
-      <p>現在、最新ニュースの準備を進めております。公開まで今しばらくお待ちください。</p>
-    </div>
+  <main>
+    <!-- ページ見出し -->
+    <section class="lp-section lp-section--white" style="padding-bottom: 1.5rem;">
+      <div class="container" style="text-align: center;">
+        <div class="lp-kicker">NEWS &amp; CASE STUDIES</div>
+        <h2 style="margin-top: 0.4rem;">ニュース・事例</h2>
+        <p class="lead-text" style="max-width: 640px; margin: 0 auto;">
+          nanoFACTORYからのお知らせと、現場での取り組み事例をお届けします。
+        </p>
+      </div>
+    </section>
+
+    <!-- CASE 01: AR×実習生 -->
+    <section id="case-ar" class="lp-section lp-section--surface">
+      <div class="container">
+        <div class="lp-kicker">CASE 01 / 作業認識AI</div>
+        <h2>ARグラス越しに、言葉の壁を越える現場教育</h2>
+        <div class="nanostep-story">
+          <div class="nanostep-story__media">
+            <div class="nanostep-story__fallback">
+              <span class="nanostep-story__fallback-icon">🥽</span>
+              <span>※ AR×実習生の実写を配置予定</span>
+            </div>
+            <img src="../assets/story-ar-trainee.jpg" alt="ARグラスを着用した実習生" onerror="this.style.display='none'" />
+          </div>
+          <div class="nanostep-story__body">
+            <h3>言葉が通じなくても、<br>AIが「次の動き」を見せる。</h3>
+            <p>外国人実習生がARグラスを着用すると、視界の中に作業手順がリアルタイムで投影されます。AIが現在の作業を認識し、次に行うべき動作・注意点を表示する仕組みです。</p>
+            <p>これにより、母国語の手順書がなくても、ベテランが横に立たなくても、<strong>標準作業をその場で再現</strong>できます。教育担当者は「最初の数回だけ」を見てあげれば十分。OJT工数を大きく圧縮できます。</p>
+            <span class="nanostep-story__highlight">OJT工数 ▲60% 目標(現場検証中)</span>
+          </div>
+        </div>
+        <p style="margin-top: 2rem;">
+          <a class="cta-button cta-button--outline" href="../nanostep-lp/#story-ar">作業認識AIの詳細を見る</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- CASE 02: フィジカルAI -->
+    <section id="case-robot" class="lp-section lp-section--white">
+      <div class="container">
+        <div class="lp-kicker">CASE 02 / 作業認識AI</div>
+        <h2>人の動きをAIが学び、ロボットが代替する</h2>
+        <div class="nanostep-story nanostep-story--reverse">
+          <div class="nanostep-story__media">
+            <div class="nanostep-story__fallback">
+              <span class="nanostep-story__fallback-icon">🤖</span>
+              <span>※ ロボット×フィジカルAI写真を配置予定</span>
+            </div>
+            <img src="../assets/story-physical-ai-robot.jpg" alt="ロボットアームによる作業代替" onerror="this.style.display='none'" />
+          </div>
+          <div class="nanostep-story__body">
+            <h3>「人がやる作業」を、<br>そのまま機械に任せる。</h3>
+            <p>AIが現場の動作を認識する仕組みは、そのままロボット制御の入力としても使えます。ベテランの動きを学習データにして、ロボットアームに同じ作業を実行させる——いわゆるフィジカルAIです。</p>
+            <p>重作業・単純反復作業・夜勤帯の作業など、<strong>人がやらなくていい仕事を機械側に逃がす</strong>。人手不足の現場ほど効きます。</p>
+            <span class="nanostep-story__highlight">作業認識AI + ロボット制御を一括で検証</span>
+          </div>
+        </div>
+        <p style="margin-top: 2rem;">
+          <a class="cta-button cta-button--outline" href="../nanostep-lp/#story-robot">作業認識AIの詳細を見る</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ニュース(準備中) -->
+    <section class="lp-section lp-section--tinted">
+      <div class="container">
+        <div class="lp-kicker">ニュース</div>
+        <h2>最新のお知らせ</h2>
+        <p class="lead-text">現在、最新ニュースの準備を進めております。公開まで今しばらくお待ちください。</p>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
