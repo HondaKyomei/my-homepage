@@ -59,24 +59,88 @@
   <link rel="icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
   <link rel="stylesheet" href="./assets/styles.css">
+
+  <!-- === サイト共通ヘッダー(他LPと統一) === -->
+  <style>
+    .site-header { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background: rgba(15,17,26,0.85); border-bottom: 1px solid rgba(255,255,255,0.05); }
+    /* sanicam の .container は padding なしなので、ヘッダー内では横余白を補う */
+    .site-header .container { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; transition: padding 0.35s ease; }
+    .site-header .logo-wrapper { display: flex; align-items: center; gap: 8px; text-decoration: none; overflow: hidden; }
+    .site-header .logo-img { height: 36px; width: auto; display: inline-block; object-fit: contain; border-radius: 4px; transition: opacity 0.35s ease, height 0.35s ease; }
+    .site-header .nav { display: flex; align-items: center; }
+    .site-header .nav__link { margin-left: 1rem; text-decoration: none; color: #cfcfe5; font-size: 0.9rem; position: relative; }
+    .site-header .nav__link:hover { color: #fff; }
+    .site-header .nav__link::after { content: ""; position: absolute; left: 0; bottom: -3px; width: 0%; height: 2px; background: #fff; transition: width 0.3s ease; }
+    .site-header .nav__link:hover::after { width: 100%; }
+    .site-header .nav__link--products { font-weight: 600; }
+    .site-header .menu-toggle { display: none; position: relative; width: 2.5rem; height: 2.5rem; border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; background: transparent; color: #cfcfe5; align-items: center; justify-content: center; cursor: pointer; transition: background 0.3s ease; }
+    .site-header .menu-toggle:hover { background: rgba(255,255,255,0.08); }
+    .site-header .menu-toggle__bar { position: relative; display: block; width: 1.2rem; height: 2px; background: currentColor; transition: background 0.3s ease; }
+    .site-header .menu-toggle__bar::before, .site-header .menu-toggle__bar::after { content: ""; position: absolute; left: 0; width: 100%; height: 2px; background: currentColor; transition: transform 0.3s ease; }
+    .site-header .menu-toggle__bar::before { top: -6px; }
+    .site-header .menu-toggle__bar::after  { top:  6px; }
+    .site-header .menu-toggle[aria-expanded="true"] .menu-toggle__bar { background: transparent; }
+    .site-header .menu-toggle[aria-expanded="true"] .menu-toggle__bar::before { transform: translateY(6px) rotate(45deg); }
+    .site-header .menu-toggle[aria-expanded="true"] .menu-toggle__bar::after  { transform: translateY(-6px) rotate(-45deg); }
+    .site-header .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 900px) {
+      .site-header .nav { display: none; width: 100%; flex-direction: column; gap: 0; margin-top: 0.75rem; padding: 0.6rem 0 0.2rem; border-top: 1px solid rgba(255,255,255,0.08); }
+      .site-header .nav.is-open { display: flex; }
+      .site-header .nav__link { margin-left: 0; display: block; padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.98rem; }
+      .site-header .nav__link:last-child { border-bottom: none; }
+      .site-header .nav__link--products { font-weight: 700; color: #f3f5ff; }
+      .site-header .menu-toggle { display: inline-flex; }
+      .site-header .container { flex-wrap: wrap; }
+    }
+    @media (max-width: 720px) {
+      .site-header .container { gap: 0.75rem; }
+      .site-header .logo-img { height: 32px; }
+    }
+  </style>
 </head>
 
 <body>
-  <header class="container section-sm" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <a class="muted" href="../index.html">← 戻る</a>
-      <strong>衛生管理AI SANICAM</strong>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-wrapper">
+        <a href="../index.html">
+          <img src="../assets/site-logo-nanofactory.png" alt="nanoFACTORY" class="logo-img" />
+        </a>
+      </div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle__bar"></span>
+        <span class="sr-only">メニューを開閉</span>
+      </button>
+      <nav id="site-nav" class="nav">
+        <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
+        <a class="nav__link nav__link--products" href="../nanostep-lp/">作業認識AI</a>
+        <a class="nav__link nav__link--products" href="../nanosi-lp/">AI検査</a>
+        <a class="nav__link nav__link--products" href="../nanoguard-lp/">AI監視カメラ</a>
+        <a class="nav__link nav__link--products" href="../sanicam-lp/hand.html">手指衛生</a>
+        <a class="nav__link" href="../news/">ニュース・事例</a>
+        <a class="nav__link" href="../company/">会社情報</a>
+      </nav>
     </div>
-    <nav style="display:flex;gap:18px;">
-      <a class="muted" href="#features">特長</a>
-      <a class="muted" href="#video">動画デモ</a>
-      <a class="muted" href="#precision">精度</a>
-      <a class="muted" href="#capability">機能</a>
-      <a class="muted" href="#comparison">人との比較</a>
-      <a class="muted" href="../index.html#about">会社情報</a>
-      <a class="btn" href="#contact">資料請求</a>
-    </nav>
   </header>
+
+  <script>
+    // メニュートグル(モバイル時のハンバーガー)
+    (function () {
+      const menuToggle = document.querySelector(".menu-toggle");
+      const nav = document.getElementById("site-nav");
+      if (!menuToggle || !nav) return;
+      menuToggle.addEventListener("click", function () {
+        const isOpen = nav.classList.toggle("is-open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+      nav.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          nav.classList.remove("is-open");
+          menuToggle.setAttribute("aria-expanded", "false");
+        });
+      });
+    })();
+  </script>
 
   <section class="hero-bear">
     <div class="hero-bear__backdrop" aria-hidden="true">
