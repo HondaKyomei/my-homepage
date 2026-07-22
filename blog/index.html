@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>ブログ | nanoFACTORY BLOG</title>
+  <meta name="description" content="食品・医療・製造の現場で使えるエッジAIの知識を、nanoFACTORYのエンジニアがお届けするブログ。AI検査・作業認識AI・AI監視カメラ・手指衛生AIの実践情報。" />
+  <link rel="canonical" href="https://nano-factory.net/blog/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="nanoFACTORY BLOG" />
+  <meta property="og:title" content="ブログ | nanoFACTORY BLOG" />
+  <meta property="og:description" content="食品・医療・製造の現場で使えるエッジAIの知識を、nanoFACTORYのエンジニアがお届けするブログ。" />
+  <meta property="og:url" content="https://nano-factory.net/blog/" />
+
+  <!-- Google Fonts（外部依存はこれのみ） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+JP:wght@400;500;700;900&family=Orbitron:wght@500;700&display=swap" rel="stylesheet" />
+
+  <style>
+  /* ==== トークン（article-template.html と同一） ==== */
+  :root{
+    --frame-bg:      #0a0e17;
+    --frame-bg-2:    #0f1420;
+    --grid-line:     rgba(0,229,195,0.06);
+    --scanline:      rgba(255,255,255,0.03);
+    --accent:        #00e5c3;
+    --accent-blue:   #56ccf2;
+    --accent-amber:  #f2c94c;
+    --accent-purple: #9b51e0;
+    --paper:         #ffffff;
+    --paper-tint:    #f7f9fc;
+    --ink:           #14202e;
+    --ink-soft:      #46566a;
+    --rule:          #e3e9f2;
+    --link:          #0b8f7d;
+    --font-body: 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+    --font-brand: 'Audiowide', system-ui, sans-serif;
+    --font-label: 'Orbitron', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', Consolas, monospace;
+    --header-h: 64px;
+    --cat: #4f8ef7;
+  }
+  [data-category="nanostep"]  { --cat: #56ccf2; }
+  [data-category="nanosi"]    { --cat: #f2c94c; }
+  [data-category="nanoguard"] { --cat: #9b51e0; }
+  [data-category="sanicam"]   { --cat: #00e5c3; }
+  [data-category="guide"]     { --cat: #4f8ef7; }
+
+  *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  html, body{ overflow-x:hidden; overflow-x:clip; }
+  body{
+    background: var(--frame-bg);
+    color:#e8eef6;
+    font-family: var(--font-body);
+    line-height:1.8;
+    -webkit-font-smoothing: antialiased;
+    min-height:100vh;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 2px, var(--scanline) 2px 3px),
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 100% 100%, 44px 44px, 44px 44px;
+  }
+  img{ max-width:100%; height:auto; }
+  .container{ max-width:1120px; margin:0 auto; padding:0 1.25rem; }
+  .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:2px; }
+
+  /* ==== ヘッダー（テンプレと同一トーン） ==== */
+  .site-header{
+    position:sticky; top:0; z-index:50; height:var(--header-h);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    background: rgba(10,14,23,0.85);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+  }
+  .site-header .container{ display:flex; align-items:center; justify-content:space-between; height:100%; gap:1rem; }
+  .brand{ display:flex; align-items:baseline; gap:.5rem; text-decoration:none; white-space:nowrap; }
+  .brand__nano{ font-family:var(--font-brand); font-size:1.15rem; color:#fff; letter-spacing:.02em; }
+  .brand__factory{ font-family:var(--font-label); font-weight:700; font-size:1.05rem; color:#fff; letter-spacing:.06em; }
+  .brand__blog{
+    font-family:var(--font-label); font-weight:500; font-size:.6rem; letter-spacing:.28em;
+    color:var(--accent); border:1px solid rgba(0,229,195,0.45); border-radius:4px;
+    padding:.14em .5em .1em .6em; transform:translateY(-2px);
+  }
+  .nav{ display:flex; align-items:center; }
+  .nav__link{ margin-left:1.1rem; text-decoration:none; color:#c6d2e2; font-size:.88rem; position:relative; }
+  .nav__link:hover{ color:#fff; }
+  .nav__link::after{ content:""; position:absolute; left:0; bottom:-4px; width:0%; height:2px; background:var(--accent); transition:width .3s ease; }
+  .nav__link:hover::after{ width:100%; }
+  .nav__link--current{ color:var(--accent); font-weight:700; }
+  .menu-toggle{
+    display:none; width:2.4rem; height:2.4rem; border:1px solid rgba(255,255,255,0.25);
+    border-radius:999px; background:transparent; color:#e8eef6; cursor:pointer;
+    align-items:center; justify-content:center;
+  }
+  .menu-toggle__bar{ position:relative; display:block; width:1.1rem; height:2px; background:currentColor; transition:background .3s; }
+  .menu-toggle__bar::before,.menu-toggle__bar::after{ content:""; position:absolute; left:0; width:100%; height:2px; background:currentColor; transition:transform .3s; }
+  .menu-toggle__bar::before{ top:-6px; } .menu-toggle__bar::after{ top:6px; }
+  .menu-toggle[aria-expanded="true"] .menu-toggle__bar{ background:transparent; }
+  .menu-toggle[aria-expanded="true"] .menu-toggle__bar::before{ transform:translateY(6px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] .menu-toggle__bar::after{ transform:translateY(-6px) rotate(-45deg); }
+  @media (max-width: 960px){
+    .site-header{ height:auto; min-height:var(--header-h); }
+    .site-header .container{ flex-wrap:wrap; padding-top:.7rem; padding-bottom:.7rem; }
+    .menu-toggle{ display:inline-flex; }
+    .nav{ display:none; width:100%; flex-direction:column; align-items:stretch; margin-top:.6rem; padding-top:.4rem; border-top:1px solid rgba(255,255,255,0.08); }
+    .nav.is-open{ display:flex; }
+    .nav__link{ margin-left:0; padding:.75rem 0; border-bottom:1px solid rgba(255,255,255,0.07); font-size:.95rem; }
+    .nav__link:last-child{ border-bottom:none; }
+  }
+
+  /* ==== 浮遊装飾レイヤー（テンプレと同方式・一覧は浅め） ==== */
+  .fx{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+  .fx__item{ position:absolute; will-change:transform; }
+  .fx__drift{ animation: fxDrift 14s ease-in-out infinite alternate; }
+  .fx__drift--slow{ animation-duration:20s; }
+  .fx__drift--fast{ animation-duration:9s; }
+  @keyframes fxDrift{
+    0%   { transform: translate(0,0) rotate(0deg); }
+    50%  { transform: translate(10px,-14px) rotate(2deg); }
+    100% { transform: translate(-8px,10px) rotate(-2deg); }
+  }
+  @media (max-width:760px){ .fx__item--desktop{ display:none; } .fx__item{ opacity:.6; } }
+
+  /* ==== ページヒーロー ==== */
+  .list-hero{ position:relative; z-index:1; padding:3.6rem 0 2rem; overflow:clip; text-align:center; }
+  .hero-scan{
+    position:absolute; top:0; bottom:0; left:0; width:2px; z-index:0; opacity:0;
+    background: linear-gradient(to bottom, transparent, rgba(0,229,195,.9) 50%, transparent);
+    filter: drop-shadow(0 0 6px rgba(0,229,195,.8)) drop-shadow(0 0 18px rgba(0,229,195,.4));
+    animation: heroScan 14s linear infinite; pointer-events:none; mix-blend-mode:screen;
+  }
+  @keyframes heroScan{
+    0%{ transform:translateX(0); opacity:0; } 2%{ transform:translateX(0); opacity:.9; }
+    30%{ transform:translateX(100vw); opacity:.9; } 32%{ transform:translateX(100vw); opacity:0; }
+    100%{ transform:translateX(0); opacity:0; }
+  }
+  .list-hero__kicker{
+    font-family:var(--font-label); font-weight:700; font-size:.68rem; letter-spacing:.4em; color:var(--accent);
+  }
+  .list-hero h1{
+    font-size: clamp(1.7rem, 3.6vw, 2.3rem); font-weight:900; color:#fff; line-height:1.4; margin-top:.6rem;
+  }
+  .list-hero p{ color:#a9b8ca; font-size:.95rem; max-width:38em; margin:.8rem auto 0; }
+
+  /* ==== カテゴリ絞り込みタブ ==== */
+  .filter{ position:relative; z-index:1; padding:1.4rem 0 0; }
+  .filter__tabs{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:.55rem;
+  }
+  .filter-tab{
+    display:inline-flex; align-items:center; gap:.5em; cursor:pointer;
+    font-family:var(--font-body); font-weight:700; font-size:.82rem; letter-spacing:.03em;
+    color:#a9b8ca; background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.14); border-radius:999px; padding:.42em 1.1em;
+    transition: color .25s, border-color .25s, background .25s, box-shadow .25s;
+  }
+  .filter-tab::before{
+    content:""; width:.55em; height:.55em; border-radius:50%;
+    background:var(--cat); box-shadow:0 0 8px var(--cat);
+  }
+  .filter-tab--all::before{ background:#e8eef6; box-shadow:none; }
+  .filter-tab:hover{ color:#fff; border-color:rgba(255,255,255,0.4); }
+  .filter-tab.is-active{
+    color:var(--cat); border-color:var(--cat);
+    background: rgba(255,255,255,0.02);
+    box-shadow: 0 0 16px rgba(0,229,195,0.08), inset 0 0 12px rgba(255,255,255,0.03);
+  }
+  .filter-tab--all.is-active{ color:#fff; border-color:#fff; }
+
+  /* ==== カードリスト ==== */
+  .post-list-section{ position:relative; z-index:1; padding:2rem 0 3rem; }
+  .post-grid{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:1.3rem; }
+  @media (max-width: 1000px){ .post-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 660px){ .post-grid{ grid-template-columns:1fr; } }
+
+  .post-card{
+    display:flex; flex-direction:column; gap:.6rem; text-decoration:none;
+    background: linear-gradient(160deg, rgba(22,29,46,0.92), rgba(13,18,30,0.92));
+    border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:1.4rem 1.4rem 1.25rem;
+    position:relative; overflow:hidden;
+    transition: transform .35s cubic-bezier(0.34,1.56,0.64,1), border-color .3s, box-shadow .3s;
+  }
+  .post-card::before{  /* 上辺のカテゴリ色ライン */
+    content:""; position:absolute; top:0; left:0; right:0; height:3px;
+    background: linear-gradient(90deg, var(--cat), transparent 75%);
+    opacity:.85;
+  }
+  .post-card:hover{
+    transform:translateY(-6px);
+    border-color: var(--cat);
+    box-shadow: 0 18px 44px rgba(0,0,0,0.5);
+  }
+  .post-card__meta{ display:flex; align-items:center; gap:.55rem; font-size:.75rem; }
+  .post-card__dot{ width:8px; height:8px; border-radius:50%; background:var(--cat); box-shadow:0 0 8px var(--cat); flex:none; }
+  .post-card__cat{ color:var(--cat); font-weight:700; letter-spacing:.04em; }
+  .post-card__date{ font-family:var(--font-label); font-size:.66rem; letter-spacing:.12em; color:#7e90a8; margin-left:auto; }
+  .post-card__title{ color:#eef3f9; font-size:1.05rem; font-weight:800; line-height:1.6; }
+  .post-card__excerpt{
+    color:#a9b8ca; font-size:.85rem; line-height:1.75; flex:1;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .post-card__more{
+    font-family:var(--font-label); font-size:.64rem; letter-spacing:.24em; color:#8fa3ba;
+    margin-top:.3rem; transition:color .25s;
+  }
+  .post-card:hover .post-card__more{ color:var(--cat); }
+
+  .post-empty{
+    display:none; text-align:center; color:#8fa3ba; padding:3rem 1rem; font-size:.92rem;
+    border:1px dashed rgba(255,255,255,0.15); border-radius:14px;
+  }
+  .post-empty.is-visible{ display:block; }
+
+  /* ==== ページネーション ==== */
+  .pager{ display:flex; justify-content:center; gap:.45rem; margin-top:2.2rem; }
+  .pager:empty{ display:none; }
+  .pager__btn{
+    min-width:2.4rem; height:2.4rem; padding:0 .6rem; cursor:pointer;
+    font-family:var(--font-label); font-weight:700; font-size:.8rem;
+    color:#a9b8ca; background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.15); border-radius:8px;
+    transition: color .2s, border-color .2s;
+  }
+  .pager__btn:hover:not(:disabled){ color:#fff; border-color:rgba(255,255,255,0.5); }
+  .pager__btn.is-active{ color:var(--accent); border-color:var(--accent); background:rgba(0,229,195,0.07); }
+  .pager__btn:disabled{ opacity:.35; cursor:default; }
+
+  /* ==== フッター ==== */
+  .site-footer{
+    position:relative; z-index:1; background:var(--frame-bg-2);
+    border-top:1px solid rgba(255,255,255,0.06); padding:3rem 0 1.2rem; font-size:.9rem; color:#c6d2e2;
+  }
+  .footer-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:2rem; }
+  .footer-grid h3{ margin-bottom:.6rem; color:#fff; font-size:1rem; }
+  .footer-links{ list-style:none; }
+  .footer-links li{ margin-bottom:6px; }
+  .footer-links a{ color:#c6d2e2; text-decoration:none; }
+  .footer-links a:hover{ color:var(--accent); text-decoration:underline; }
+  .copyright{ margin-top:2.2rem; text-align:center; opacity:.65; font-size:.8rem; }
+
+  /* ==== 登場アニメ ==== */
+  .reveal{ opacity:0; transform:translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(0.22,0.61,0.36,1); }
+  .reveal.is-in{ opacity:1; transform:none; }
+
+  /* ==== prefers-reduced-motion：全停止（必須） ==== */
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *,*::before,*::after{ animation:none !important; transition:none !important; }
+    .fx__item{ display:none; }
+    .hero-scan{ display:none; }
+    .reveal{ opacity:1; transform:none; }
+  }
+  </style>
+</head>
+<body>
+
+  <!-- 浮遊装飾レイヤー（一覧ページ用・浅め配置） -->
+  <div class="fx" aria-hidden="true">
+    <div class="fx__item fx__item--desktop" data-depth="0.06" style="top:18%; left:-30px;">
+      <div class="fx__drift fx__drift--slow">
+        <svg width="220" height="150" viewBox="0 0 220 150" fill="none">
+          <path d="M10 120 H70 L100 90 H160 M100 90 V40 H180 M70 120 V60 H30" stroke="rgba(0,229,195,0.30)" stroke-width="1.5"/>
+          <circle cx="180" cy="40" r="3" fill="rgba(86,204,242,0.9)"/>
+          <circle cx="30" cy="60" r="3" fill="rgba(0,229,195,0.7)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="fx__item" data-depth="0.10" style="top:40%; right:-20px;">
+      <div class="fx__drift">
+        <svg width="150" height="160" viewBox="0 0 150 160" fill="none">
+          <path d="M75 10 L130 42 V106 L75 138 L20 106 V42 Z" stroke="rgba(86,204,242,0.28)" stroke-width="1.5"/>
+          <path d="M75 40 L104 57 V91 L75 108 L46 91 V57 Z" stroke="rgba(0,229,195,0.35)" stroke-width="1"/>
+        </svg>
+      </div>
+    </div>
+    <div class="fx__item fx__item--desktop" data-depth="0.14" style="top:95%; left:3%;">
+      <div class="fx__drift fx__drift--fast">
+        <svg width="120" height="90" viewBox="0 0 120 90" fill="none">
+          <rect x="8" y="50" width="12" height="34" fill="rgba(0,229,195,0.22)"/>
+          <rect x="30" y="30" width="12" height="54" fill="rgba(0,229,195,0.34)"/>
+          <rect x="52" y="42" width="12" height="42" fill="rgba(86,204,242,0.28)"/>
+          <rect x="74" y="14" width="12" height="70" fill="rgba(0,229,195,0.45)"/>
+          <rect x="96" y="34" width="12" height="50" fill="rgba(86,204,242,0.22)"/>
+          <path d="M4 86 H116" stroke="rgba(0,229,195,0.4)" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+    <div class="fx__item" data-depth="0.18" style="top:130%; right:5%;">
+      <div class="fx__drift fx__drift--slow">
+        <svg width="150" height="150" viewBox="0 0 170 170" fill="none">
+          <circle cx="85" cy="85" r="80" stroke="rgba(0,229,195,0.16)" stroke-width="1"/>
+          <circle cx="85" cy="85" r="54" stroke="rgba(0,229,195,0.24)" stroke-width="1"/>
+          <circle cx="85" cy="85" r="28" stroke="rgba(86,204,242,0.3)" stroke-width="1"/>
+          <path d="M85 85 L85 8" stroke="rgba(0,229,195,0.5)" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ヘッダー -->
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="https://nano-factory.net/">
+        <span class="brand__nano">nano</span><span class="brand__factory">FACTORY</span>
+        <span class="brand__blog">BLOG</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle__bar"></span>
+        <span class="sr-only">メニューを開閉</span>
+      </button>
+      <nav id="site-nav" class="nav" aria-label="サイト内メニュー">
+        <a class="nav__link" href="https://nano-factory.net/nanostep-lp/">作業認識AI</a>
+        <a class="nav__link" href="https://nano-factory.net/nanosi-lp/">AI検査</a>
+        <a class="nav__link" href="https://nano-factory.net/nanoguard-lp/">AI監視カメラ</a>
+        <a class="nav__link" href="https://nano-factory.net/sanicam-lp/hand.html">手指衛生</a>
+        <a class="nav__link" href="https://nano-factory.net/news/">ニュース・事例</a>
+        <a class="nav__link nav__link--current" href="/blog/">ブログ</a>
+        <a class="nav__link" href="https://nano-factory.net/company/">会社情報</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ページヒーロー -->
+    <section class="list-hero">
+      <div class="hero-scan" aria-hidden="true"></div>
+      <div class="container">
+        <p class="list-hero__kicker">TECH BLOG</p>
+        <h1>現場で動くAIの話</h1>
+        <p>食品・医療・製造の現場で使えるエッジAIの知識を、nanoFACTORYのエンジニアがお届けします。</p>
+      </div>
+    </section>
+
+    <!-- カテゴリ絞り込みタブ（data-filter = カテゴリslug / all） -->
+    <nav class="filter" aria-label="カテゴリで絞り込み">
+      <div class="container">
+        <div class="filter__tabs" id="filter-tabs" role="tablist">
+          <button class="filter-tab filter-tab--all is-active" type="button" data-filter="all" aria-pressed="true">すべて</button>
+          <button class="filter-tab" type="button" data-filter="nanostep"  data-category="nanostep"  aria-pressed="false">作業認識AI</button>
+          <button class="filter-tab" type="button" data-filter="nanosi"    data-category="nanosi"    aria-pressed="false">AI検査</button>
+          <button class="filter-tab" type="button" data-filter="nanoguard" data-category="nanoguard" aria-pressed="false">AI監視カメラ</button>
+          <button class="filter-tab" type="button" data-filter="sanicam"   data-category="sanicam"   aria-pressed="false">手指衛生</button>
+          <button class="filter-tab" type="button" data-filter="guide"     data-category="guide"     aria-pressed="false">ガイド</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- カードリスト（JSが日付降順ソート＋絞り込み＋ページネーション） -->
+    <section class="post-list-section" id="post-list-section">
+      <div class="container">
+        <div class="post-grid" id="post-grid" data-page-size="6">
+
+          <a class="post-card reveal" href="edge-gpu-parallel-rl-physical-ai.html"
+             data-date="2026-07-20" data-category="guide">
+            <span class="post-card__meta">
+              <span class="post-card__dot" aria-hidden="true"></span>
+              <span class="post-card__cat">ガイド</span>
+              <time class="post-card__date" datetime="2026-07-20">2026.07.20</time>
+            </span>
+            <h2 class="post-card__title">エッジGPU1台でフィジカルAI｜2,048体の並列強化学習</h2>
+            <p class="post-card__excerpt">RTコアを持たないエッジ端末1台で、2,048体のロボットアームを並列訓練した方法。描画を捨てたシミュレーター構成から、押す動作の成功率66.7%・安全違反0%までを実測値で解説します。</p>
+            <span class="post-card__more">READ MORE →</span>
+          </a>
+
+        </div>
+
+        <p class="post-empty" id="post-empty">このカテゴリの記事はまだありません。</p>
+        <nav class="pager" id="pager" aria-label="ページネーション"></nav>
+      </div>
+    </section>
+  </main>
+
+  <!-- フッター -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3>About</h3>
+          <p>nanoFACTORY の技術の根底はロボット開発・フィジカルAI。製造業の現場で数々の課題を解決してきた経験から磨き上げたソフトウェアの販売と、AIエンジニアが現場に直接入り込む<strong>FDE(Forward Deployed Engineer)</strong>サービスが、私たちの事業です。</p>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>〒107-0062 東京都港区南青山５-11-14 H&amp;M南青山イースト308</p>
+          <p><a href="https://nano-factory.net/company/" style="color:var(--accent);">お問い合わせはこちら</a></p>
+        </div>
+        <div>
+          <h3>Links</h3>
+          <ul class="footer-links">
+            <li><a href="https://nano-factory.net/">Home</a></li>
+            <li><a href="https://nano-factory.net/nanostep-lp/">作業認識AI（nanoSTEP）</a></li>
+            <li><a href="https://nano-factory.net/nanosi-lp/">AI検査（nanoSI）</a></li>
+            <li><a href="https://nano-factory.net/nanoguard-lp/">AI監視カメラ（nanoGUARD）</a></li>
+            <li><a href="https://nano-factory.net/sanicam-lp/hand.html">手指衛生（SANI-CAM）</a></li>
+            <li><a href="https://nano-factory.net/news/">ニュース・事例</a></li>
+            <li><a href="/blog/">ブログ</a></li>
+            <li><a href="https://nano-factory.net/company/">会社情報</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">&copy; <span id="year"></span> nanoFACTORY Co. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    'use strict';
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- 年号・メニュー ---------- */
+    var y = document.getElementById('year');
+    if (y) y.textContent = new Date().getFullYear();
+    var toggle = document.querySelector('.menu-toggle');
+    var nav = document.getElementById('site-nav');
+    if (toggle && nav) {
+      toggle.addEventListener('click', function(){
+        var open = nav.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+    }
+
+    /* ---------- 一覧：日付降順ソート＋カテゴリ絞り込み＋ページネーション ---------- */
+    var grid = document.getElementById('post-grid');
+    var pager = document.getElementById('pager');
+    var empty = document.getElementById('post-empty');
+    var tabs = document.querySelectorAll('.filter-tab');
+    var pageSize = parseInt(grid.getAttribute('data-page-size') || '6', 10);
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.post-card'));
+
+    // 日付降順に並べ直す（data-date: YYYY-MM-DD）
+    cards.sort(function(a, b){
+      return (b.getAttribute('data-date') || '').localeCompare(a.getAttribute('data-date') || '');
+    });
+    cards.forEach(function(c){ grid.appendChild(c); });
+
+    var currentFilter = 'all';
+    var currentPage = 1;
+
+    // URLの ?cat= 初期絞り込み（記事側カテゴリタグからの遷移用）
+    var m = /[?&]cat=([a-z]+)/.exec(location.search);
+    if (m) {
+      tabs.forEach(function(t){ if (t.getAttribute('data-filter') === m[1]) currentFilter = m[1]; });
+    }
+
+    function visibleCards(){
+      return cards.filter(function(c){
+        return currentFilter === 'all' || c.getAttribute('data-category') === currentFilter;
+      });
+    }
+
+    function render(){
+      var vis = visibleCards();
+      var totalPages = Math.max(1, Math.ceil(vis.length / pageSize));
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      cards.forEach(function(c){ c.style.display = 'none'; });
+      vis.forEach(function(c, i){
+        var inPage = Math.floor(i / pageSize) + 1 === currentPage;
+        c.style.display = inPage ? '' : 'none';
+      });
+      empty.classList.toggle('is-visible', vis.length === 0);
+
+      // タブ状態
+      tabs.forEach(function(t){
+        var on = t.getAttribute('data-filter') === currentFilter;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-pressed', String(on));
+      });
+
+      // ページャ（2ページ以上のときのみ描画）
+      pager.innerHTML = '';
+      if (totalPages <= 1) return;
+      function mkBtn(label, page, opts){
+        opts = opts || {};
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'pager__btn' + (opts.active ? ' is-active' : '');
+        b.textContent = label;
+        if (opts.disabled) { b.disabled = true; }
+        else {
+          b.addEventListener('click', function(){
+            currentPage = page;
+            render();
+            document.getElementById('post-list-section').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+          });
+        }
+        return b;
+      }
+      pager.appendChild(mkBtn('‹', currentPage - 1, { disabled: currentPage === 1 }));
+      for (var p = 1; p <= totalPages; p++) {
+        pager.appendChild(mkBtn(String(p), p, { active: p === currentPage }));
+      }
+      pager.appendChild(mkBtn('›', currentPage + 1, { disabled: currentPage === totalPages }));
+    }
+
+    tabs.forEach(function(t){
+      t.addEventListener('click', function(){
+        currentFilter = t.getAttribute('data-filter');
+        currentPage = 1;
+        render();
+      });
+    });
+    render();
+
+    /* ---------- 登場アニメ ---------- */
+    var revealEls = document.querySelectorAll('.reveal');
+    if (reduced || !('IntersectionObserver' in window)) {
+      revealEls.forEach(function(el){ el.classList.add('is-in'); });
+    } else {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+      revealEls.forEach(function(el){ io.observe(el); });
+    }
+
+    /* ---------- 浮遊パララックス（scroll + rAF・transformのみ） ---------- */
+    var fxItems = Array.prototype.slice.call(document.querySelectorAll('.fx__item[data-depth]'))
+      .map(function(el){ return { el: el, depth: parseFloat(el.getAttribute('data-depth')) || 0.1 }; });
+    var ticking = false;
+    function onFrame(){
+      ticking = false;
+      if (reduced) return;
+      var sy = window.scrollY;
+      fxItems.forEach(function(o){
+        o.el.style.transform = 'translate3d(0,' + (-(sy * o.depth)).toFixed(1) + 'px,0)';
+      });
+    }
+    window.addEventListener('scroll', function(){
+      if (!ticking) { ticking = true; window.requestAnimationFrame(onFrame); }
+    }, { passive: true });
+    onFrame();
+  })();
+  </script>
+</body>
+</html>

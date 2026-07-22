@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+  <!-- ============================================================
+       META 差し替え区間（プレースホルダ・コントラクト design-brief §5）
+       量産時は各マーカー区間の中身を差し替える。
+       ============================================================ -->
+
+  <!-- ▼▼ {{TITLE}} ▼▼ 32字以内目安。「 | nanoFACTORY BLOG」サフィックスは維持 -->
+  <title>エッジGPU1台でフィジカルAI｜2,048体の並列強化学習 | nanoFACTORY BLOG</title>
+  <!-- ▲▲ {{TITLE}} ▲▲ -->
+
+  <!-- ▼▼ {{META_DESCRIPTION}} ▼▼ 110字前後 -->
+  <meta name="description" content="Isaac Simが動かないエッジデバイス1台で、MuJoCo-Warpにより2,048体のロボットアームを並列強化学習した実測記録。スループット、シムの正直化、押す動作66.7%到達までを公開します。" />
+  <!-- ▲▲ {{META_DESCRIPTION}} ▲▲ -->
+
+  <!-- ▼▼ OGP ▼▼ {{TITLE}} / {{META_DESCRIPTION}} / {{CANONICAL_URL}} / {{OGP_IMAGE}} を反映 -->
+  <link rel="canonical" href="https://nano-factory.net/blog/edge-gpu-parallel-rl-physical-ai.html" /><!-- ← {{CANONICAL_URL}} = https://nano-factory.net/blog/{{SLUG}}.html -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="nanoFACTORY BLOG" />
+  <meta property="og:title" content="エッジGPU1台でフィジカルAI｜2,048体の並列強化学習" /><!-- ← {{TITLE}} -->
+  <meta property="og:description" content="Isaac Simが動かないエッジデバイス1台で、MuJoCo-Warpにより2,048体のロボットアームを並列強化学習した実測記録。スループット、シムの正直化、押す動作66.7%到達までを公開します。" /><!-- ← {{META_DESCRIPTION}} -->
+  <meta property="og:url" content="https://nano-factory.net/blog/edge-gpu-parallel-rl-physical-ai.html" /><!-- ← {{CANONICAL_URL}} -->
+  <meta property="og:image" content="https://nano-factory.net/blog/assets/edge-gpu-parallel-rl/hero_48grid.png" /><!-- ← {{OGP_IMAGE}} -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <!-- ▲▲ OGP ▲▲ -->
+
+  <!-- ▼▼ {{JSON_LD}} ▼▼ Article構造化データ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "エッジGPU1台でフィジカルAI｜2,048体の並列強化学習",
+    "description": "Isaac Simが動かないエッジデバイス1台で、MuJoCo-Warpにより2,048体のロボットアームを並列強化学習した実測記録。スループット、シムの正直化、押す動作66.7%到達までを公開します。",
+    "image": "https://nano-factory.net/blog/assets/edge-gpu-parallel-rl/hero_48grid.png",
+    "datePublished": "2026-07-20",
+    "dateModified": "2026-07-20",
+    "author": { "@type": "Organization", "name": "nanoFACTORY", "url": "https://nano-factory.net/" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "nanoFACTORY",
+      "logo": { "@type": "ImageObject", "url": "https://nano-factory.net/assets/site-logo-nanofactory.png" }
+    },
+    "mainEntityOfPage": "https://nano-factory.net/blog/edge-gpu-parallel-rl-physical-ai.html"
+  }
+  </script>
+  <!-- ▲▲ {{JSON_LD}} ▲▲ -->
+
+  <!-- Google Fonts（外部依存はこれのみ） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+JP:wght@400;500;700;900&family=Orbitron:wght@500;700&display=swap" rel="stylesheet" />
+
+  <style>
+  /* ==========================================================================
+     0. トークン（design-brief §1 準拠・確定値）
+     ========================================================================== */
+  :root{
+    /* 外枠・装飾（ダークサイバー） */
+    --frame-bg:      #0a0e17;
+    --frame-bg-2:    #0f1420;
+    --grid-line:     rgba(0,229,195,0.06);
+    --scanline:      rgba(255,255,255,0.03);
+    --accent:        #00e5c3;
+    --accent-blue:   #56ccf2;
+    --accent-amber:  #f2c94c;
+    --accent-purple: #9b51e0;
+
+    /* 本文（可読性最優先） */
+    --paper:         #ffffff;
+    --paper-tint:    #f7f9fc;
+    --ink:           #14202e;
+    --ink-soft:      #46566a;
+    --rule:          #e3e9f2;
+    --link:          #0b8f7d;
+
+    /* タイポ */
+    --font-body: 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+    --font-brand: 'Audiowide', system-ui, sans-serif;
+    --font-label: 'Orbitron', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', Consolas, monospace;
+
+    /* レイアウト */
+    --header-h: 64px;
+    --measure: 34em;               /* 本文幅 ≒ 全角38字 */
+    --radius: 14px;
+    --cat: #4f8ef7;                /* カテゴリ色（デフォルト=guide） */
+  }
+  /* カテゴリ色マッピング（body・カード共通で [data-category] が効く） */
+  [data-category="nanostep"]  { --cat: #56ccf2; }
+  [data-category="nanosi"]    { --cat: #f2c94c; }
+  [data-category="nanoguard"] { --cat: #9b51e0; }
+  [data-category="sanicam"]   { --cat: #00e5c3; }
+  [data-category="guide"]     { --cat: #4f8ef7; }
+
+  /* ==========================================================================
+     1. ベース
+     ========================================================================== */
+  *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  html, body{ overflow-x:hidden; overflow-x:clip; }   /* 横スクロール絶対禁止（clip非対応環境はhiddenにフォールバック） */
+  body{
+    background: var(--frame-bg);
+    color: #e8eef6;
+    font-family: var(--font-body);
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* 微細グリッド＋スキャンライン（装飾レイヤー最下層） */
+  body::before{
+    content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 2px, var(--scanline) 2px 3px),
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 100% 100%, 44px 44px, 44px 44px;
+  }
+  img{ max-width:100%; height:auto; }
+  a{ color:inherit; }
+  .container{ max-width:1120px; margin:0 auto; padding:0 1.25rem; }
+  .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:2px; }
+
+  /* ==========================================================================
+     2. リーディングプログレスバー
+     ========================================================================== */
+  .progress{
+    position:fixed; top:0; left:0; right:0; height:3px; z-index:60;
+    background: linear-gradient(90deg, var(--accent), var(--accent-blue));
+    transform: scaleX(0); transform-origin: left center;
+    box-shadow: 0 0 10px rgba(0,229,195,0.55);
+    pointer-events:none;
+  }
+
+  /* ==========================================================================
+     3. ヘッダー（既存HPトーン：ダーク＋backdrop-blur）
+     ========================================================================== */
+  .site-header{
+    position:sticky; top:0; z-index:50; height:var(--header-h);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    background: rgba(10,14,23,0.85);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+  }
+  .site-header .container{ display:flex; align-items:center; justify-content:space-between; height:100%; gap:1rem; }
+  .brand{ display:flex; align-items:baseline; gap:.5rem; text-decoration:none; white-space:nowrap; }
+  .brand__nano{ font-family:var(--font-brand); font-size:1.15rem; color:#fff; letter-spacing:.02em; }
+  .brand__factory{ font-family:var(--font-label); font-weight:700; font-size:1.05rem; color:#fff; letter-spacing:.06em; }
+  .brand__blog{
+    font-family:var(--font-label); font-weight:500; font-size:.6rem; letter-spacing:.28em;
+    color:var(--accent); border:1px solid rgba(0,229,195,0.45); border-radius:4px;
+    padding:.14em .5em .1em .6em; transform:translateY(-2px);
+  }
+  .nav{ display:flex; align-items:center; }
+  .nav__link{
+    margin-left:1.1rem; text-decoration:none; color:#c6d2e2; font-size:.88rem; position:relative;
+  }
+  .nav__link:hover{ color:#fff; }
+  .nav__link::after{
+    content:""; position:absolute; left:0; bottom:-4px; width:0%; height:2px;
+    background:var(--accent); transition:width .3s ease;
+  }
+  .nav__link:hover::after{ width:100%; }
+  .nav__link--current{ color:var(--accent); font-weight:700; }
+  .menu-toggle{
+    display:none; width:2.4rem; height:2.4rem; border:1px solid rgba(255,255,255,0.25);
+    border-radius:999px; background:transparent; color:#e8eef6; cursor:pointer;
+    align-items:center; justify-content:center;
+  }
+  .menu-toggle__bar{ position:relative; display:block; width:1.1rem; height:2px; background:currentColor; transition:background .3s; }
+  .menu-toggle__bar::before,.menu-toggle__bar::after{
+    content:""; position:absolute; left:0; width:100%; height:2px; background:currentColor; transition:transform .3s;
+  }
+  .menu-toggle__bar::before{ top:-6px; } .menu-toggle__bar::after{ top:6px; }
+  .menu-toggle[aria-expanded="true"] .menu-toggle__bar{ background:transparent; }
+  .menu-toggle[aria-expanded="true"] .menu-toggle__bar::before{ transform:translateY(6px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] .menu-toggle__bar::after{ transform:translateY(-6px) rotate(-45deg); }
+  @media (max-width: 960px){
+    .site-header{ height:auto; min-height:var(--header-h); }
+    .site-header .container{ flex-wrap:wrap; padding-top:.7rem; padding-bottom:.7rem; }
+    .menu-toggle{ display:inline-flex; }
+    .nav{
+      display:none; width:100%; flex-direction:column; align-items:stretch;
+      margin-top:.6rem; padding-top:.4rem; border-top:1px solid rgba(255,255,255,0.08);
+    }
+    .nav.is-open{ display:flex; }
+    .nav__link{ margin-left:0; padding:.75rem 0; border-bottom:1px solid rgba(255,255,255,0.07); font-size:.95rem; }
+    .nav__link:last-child{ border-bottom:none; }
+  }
+
+  /* ==========================================================================
+     4. 署名演出：電流グリッド（circuit）
+        - 背面固定グリッドの上を、電流パルスが「あみだくじ」状に走る。
+          縦線を流れ落ち、橋（横線）で隣の線へ飛び移る。
+        - 本文テキストは一切動かさない（白ペーパーがこの上に重なる）。
+        - stroke-dashoffset のみアニメート（paint合成・レイアウト不変）。
+     ========================================================================== */
+  .circuit{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+  .circuit__svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .circuit__base line{ stroke:rgba(0,229,195,0.10); stroke-width:1; }
+  .circuit__base line.v{ stroke:rgba(120,180,224,0.09); }
+  .circuit__flow{
+    fill:none; stroke-width:2.2; stroke-linecap:round;
+    stroke-dasharray:128 14 9 14 6 829; stroke-dashoffset:1000;   /* 長い電流streak＋後方に散る火花2つ */
+    filter: drop-shadow(0 0 5px rgba(0,229,195,.85)) drop-shadow(0 0 13px rgba(0,229,195,.35));
+    animation: currentRun 6s linear infinite;
+  }
+  .circuit__flow--a{ stroke:#00e5c3; animation-duration:6s;   animation-delay:0s; }
+  .circuit__flow--b{ stroke:#56ccf2; animation-duration:7.4s; animation-delay:-2.4s;
+    filter: drop-shadow(0 0 5px rgba(86,204,242,.85)) drop-shadow(0 0 13px rgba(86,204,242,.35)); }
+  .circuit__flow--c{ stroke:#00e5c3; animation-duration:6.6s; animation-delay:-3.8s; }
+  .circuit__flow--d{ stroke:#56ccf2; animation-duration:8.2s; animation-delay:-1.2s;
+    filter: drop-shadow(0 0 5px rgba(86,204,242,.85)) drop-shadow(0 0 13px rgba(86,204,242,.35)); }
+  @keyframes currentRun{ to{ stroke-dashoffset:0; } }
+  @media (max-width: 760px){
+    .circuit__flow--c, .circuit__flow--d{ display:none; }   /* モバイルはパルス数を絞る */
+  }
+
+  /* ==========================================================================
+     5. 記事ヒーロー（ダーク・サイバー担当）
+     ========================================================================== */
+  .article-hero{ position:relative; z-index:1; padding:3.4rem 0 2.6rem; overflow:clip; }
+  /* 電流グリッドがヒーロー見出しに被って読みにくくならないよう、テキスト背後を減光 */
+  .article-hero::before{
+    content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+    background: radial-gradient(135% 115% at 30% 34%, rgba(10,14,23,0.92) 0%, rgba(10,14,23,0.6) 46%, transparent 78%);
+  }
+  .article-hero .container{ position:relative; z-index:1; max-width:880px; }
+  /* 縦スキャンライン（既存HPヒーローのオマージュ・ティール版） */
+  .hero-scan{
+    position:absolute; top:0; bottom:0; left:0; width:2px; z-index:0; opacity:0;
+    background: linear-gradient(to bottom, transparent, rgba(0,229,195,.9) 50%, transparent);
+    filter: drop-shadow(0 0 6px rgba(0,229,195,.8)) drop-shadow(0 0 18px rgba(0,229,195,.4));
+    animation: heroScan 14s linear infinite; pointer-events:none; mix-blend-mode:screen;
+  }
+  @keyframes heroScan{
+    0%   { transform:translateX(0);     opacity:0; }
+    2%   { transform:translateX(0);     opacity:.9; }
+    30%  { transform:translateX(100vw); opacity:.9; }
+    32%  { transform:translateX(100vw); opacity:0; }
+    100% { transform:translateX(0);     opacity:0; }
+  }
+  .hero-meta{ display:flex; align-items:center; flex-wrap:wrap; gap:.7rem 1rem; margin-bottom:1.1rem; }
+  .cat-tag{
+    display:inline-flex; align-items:center; gap:.45em;
+    font-size:.78rem; font-weight:700; letter-spacing:.05em; text-decoration:none;
+    color:var(--cat);
+    border:1px solid rgba(255,255,255,0.3);            /* color-mix非対応時のフォールバック */
+    background: rgba(255,255,255,0.05);
+    border-color: color-mix(in srgb, var(--cat) 55%, transparent);
+    background: color-mix(in srgb, var(--cat) 12%, transparent);
+    border-radius:999px; padding:.28em .9em;
+  }
+  .cat-tag::before{
+    content:""; width:.55em; height:.55em; border-radius:50%;
+    background:var(--cat); box-shadow:0 0 8px var(--cat);
+  }
+  .hero-meta__stat{
+    font-family:var(--font-label); font-weight:500; font-size:.72rem; letter-spacing:.14em;
+    color:#8fa3ba;
+  }
+  .hero-meta__stat b{ color:var(--accent); font-weight:700; }
+  .article-title{
+    font-size: clamp(1.65rem, 3.6vw, 2.45rem);
+    font-weight:900; line-height:1.4; color:#fff; letter-spacing:.01em;
+    margin-bottom:1.6rem; text-shadow: 0 2px 20px rgba(10,14,23,0.75);
+  }
+  /* ヒーロー画像：サイバーフレーム（コーナーブラケット＋グロー） */
+  .px-frame{
+    position:relative; overflow:hidden; border-radius:12px;
+    border:1px solid rgba(0,229,195,0.28);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 18px 50px rgba(0,0,0,0.55), 0 0 34px rgba(0,229,195,0.10);
+    background: var(--frame-bg-2);
+  }
+  .px-frame::before,.px-frame::after{
+    content:""; position:absolute; width:22px; height:22px; z-index:2; pointer-events:none;
+    border:2px solid var(--accent); opacity:.9;
+  }
+  .px-frame::before{ top:8px; left:8px; border-right:none; border-bottom:none; }
+  .px-frame::after{ bottom:8px; right:8px; border-left:none; border-top:none; }
+  .hero-visual{ aspect-ratio: 1200/630; }
+  .px-float{ height:100%; animation: gentleFloat 9s ease-in-out infinite alternate; }
+  @keyframes gentleFloat{ from{ transform:translateY(-4px); } to{ transform:translateY(4px); } }
+  .px-frame img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    transform: scale(1.1); will-change:transform;   /* パララックス余白ぶん拡大 */
+  }
+  .px-fallback{
+    position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center;
+    gap:.6rem; color:#5d7288; font-family:var(--font-label); font-size:.7rem; letter-spacing:.3em;
+    background:
+      linear-gradient(rgba(0,229,195,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,195,0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .px-frame.is-broken .px-float{ display:none; }
+  .px-frame.is-broken .px-fallback{ display:flex; }
+
+  /* ==========================================================================
+     6. 本文レイアウト（TOC＋白ペーパー）
+     ========================================================================== */
+  .article-shell{
+    position:relative; z-index:1;
+    display:grid; grid-template-columns: minmax(0,1fr) 264px; gap:2.2rem;
+    align-items:start; max-width:1120px; margin:0 auto; padding:0 1.25rem 4rem;
+  }
+
+  /* --- 白ペーパー（可読性担当） --- */
+  .article-paper{
+    background:var(--paper); color:var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    position:relative;
+    padding: clamp(1.6rem, 4.5vw, 3.4rem) clamp(1.1rem, 4.5vw, 3rem) clamp(2rem, 5vw, 3.6rem);
+  }
+  .article-paper::before{  /* 上端のカテゴリ色アクセントバー */
+    content:""; position:absolute; top:0; left:0; right:0; height:4px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: linear-gradient(90deg, var(--cat), transparent 70%);
+  }
+  .article-body{ max-width: var(--measure); margin:0 auto; font-size:17px; line-height:1.8; }
+  .article-body > * + *{ margin-top:1.5em; }
+  .article-body p{ color:var(--ink); }
+  .article-body a{ color:var(--link); text-decoration-thickness:1px; text-underline-offset:3px; }
+  .article-body a:hover{ text-decoration-thickness:2px; }
+  .article-body strong{ font-weight:700; }
+  .article-body ul, .article-body ol{ padding-left:1.5em; }
+  .article-body li{ margin-top:.5em; color:var(--ink); }
+  .article-body li::marker{ color:var(--link); font-weight:700; }
+
+  /* 見出し（日本語 = Noto Sans JP Bold。英字カウンタのみOrbitron） */
+  .article-body{ counter-reset: sec; }
+  .article-body h2{
+    counter-increment: sec;
+    font-size:1.42rem; font-weight:800; line-height:1.5; color:var(--ink);
+    margin-top:2.6em; padding-top:1.2em; border-top:1px solid var(--rule);
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+  .article-body h2::before{
+    content:"SEC." counter(sec, decimal-leading-zero);
+    display:block; font-family:var(--font-label); font-weight:700; font-size:.66rem;
+    letter-spacing:.3em; color:var(--cat); margin-bottom:.5em;
+  }
+  .article-body h3{
+    font-size:1.16rem; font-weight:800; line-height:1.55; color:var(--ink);
+    margin-top:2em;
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+
+  /* --- 追従目次（TOC / ダークパネル：装飾レイヤー側） --- */
+  .toc-wrap{ position:sticky; top: calc(var(--header-h) + 20px); }
+  .toc{
+    background: rgba(15,20,32,0.82); backdrop-filter: blur(8px);
+    border:1px solid rgba(0,229,195,0.22); border-radius:12px; overflow:hidden;
+  }
+  .toc__head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:.85rem 1rem .8rem; border-bottom:1px solid rgba(255,255,255,0.07);
+  }
+  .toc__label{
+    font-family:var(--font-label); font-weight:700; font-size:.68rem; letter-spacing:.32em; color:var(--accent);
+  }
+  .toc__toggle{
+    display:none; background:none; border:none; color:#c6d2e2; cursor:pointer;
+    font-size:.8rem; padding:.2rem .4rem;
+  }
+  .toc__toggle::after{ content:"▾"; display:inline-block; transition:transform .3s; }
+  .toc.is-open .toc__toggle::after{ transform:rotate(180deg); }
+  .toc__list{ list-style:none; padding:.6rem .5rem .8rem; max-height: calc(100vh - var(--header-h) - 140px); overflow-y:auto; }
+  .toc__item a{
+    display:block; text-decoration:none; color:#a9b8ca; font-size:.83rem; line-height:1.5;
+    padding:.42rem .7rem; border-radius:7px;
+    transition: color .2s, background .2s;
+  }
+  .toc__item--h3 a{ padding-left:1.7rem; font-size:.78rem; color:#8395a9; }
+  .toc__item a:hover{ color:#fff; background:rgba(255,255,255,0.04); }
+  .toc__item a.is-active{
+    color:var(--accent); background: rgba(0,229,195,0.12); font-weight:700;
+  }
+  @media (max-width: 960px){
+    .article-shell{ grid-template-columns: minmax(0,1fr); gap:1.2rem; }
+    .toc-wrap{ position:static; order:-1; }
+    .toc__toggle{ display:inline-block; }
+    .toc__list{ display:none; }
+    .toc.is-open .toc__list{ display:block; max-height:50vh; }
+  }
+
+  /* ==========================================================================
+     7. 本文コンポーネント
+     ========================================================================== */
+  /* --- コールアウト（💡ポイント / ⚠️注意） --- */
+  .callout{ border-radius:12px; padding:1.2rem 1.4rem; border:1px solid; }
+  .callout__head{ display:flex; align-items:center; gap:.6em; font-weight:800; font-size:.95rem; margin-bottom:.55em; letter-spacing:.01em; }
+  .callout__icon{ display:inline-flex; align-items:center; justify-content:center; width:1.9em; height:1.9em; border-radius:9px; font-size:.95em; line-height:1; flex:none; }
+  .callout p{ font-size:.95rem; line-height:1.8; margin-top:.4em; }
+  .callout p:first-of-type{ margin-top:0; }
+  .callout--point{ background:#f0fbf8; border-color:#c2e8dd; }
+  .callout--point .callout__head{ color:#0b6e60; }
+  .callout--point .callout__icon{ background:#d6f4ec; }
+  .callout--warn{ background:#fff8ea; border-color:#f0dcae; }
+  .callout--warn .callout__head{ color:#a35a05; }
+  .callout--warn .callout__icon{ background:#fce9c2; }
+
+  /* --- 比較表 --- */
+  .table-wrap{ overflow-x:auto; border:1px solid var(--rule); border-radius:10px; }
+  .compare-table{ width:100%; border-collapse:collapse; font-size:.9rem; min-width:560px; }
+  .compare-table caption{
+    caption-side:top; text-align:left; font-family:var(--font-label); font-weight:700;
+    font-size:.64rem; letter-spacing:.26em; color:var(--ink-soft);
+    padding:.7rem 1rem .55rem; background:var(--paper-tint); border-bottom:1px solid var(--rule);
+  }
+  .compare-table th, .compare-table td{ padding:.75rem 1rem; text-align:left; line-height:1.6; }
+  .compare-table thead th{
+    background: var(--frame-bg-2); color:#e8eef6; font-weight:700; font-size:.85rem;
+    border-bottom:2px solid var(--accent);
+  }
+  .compare-table thead th:first-child{ color:#8fa3ba; font-weight:500; }
+  .compare-table tbody th{ font-weight:700; color:var(--ink); background:var(--paper-tint); white-space:nowrap; }
+  .compare-table tbody tr + tr th, .compare-table tbody tr + tr td{ border-top:1px solid var(--rule); }
+  .compare-table td{ color:var(--ink); }
+  .compare-table .is-hl{ background:#f0fbf8; }
+  .compare-table thead th.is-hl{ background:#0d2a27; color:#7ff0da; }   /* 強調列ヘッダは暗地＋明るいティール文字で可読性確保 */
+
+  /* --- ターミナル風コードブロック（信号ドット付き） --- */
+  .term{
+    border-radius:10px; overflow:hidden; border:1px solid #1c2536;
+    box-shadow: 0 12px 32px rgba(10,14,23,0.35);
+  }
+  .term__bar{
+    display:flex; align-items:center; gap:.45rem; padding:.55rem .9rem;
+    background:#151c2b; border-bottom:1px solid #1f2a3d;
+  }
+  .term__dot{ width:11px; height:11px; border-radius:50%; flex:none; }
+  .term__dot--r{ background:#ff5f56; } .term__dot--y{ background:#ffbd2e; } .term__dot--g{ background:#27c93f; }
+  .term__title{
+    margin-left:.5rem; font-family:var(--font-mono); font-size:.72rem; color:#7e90a8; letter-spacing:.04em;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .term__body{
+    margin:0; padding:1rem 1.1rem; background:#0d1220; overflow-x:auto;
+  }
+  .term__body code{
+    font-family:var(--font-mono); font-size:.82rem; line-height:1.75; color:#c9e8de; white-space:pre;
+  }
+  .term__body .t-cmd{ color:#7fe9d4; }        /* $ コマンド行 */
+  .term__body .t-out{ color:#8ea4bd; }        /* 出力 */
+  .term__body .t-ok{ color:#27c93f; }
+  .term__body .t-comment{ color:#5d7288; }
+
+  /* --- 図版枠（キャプション＋onerrorフォールバック） --- */
+  /* --- YouTube埋め込み（16:9・レスポンシブ） --- */
+  .video{ margin:0; }
+  .video__box{
+    position:relative; width:100%; aspect-ratio:16/9;
+    border:1px solid rgba(0,229,195,0.28); border-radius:10px; overflow:hidden;
+    background:#0b1016;
+  }
+  .video__box iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  /* サムネイル＋再生ボタンのファサード（file://でもエラーにならない） */
+  .video__facade{
+    position:absolute; inset:0; width:100%; height:100%; padding:0; border:0; cursor:pointer;
+    background-size:cover; background-position:center; background-color:#0b1016;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .video__facade::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.4));
+  }
+  .video__play{
+    position:relative; z-index:1; width:74px; height:52px; border-radius:14px;
+    background:rgba(18,22,28,0.72); border:1px solid rgba(0,229,195,0.5);
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .2s ease, background .2s ease;
+  }
+  .video__play::before{
+    content:""; width:0; height:0; margin-left:4px;
+    border-style:solid; border-width:11px 0 11px 19px;
+    border-color:transparent transparent transparent #fff;
+  }
+  .video__facade:hover .video__play{ transform:scale(1.08); background:rgba(0,229,195,0.9); }
+  .video__facade:hover .video__play::before{ border-left-color:#06251f; }
+  .video__label{
+    position:absolute; z-index:1; left:12px; bottom:10px; color:#e8eef6; font-size:.78rem;
+    font-family:var(--font-label); letter-spacing:.06em; opacity:.9;
+    display:flex; align-items:center; gap:.4em;
+  }
+  .video__label::before{ content:"\25B6"; color:#ff4444; font-size:.9em; }
+
+  /* --- インラインSVGチャート（枠のパララックスに切り取られない） --- */
+  .chart{ margin:0; }
+  .chart__box{
+    background:#faf9f6; border:1px solid rgba(0,0,0,0.10); border-radius:10px;
+    padding:.5rem; overflow-x:auto;
+  }
+  .chart__box svg{ display:block; width:100%; height:auto; min-width:520px; }
+  .fig{ margin:0; }
+  .fig .px-frame{ border-radius:10px; }
+  .fig .px-frame::before,.fig .px-frame::after{ width:16px; height:16px; }
+  .fig__media{ aspect-ratio:16/9; overflow:hidden; }
+  .video figcaption,
+  .chart figcaption,
+  .fig figcaption{
+    display:flex; align-items:baseline; gap:.7em; margin-top:.65em;
+    font-size:.82rem; color:var(--ink-soft); line-height:1.6;
+  }
+  .video figcaption .fig__no,
+  .chart figcaption .fig__no,
+  .fig figcaption .fig__no{
+    font-family:var(--font-label); font-weight:700; font-size:.62rem; letter-spacing:.22em;
+    color:var(--cat); flex:none;
+  }
+
+  /* --- セクション区切りの装飾（回路ライン） --- */
+  .cyber-divider{ display:flex; justify-content:center; padding:.4em 0; }
+  .cyber-divider svg{ width:min(100%, 340px); height:14px; opacity:.75; }
+
+  /* --- CTAバナー（記事末＋本文途中挿入可） --- */
+  .cta-banner{
+    position:relative; overflow:hidden; border-radius:12px;
+    background: linear-gradient(135deg, #0c1320 0%, #10202a 100%);
+    border:1px solid rgba(0,229,195,0.3); padding:1.8rem 1.7rem;
+  }
+  .cta-banner::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(circle at 88% -20%, rgba(0,229,195,0.18), transparent 55%),
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:100% 100%, 32px 32px, 32px 32px;
+  }
+  .cta-banner > *{ position:relative; }
+  .cta-banner__kicker{
+    font-family:var(--font-label); font-weight:700; font-size:.7rem; letter-spacing:.22em; color:var(--accent);
+  }
+  .cta-banner__title{ color:#fff; font-size:1.24rem; font-weight:800; line-height:1.5; margin-top:.5em; }
+  .cta-banner__text{ color:#f2f6fb; font-size:.96rem; line-height:1.85; margin-top:.6em; max-width:38em; }
+  .cta-banner__btns{ display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1.2rem; }
+  /* .article-body p (詳細度0,1,1) に負けるため、記事本文内でも明示的に上書きする */
+  .article-body .cta-banner__title{ color:#fff; }
+  .article-body .cta-banner__text{ color:#f2f6fb; }
+  .btn{
+    display:inline-block; text-decoration:none; font-weight:700; font-size:.92rem;
+    border-radius:999px; padding:.72em 1.7em; transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn--primary{ background:var(--accent); color:#06251f; box-shadow:0 6px 22px rgba(0,229,195,0.3); }
+  .btn--primary:hover{ box-shadow:0 10px 28px rgba(0,229,195,0.45); }
+  .btn--ghost{ color:#fff; border:1.5px solid rgba(255,255,255,0.45); }
+  .btn--ghost:hover{ border-color:#fff; background:rgba(255,255,255,0.06); }
+
+  /* ==========================================================================
+     8. 関連記事（ダーク枠側・カテゴリ色ドット）
+     ========================================================================== */
+  .related{ position:relative; z-index:1; padding:0 0 4.5rem; }
+  .related .container{ max-width:1120px; }
+  .related__title{
+    display:flex; align-items:baseline; gap:.9rem; color:#fff; font-size:1.25rem; font-weight:800; margin-bottom:1.4rem;
+  }
+  .related__title .en{
+    font-family:var(--font-label); font-weight:700; font-size:.7rem; letter-spacing:.32em; color:var(--accent);
+  }
+  .related__grid{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:1.2rem; }
+  @media (max-width: 860px){ .related__grid{ grid-template-columns:1fr; } }
+  .rel-card{
+    display:flex; flex-direction:column; gap:.55rem; text-decoration:none;
+    background: linear-gradient(160deg, rgba(22,29,46,0.9), rgba(13,18,30,0.9));
+    border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:1.25rem 1.3rem 1.15rem;
+    transition: transform .35s cubic-bezier(0.34,1.56,0.64,1), border-color .3s, box-shadow .3s;
+  }
+  .rel-card:hover{
+    transform:translateY(-5px);
+    border-color: var(--cat);                           /* color-mix非対応時のフォールバック */
+    border-color: color-mix(in srgb, var(--cat) 55%, transparent);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 24px color-mix(in srgb, var(--cat) 18%, transparent);
+  }
+  .rel-card__meta{ display:flex; align-items:center; gap:.55rem; font-size:.74rem; }
+  .rel-card__dot{ width:8px; height:8px; border-radius:50%; background:var(--cat); box-shadow:0 0 8px var(--cat); flex:none; }
+  .rel-card__cat{ color:var(--cat); font-weight:700; letter-spacing:.04em; }
+  .rel-card__date{ font-family:var(--font-label); font-size:.66rem; letter-spacing:.12em; color:#7e90a8; }
+  .rel-card__title{ color:#eef3f9; font-size:.98rem; font-weight:700; line-height:1.6; flex:1; }
+  .rel-card__more{ font-family:var(--font-label); font-size:.64rem; letter-spacing:.24em; color:#8fa3ba; transition:color .25s; }
+  .rel-card:hover .rel-card__more{ color:var(--cat); }
+
+  /* ==========================================================================
+     9. フッター（既存HPトーン）
+     ========================================================================== */
+  .site-footer{
+    position:relative; z-index:1; background: var(--frame-bg-2);
+    border-top:1px solid rgba(255,255,255,0.06); padding:3rem 0 1.2rem; font-size:.9rem; color:#c6d2e2;
+  }
+  .footer-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:2rem; }
+  .footer-grid h3{ margin-bottom:.6rem; color:#fff; font-size:1rem; }
+  .footer-links{ list-style:none; }
+  .footer-links li{ margin-bottom:6px; }
+  .footer-links a{ color:#c6d2e2; text-decoration:none; }
+  .footer-links a:hover{ color:var(--accent); text-decoration:underline; }
+  .copyright{ margin-top:2.2rem; text-align:center; opacity:.65; font-size:.8rem; }
+
+  /* ==========================================================================
+     10. 登場アニメ（reveal）— 図版・カード等の非テキストブロックのみに適用
+     ========================================================================== */
+  .reveal{ opacity:0; transform:translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(0.22,0.61,0.36,1); }
+  .reveal.is-in{ opacity:1; transform:none; }
+
+  /* ==========================================================================
+     11. prefers-reduced-motion：全浮遊・全アニメ停止（必須）
+     ========================================================================== */
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *,*::before,*::after{ animation:none !important; transition:none !important; }
+    .circuit__flow{ display:none; }
+    .hero-scan{ display:none; }
+    .reveal{ opacity:1; transform:none; }
+    .px-frame img{ transform:none; }
+  }
+  </style>
+</head>
+
+<!-- data-category = {{CATEGORY_SLUG}} （nanostep / nanosi / nanoguard / sanicam / guide）-->
+<body data-category="guide">
+
+  <!-- リーディングプログレスバー -->
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       署名演出：電流グリッド（背面固定・本文とは完全分離・pointer-events:none）
+       グリッド上を電流パルスが「あみだくじ」状に走る（縦に流れ→橋で隣へ）。
+       アニメは stroke-dashoffset のみ。preserveAspectRatio=none で全面カバー。
+       ============================================================ -->
+  <div class="circuit" aria-hidden="true">
+    <svg class="circuit__svg" viewBox="0 0 1200 800" preserveAspectRatio="none">
+      <!-- 背面グリッド：縦線（v）＋あみだくじの橋（横線） -->
+      <g class="circuit__base">
+        <line class="v" x1="60"   y1="-40" x2="60"   y2="840"/>
+        <line class="v" x1="240"  y1="-40" x2="240"  y2="840"/>
+        <line class="v" x1="420"  y1="-40" x2="420"  y2="840"/>
+        <line class="v" x1="600"  y1="-40" x2="600"  y2="840"/>
+        <line class="v" x1="780"  y1="-40" x2="780"  y2="840"/>
+        <line class="v" x1="960"  y1="-40" x2="960"  y2="840"/>
+        <line class="v" x1="1140" y1="-40" x2="1140" y2="840"/>
+        <line x1="60"  y1="120" x2="240"  y2="120"/>
+        <line x1="600" y1="120" x2="780"  y2="120"/>
+        <line x1="420" y1="180" x2="600"  y2="180"/>
+        <line x1="780" y1="240" x2="960"  y2="240"/>
+        <line x1="240" y1="300" x2="420"  y2="300"/>
+        <line x1="960" y1="360" x2="1140" y2="360"/>
+        <line x1="600" y1="420" x2="780"  y2="420"/>
+        <line x1="60"  y1="540" x2="240"  y2="540"/>
+        <line x1="420" y1="600" x2="600"  y2="600"/>
+        <line x1="780" y1="660" x2="960"  y2="660"/>
+      </g>
+      <!-- 電流パルス：縦線を流れ落ち、橋で隣の線へ飛び移るあみだくじ経路 -->
+      <path class="circuit__flow circuit__flow--a" pathLength="1000" d="M60,-40 V120 H240 V300 H420 V600 H600 V840"/>
+      <path class="circuit__flow circuit__flow--b" pathLength="1000" d="M1140,-40 V360 H960 V660 H780 V840"/>
+      <path class="circuit__flow circuit__flow--c" pathLength="1000" d="M420,-40 V180 H600 V420 H780 V660 H960 V840"/>
+      <path class="circuit__flow circuit__flow--d" pathLength="1000" d="M780,-40 V240 H960 V360 H1140 V840"/>
+    </svg>
+  </div>
+
+  <!-- ============================================================
+       ヘッダー（design-brief §6 の絶対URL）
+       ============================================================ -->
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="https://nano-factory.net/">
+        <span class="brand__nano">nano</span><span class="brand__factory">FACTORY</span>
+        <span class="brand__blog">BLOG</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle__bar"></span>
+        <span class="sr-only">メニューを開閉</span>
+      </button>
+      <nav id="site-nav" class="nav" aria-label="サイト内メニュー">
+        <a class="nav__link" href="https://nano-factory.net/nanostep-lp/">作業認識AI</a>
+        <a class="nav__link" href="https://nano-factory.net/nanosi-lp/">AI検査</a>
+        <a class="nav__link" href="https://nano-factory.net/nanoguard-lp/">AI監視カメラ</a>
+        <a class="nav__link" href="https://nano-factory.net/sanicam-lp/hand.html">手指衛生</a>
+        <a class="nav__link" href="https://nano-factory.net/news/">ニュース・事例</a>
+        <a class="nav__link nav__link--current" href="/blog/">ブログ</a>
+        <a class="nav__link" href="https://nano-factory.net/company/">会社情報</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================================================
+         記事ヒーロー
+         ============================================================ -->
+    <section class="article-hero">
+      <div class="container">
+        <div class="hero-meta">
+          <!-- カテゴリタグ：{{CATEGORY_LABEL}}（色は body[data-category] が自動適用） -->
+          <a class="cat-tag" href="/blog/?cat=guide">ガイド</a><!-- ← href の cat= に {{CATEGORY_SLUG}} -->
+          <span class="hero-meta__stat">READ&nbsp;<b>9</b>&nbsp;MIN</span><!-- ← {{READ_TIME}} -->
+          <span class="hero-meta__stat">
+            公開 <time datetime="2026-07-20">2026-07-20</time><!-- ← {{PUBLISH_DATE}} -->
+            ／ 更新 <time datetime="2026-07-20">2026-07-20</time><!-- ← {{UPDATE_DATE}} -->
+          </span>
+        </div>
+
+        <!-- ▼▼ {{TITLE}}（見出し側） ▼▼ -->
+        <h1 class="article-title">エッジGPU1台でフィジカルAI｜2,048体の並列強化学習</h1>
+        <!-- ▲▲ {{TITLE}} ▲▲ -->
+
+        <!-- ヒーロー画像：{{HERO_IMAGE}}（無い場合 picsum の seed に {{SLUG}}） -->
+        <figure class="hero-visual px-frame reveal">
+          <div class="px-float">
+            <img class="fx-img" data-px="26"
+                 src="assets/edge-gpu-parallel-rl/hero_48grid.png"
+                 alt="48台の仮想ロボットアームが同一ポリシーでタッチパネルのボタン押下を同時に実行する俯瞰グリッド"
+                 onerror="this.closest('.px-frame').classList.add('is-broken')" />
+          </div>
+          <div class="px-fallback">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+              <rect x="4" y="8" width="36" height="28" rx="3" stroke="rgba(0,229,195,0.6)" stroke-width="1.5"/>
+              <circle cx="16" cy="19" r="4" stroke="rgba(0,229,195,0.6)" stroke-width="1.5"/>
+              <path d="M8 32 L20 24 L28 30 L36 22" stroke="rgba(0,229,195,0.6)" stroke-width="1.5"/>
+            </svg>
+            <span>NO IMAGE</span>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         本文シェル：白ペーパー＋追従TOC
+         ============================================================ -->
+    <div class="article-shell">
+
+      <!-- 白ペーパー（可読性レイヤー） -->
+      <article class="article-paper">
+        <!-- ▼▼ {{BODY}} ▼▼ 本文はここから。h2/h3 の id はJSが自動付与（手書き不要） -->
+        <div class="article-body" id="article-body">
+
+          <p>「工場の操作盤を、人の代わりにロボットに押させてほしい」</p>
+
+          <p>この手の相談で最初にぶつかる壁は、たいてい想像と違うところにあります。カメラでもAIでもなく、<strong>ロボットに動きを覚えさせるシミュレーターが、現場に置ける機材では動かない。</strong></p>
+
+          <p>NVIDIAの発表会でよく流れる、何百体ものロボットが仮想空間で一斉に訓練している映像。あれを動かしているIsaac Simは、レイトレーシング用のRTコアを積んだGPUを前提にしています。工場に置くような小型のAI端末に、そんなものは載っていません。ではクラウドの大型GPUを借りればいいのか。それをやると、回線が細い日はロボットが止まります。工場の中で完結させたくて始めた話なのに、本末転倒です。</p>
+
+          <p>諦めるしかないのか。そう思いながら手を動かしてみたら、抜け道がありました。<strong>描画を捨てて、物理計算だけをGPUに任せる。</strong>この方針で、手のひらサイズの端末1台に2,048体のロボットアームを同時に訓練させられました。</p>
+
+          <p>この記事では、<strong>RTコアを持たないエッジ端末1台で、2,048体のロボットアームを並列訓練した方法</strong>を解説します。シミュレーターの構成、強化学習にカメラ画像を渡さない設計、並列数ごとの実測スループット、そして「ボタンを押す」動作を成功率66.7%まで引き上げるまでの手順を、実測値とあわせて順に説明します。安全違反（アームが壁・床に接触した回数）は全構成で0%でした。</p>
+
+          <aside class="callout callout--point">
+            <div class="callout__head"><span class="callout__icon" aria-hidden="true">💡</span><span>ポイント</span></div>
+            <p>この記事の途中で、成功率が<strong>59.5%から48.0%へ下がります</strong>。数字を落としたのではなく、シミュレーターを現実に近づけた結果です。理由は後半に書きました。</p>
+          </aside>
+
+          <h2>MuJoCo-Warpを選んだ理由</h2>
+
+          <p>あの映像で本当に効いているのは何か。写実的な絵ではなく、<strong>物理シミュレーションを何千体ぶんも同時に回すこと</strong>のほうです。訓練しているAIは、そもそも絵を見ていません。なら描画は丸ごと捨てられます。</p>
+
+          <p>NVIDIAとDeepMindが共同開発しているMuJoCo-Warpを試したところ、これが手元の端末のCUDAだけで素直に動きました。<strong>2,048体の仮想ロボットアームが、1台のエッジ端末の上で一斉に訓練に入ります。</strong>Isaac Simは要りませんでした。</p>
+
+          <div class="table-wrap">
+            <table class="compare-table">
+              <caption>TABLE 01 — 諦めたものと、代わりに得たもの</caption>
+              <thead>
+                <tr>
+                  <th>観点</th>
+                  <th>Isaac Sim（今回は使えず）</th>
+                  <th class="is-hl">MuJoCo-Warp（採用）</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>必要なGPU</th>
+                  <td>RTコア搭載GPUが必須</td>
+                  <td class="is-hl">CUDAが動けば可（手元の端末で動作）</td>
+                </tr>
+                <tr>
+                  <th>写実的な描画</th>
+                  <td>得意（映像が作れる）</td>
+                  <td class="is-hl">捨てた（訓練には要らないと判断）</td>
+                </tr>
+                <tr>
+                  <th>物理の並列数</th>
+                  <td>大規模並列</td>
+                  <td class="is-hl">2,048体を1台で並列（8,192体まで確認）</td>
+                </tr>
+                <tr>
+                  <th>動かす場所</th>
+                  <td>ワークステーション／クラウド</td>
+                  <td class="is-hl">現場に置けるエッジ端末1台</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <figure class="video reveal">
+            <div class="video__box">
+              <button class="video__facade" type="button" data-vid="i5-eJfmMTdQ"
+                      style="background-image:url('assets/edge-gpu-parallel-rl/hero_48grid.png')"
+                      aria-label="48台のロボットアームが同一ポリシーで同時に実行する俯瞰映像（YouTubeで再生）">
+                <span class="video__play" aria-hidden="true"></span>
+                <span class="video__label">YouTube</span>
+              </button>
+            </div>
+            <figcaption><span class="fig__no">FIG. 01</span>48台のロボットアームが同じ学習済みポリシーで、48通りの条件を同時に実行しているところ。実際の訓練は2,048体並列で、表示しているのは48体だけです。緑のボタンが成功したワールド、赤がそれ以外。この記録では48ワールド中10成功でした。</figcaption>
+          </figure>
+
+          <div class="cyber-divider" aria-hidden="true">
+            <svg viewBox="0 0 340 14" fill="none">
+              <path d="M0 7 H140 M200 7 H340" stroke="rgba(0,229,195,0.35)" stroke-width="1"/>
+              <circle cx="152" cy="7" r="3" fill="#00e5c3" opacity="0.8"/>
+              <rect x="166" y="3" width="8" height="8" stroke="rgba(0,229,195,0.5)" fill="none"/>
+              <circle cx="188" cy="7" r="3" fill="rgba(86,204,242,0.7)"/>
+            </svg>
+          </div>
+
+          <h2>強化学習にカメラ画像を渡さない設計</h2>
+
+          <p>もうひとつ効いたのが、<strong>強化学習（RL）にカメラ画像を渡さなかったこと</strong>です。AIが受け取るのは関節の角度と、狙う位置の3D座標だけ。「画面に何が映っているか」を読むのは視覚言語モデル（VLM）とカメラキャリブレーションの仕事、「どう腕を動かすか」がRLの仕事、と切り分けました。</p>
+
+          <p>この切り分けで楽になったのは、次の点です。</p>
+
+          <ol>
+            <li><strong>きれいな絵を描く必要がなくなった</strong>——Isaac Simがなくても訓練が成り立つ</li>
+            <li><strong>カメラを替えても学習し直さなくていい</strong>——5分のキャリブレーションで済む</li>
+            <li><strong>シミュレーターと現実の差が「物理の差」だけになる</strong>——見た目を寄せる作業が丸ごと消える</li>
+          </ol>
+
+          <aside class="callout callout--point">
+            <div class="callout__head"><span class="callout__icon" aria-hidden="true">💡</span><span>ポイント</span></div>
+            <p>「AIに全部やらせる」構成は格好よく見えますが、学習コストと再現性のリスクを一箇所に集めることでもあります。<strong>現場ごとに変わるもの（カメラ・レンズ・取り付け位置）を学習の外に出しておく</strong>と、次の現場での立ち上げがぐっと軽くなります。</p>
+          </aside>
+
+          <h2>並列数ごとのスループット実測</h2>
+
+          <p>速度の話。ここは指標の選び方でいくらでも盛れてしまうので、先に決めておきます。物理シミュレーターは1回の制御につき25回の細かい計算を回します。だから<strong>「物理サブステップ/秒」と「制御ステップ/秒」では数字が25倍変わる。</strong>訓練がどれだけ進むかを見たいなら、後者です。</p>
+
+          <div class="table-wrap">
+            <table class="compare-table">
+              <caption>TABLE 02 — 並列数別の実測スループット（自社検証環境）</caption>
+              <thead>
+                <tr>
+                  <th>構成</th>
+                  <th>制御ステップ/秒</th>
+                  <th>物理サブステップ/秒</th>
+                  <th class="is-hl">CPU比</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>CPU（10並列）</th>
+                  <td>6,242</td>
+                  <td>156,055</td>
+                  <td class="is-hl">1.0倍（基準）</td>
+                </tr>
+                <tr>
+                  <th>MuJoCo-Warp 2,048体</th>
+                  <td>19,383</td>
+                  <td>484,582</td>
+                  <td class="is-hl">3.1倍</td>
+                </tr>
+                <tr>
+                  <th>MuJoCo-Warp 8,192体</th>
+                  <td>76,152</td>
+                  <td>1,903,805</td>
+                  <td class="is-hl">12.2倍</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>ただ、この表の12.2倍がそのまま訓練の速さになるわけではありません。方策の更新まで含めた実効速度で測ると、<strong>CPUの毎秒1,226ステップに対してGPU並列は毎秒3,477ステップ。およそ2.8倍</strong>でした。実時間で言うと、CPUが41分で300万ステップ、GPU並列は144分で3,000万ステップ。物理演算だけが速くなっても、学習側の処理が追いつかないと頭打ちになることが分かりました。</p>
+
+          <p>ついでに書いておくと、この訓練中もずっと同じ端末に30GB規模のVLMが載ったままでした。訓練側が余分に食ったGPUメモリは1GBほど。<strong>「見る」と「学ぶ」が1台に同居できる</strong>のは、現場で完結させたいときにそのまま効いてきます。</p>
+
+          <figure class="chart reveal">
+            <div class="chart__box">
+              <svg class="chart-svg" viewBox="0 0 980 600" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="エッジGPUの超並列スループット">
+              <rect width="980" height="600" fill="#faf9f6" rx="10"/>
+              <text x="490.0" y="38" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="22" font-weight="700" fill="#33373d">エッジGPUの超並列スループット</text>
+              <text x="490.0" y="60" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" fill="#8f959d">主指標は制御ステップ/秒（対数軸）</text>
+              <line x1="96" y1="74" x2="96" y2="450" stroke="#c7c5be" stroke-width="1"/>
+              <line x1="96" y1="401.7" x2="946" y2="401.7" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="406.7" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">1 k</text>
+              <line x1="96" y1="309.2" x2="946" y2="309.2" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="314.2" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">10 k</text>
+              <line x1="96" y1="216.8" x2="946" y2="216.8" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="221.8" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">100 k</text>
+              <line x1="96" y1="124.3" x2="946" y2="124.3" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="129.3" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">1000 k</text>
+              <text x="26" y="262.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" fill="#33373d" transform="rotate(-90 26 262.0)">スループット (ステップ/秒, 対数)</text>
+              <line x1="96" y1="328.1" x2="946" y2="328.1" stroke="#8b93a1" stroke-width="2"/>
+              <text x="946.0" y="318.1" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#8b93a1">CPU 10並列 = 6242 制御ステップ/秒</text>
+              <polyline fill="none" stroke="#8f959d" stroke-width="2" stroke-dasharray="7 5" points="156.0,291.1 302.0,236.2 448.0,181.1 594.0,153.4 740.0,126.7 886.0,98.4"/>
+              <circle cx="156.0" cy="291.1" r="5" fill="#faf9f6" stroke="#8f959d" stroke-width="2"/>
+              <circle cx="302.0" cy="236.2" r="5" fill="#faf9f6" stroke="#8f959d" stroke-width="2"/>
+              <circle cx="448.0" cy="181.1" r="5" fill="#faf9f6" stroke="#8f959d" stroke-width="2"/>
+              <circle cx="594.0" cy="153.4" r="5" fill="#faf9f6" stroke="#8f959d" stroke-width="2"/>
+              <circle cx="740.0" cy="126.7" r="5" fill="#faf9f6" stroke="#8f959d" stroke-width="2"/>
+              <circle cx="886.0" cy="98.4" r="5" fill="#faf9f6" stroke="#8f959d" stroke-width="2"/>
+              <polyline fill="none" stroke="#2f8f86" stroke-width="3.4" points="156.0,420.3 302.0,365.4 448.0,310.4 594.0,282.6 740.0,255.9 886.0,227.7"/>
+              <circle cx="156.0" cy="420.3" r="7" fill="#2f8f86"/>
+              <text x="156.0" y="404.3" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#8f959d">0.10x</text>
+              <text x="156.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">64</text>
+              <circle cx="302.0" cy="365.4" r="7" fill="#2f8f86"/>
+              <text x="302.0" y="349.4" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#8f959d">0.39x</text>
+              <text x="302.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">256</text>
+              <circle cx="448.0" cy="310.4" r="7" fill="#2f8f86"/>
+              <text x="464.0" y="315.4" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#2f8f86">1.6x</text>
+              <text x="448.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">1024</text>
+              <circle cx="594.0" cy="282.6" r="7" fill="#2f8f86"/>
+              <text x="594.0" y="266.6" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#2f8f86">3.1x</text>
+              <text x="594.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">2048</text>
+              <circle cx="740.0" cy="255.9" r="7" fill="#2f8f86"/>
+              <text x="740.0" y="239.9" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#2f8f86">6.0x</text>
+              <text x="740.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">4096</text>
+              <circle cx="886.0" cy="227.7" r="7" fill="#2f8f86"/>
+              <text x="886.0" y="211.7" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#2f8f86">12.2x</text>
+              <text x="886.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">8192</text>
+              <text x="440.0" y="258.4" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#b1543f">ここでCPUを追い越す</text>
+              <path d="M 434.0 264.4 L 445.0 296.4" stroke="#b1543f" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+              <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#b1543f"/></marker></defs>
+              <text x="521.0" y="502.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">並列ワールド数 (MuJoCo-Warp)</text>
+              <line x1="96" y1="538" x2="130" y2="538" stroke="#8f959d" stroke-width="3" stroke-dasharray="7 5" stroke-linecap="round"/>
+              <circle cx="113" cy="538" r="5" fill="#8f959d"/>
+              <text x="140.0" y="543.0" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">物理サブステップ/秒 (参考・25倍)</text>
+              <line x1="424.79999999999995" y1="538" x2="458.79999999999995" y2="538" stroke="#2f8f86" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="441.79999999999995" cy="538" r="5" fill="#2f8f86"/>
+              <text x="468.8" y="543.0" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">制御ステップ/秒 (実効・主指標)</text>
+              <text x="16" y="586" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12" fill="#8f959d">実効値=学習が進む速さ。物理サブステップは1制御=25substepの内部刻み。</text>
+              <text x="964" y="586" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12" fill="#8f959d">自社検証環境 実測 2026-07</text>
+              </svg>
+            </div>
+            <figcaption><span class="fig__no">FIG. 02</span>並列数別の実測スループット（対数軸）。訓練の速さは制御ステップ/秒で見ます。</figcaption>
+          </figure>
+
+          <figure class="chart reveal">
+            <div class="chart__box">
+              <svg class="chart-svg" viewBox="0 0 980 600" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="学習の実時間と成功率の推移">
+              <rect width="980" height="600" fill="#faf9f6" rx="10"/>
+              <text x="490.0" y="38" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="22" font-weight="700" fill="#33373d">学習の実時間と成功率の推移</text>
+              <text x="490.0" y="60" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" fill="#8f959d">CPUは41分・300万ステップで打ち切り／GPU超並列は144分で3,000万ステップ</text>
+              <line x1="96" y1="74" x2="96" y2="450" stroke="#c7c5be" stroke-width="1"/>
+              <line x1="96" y1="450.0" x2="946" y2="450.0" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="455.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">0</text>
+              <line x1="96" y1="368.3" x2="946" y2="368.3" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="373.3" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">20</text>
+              <line x1="96" y1="286.5" x2="946" y2="286.5" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="291.5" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">40</text>
+              <line x1="96" y1="204.8" x2="946" y2="204.8" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="209.8" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">60</text>
+              <line x1="96" y1="123.0" x2="946" y2="123.0" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="128.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">80</text>
+              <text x="26" y="262.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" fill="#33373d" transform="rotate(-90 26 262.0)">成功率 (%)</text>
+              <line x1="96" y1="450" x2="946" y2="450" stroke="#c7c5be" stroke-width="1"/>
+              <text x="96.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">0</text>
+              <text x="266.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">30</text>
+              <text x="436.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">60</text>
+              <text x="606.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">90</text>
+              <text x="776.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">120</text>
+              <text x="946.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">150</text>
+              <text x="521.0" y="502.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">学習の実時間 (分)</text>
+              <polyline fill="none" stroke="#8b93a1" stroke-width="2" points="96.0,409.1 97.7,433.7 99.5,433.7 101.2,437.7 102.9,433.7 104.7,445.9 106.4,445.9 108.1,437.7 110.0,445.9 111.6,437.7 113.3,429.6 115.2,405.0 116.8,445.9 118.5,417.3 120.4,417.3 122.1,421.4 123.8,433.7 125.6,421.4 127.3,433.7 129.0,413.2 130.9,396.9 132.6,405.0 134.3,421.4 136.2,409.1 137.9,421.4 139.6,417.3 141.5,417.3 143.1,392.8 145.0,413.2 146.7,405.0 148.4,396.9 150.3,396.9 151.9,417.3 153.6,425.5 155.5,405.0 157.2,396.9 158.9,384.6 160.8,401.0 162.5,368.3 164.2,405.0 166.0,409.1 167.7,405.0 169.4,413.2 171.3,396.9 172.9,396.9 174.6,421.4 176.5,392.8 178.2,388.7 179.9,392.8 181.8,392.8 183.4,372.3 185.1,380.5 187.0,392.8 188.7,405.0 190.3,396.9 192.2,429.6 193.9,396.9 195.6,396.9 197.5,401.0 199.2,409.1 201.0,413.2 202.7,413.2 204.4,417.3 206.3,392.8 208.0,401.0 209.6,421.4 211.5,392.8 213.2,372.3 214.9,401.0 216.8,388.7 218.5,413.2 220.2,409.1 222.1,384.6 223.8,392.8 225.5,388.7 227.3,372.3 229.0,396.9 230.7,368.3 232.6,368.3 234.3,388.7 236.0,376.4 237.8,368.3 239.5,405.0 241.2,364.2 256.3,376.4 257.9,376.4 259.6,356.0 261.5,356.0 263.1,372.3 264.8,376.4 266.7,372.3 268.4,351.9 270.0,384.6 271.9,343.7 273.6,351.9 275.2,364.2 277.1,327.4 278.8,356.0 280.4,351.9 282.3,343.7 284.0,351.9 285.8,356.0 287.5,388.7 289.2,356.0 291.0,343.7 292.7,372.3 294.3,351.9 296.2,372.3 297.9,380.5 299.5,368.3 301.4,343.7 303.1,360.1 304.8,343.7 306.6,323.3 308.3,347.8 310.0,343.7 311.8,323.3 313.5,351.9 315.2,319.2 317.1,360.1 318.7,351.9 320.4,376.4 322.3,368.3 324.0,376.4 325.7,372.3 327.5,376.4 327.7,364.2"/>
+              <polyline fill="none" stroke="#2f8f86" stroke-width="2" stroke-dasharray="6 5" points="140.0,392.5 198.2,382.2 249.4,385.7 307.2,384.9 364.8,370.6 416.0,381.0 478.5,383.3 535.2,375.0 585.7,374.2 664.1,388.5 714.6,377.0 766.0,382.5 817.5,382.9 868.8,384.9"/>
+              <polyline fill="none" stroke="#c47a3d" stroke-width="3.2" points="140.0,340.0 198.2,313.8 249.4,319.4 307.2,317.8 364.8,301.2 416.0,308.9 478.5,319.5 535.2,305.2 585.7,306.4 664.1,327.0 714.6,297.6 766.0,315.6 817.5,323.4 868.8,317.1"/>
+              <circle cx="140.0" cy="340.0" r="5" fill="#c47a3d"/>
+              <circle cx="198.2" cy="313.8" r="5" fill="#c47a3d"/>
+              <circle cx="249.4" cy="319.4" r="5" fill="#c47a3d"/>
+              <circle cx="307.2" cy="317.8" r="5" fill="#c47a3d"/>
+              <circle cx="364.8" cy="301.2" r="5" fill="#c47a3d"/>
+              <circle cx="416.0" cy="308.9" r="5" fill="#c47a3d"/>
+              <circle cx="478.5" cy="319.5" r="5" fill="#c47a3d"/>
+              <circle cx="535.2" cy="305.2" r="5" fill="#c47a3d"/>
+              <circle cx="585.7" cy="306.4" r="5" fill="#c47a3d"/>
+              <circle cx="664.1" cy="327.0" r="5" fill="#c47a3d"/>
+              <circle cx="714.6" cy="297.6" r="5" fill="#c47a3d"/>
+              <circle cx="766.0" cy="315.6" r="5" fill="#c47a3d"/>
+              <circle cx="817.5" cy="323.4" r="5" fill="#c47a3d"/>
+              <circle cx="868.8" cy="317.1" r="5" fill="#c47a3d"/>
+              <circle cx="327.7" cy="364.2" r="6" fill="#8b93a1"/>
+              <text x="327.7" y="196.6" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#8b93a1">CPU はここで打ち切り</text>
+              <text x="327.7" y="213.6" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#8b93a1">300万ステップ / 41分 / 総合22%</text>
+              <line x1="327.7" y1="222.6" x2="327.7" y2="355.2" stroke="#8b93a1" stroke-width="1.2" stroke-dasharray="3 3"/>
+              <circle cx="714.6" cy="297.6" r="8" fill="none" stroke="#c47a3d" stroke-width="2"/>
+              <text x="714.6" y="277.6" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#c47a3d">学習中の press 評価 最大 37.3%</text>
+              <text x="860.8" y="410.9" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#2f8f86">総合は slide=0% で頭打ち</text>
+              <line x1="96" y1="538" x2="130" y2="538" stroke="#8b93a1" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="113" cy="538" r="5" fill="#8b93a1"/>
+              <text x="140.0" y="543.0" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">CPU 逐次PPO・総合</text>
+              <line x1="332.4" y1="538" x2="366.4" y2="538" stroke="#2f8f86" stroke-width="3" stroke-dasharray="6 5" stroke-linecap="round"/>
+              <circle cx="349.4" cy="538" r="5" fill="#2f8f86"/>
+              <text x="376.4" y="543.0" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">GPU超並列・総合 (評価)</text>
+              <line x1="595.1999999999999" y1="538" x2="629.1999999999999" y2="538" stroke="#c47a3d" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="612.1999999999999" cy="538" r="5" fill="#c47a3d"/>
+              <text x="639.2" y="543.0" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">GPU超並列・press (評価)</text>
+              <text x="16" y="586" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12" fill="#8f959d">学習中の評価はサーボ無しの簡易判定。正式評価(15mmバイアス+サーボ)での press は 66.7%。</text>
+              <text x="964" y="586" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12" fill="#8f959d">自社検証環境 実測 2026-07</text>
+              </svg>
+            </div>
+            <figcaption><span class="fig__no">FIG. 03</span>訓練の実時間と成功率。CPUは300万ステップ・41分で打ち切り、GPU超並列は144分で3,000万ステップを消化しました。</figcaption>
+          </figure>
+
+          <p>数を回した効果は、並べてみると分かりやすい。訓練途中の4段階に、同じ試験を受けさせました。未学習は失敗、300万ステップから先は成功。ボタンの位置も初期のずれも物理も揃えてあるので、この差はまるごと訓練の成果です。</p>
+
+          <figure class="video reveal">
+            <div class="video__box">
+              <button class="video__facade" type="button" data-vid="Oi9SaBItOs4"
+                      style="background-image:url('assets/edge-gpu-parallel-rl/growth_2x2_verdict.png')"
+                      aria-label="4つの学習段階が同じ試験に同時挑戦する比較映像（YouTubeで再生）">
+                <span class="video__play" aria-hidden="true"></span>
+                <span class="video__label">YouTube</span>
+              </button>
+            </div>
+            <figcaption><span class="fig__no">FIG. 04</span>4つの訓練段階（未学習／300万／900万／最終2,250万・実時間109分）が同じ試験に同時挑戦。判定は未学習=失敗、以降3つは成功。</figcaption>
+          </figure>
+
+          <div class="cyber-divider" aria-hidden="true">
+            <svg viewBox="0 0 340 14" fill="none">
+              <path d="M0 7 H140 M200 7 H340" stroke="rgba(0,229,195,0.35)" stroke-width="1"/>
+              <circle cx="152" cy="7" r="3" fill="#00e5c3" opacity="0.8"/>
+              <rect x="166" y="3" width="8" height="8" stroke="rgba(0,229,195,0.5)" fill="none"/>
+              <circle cx="188" cy="7" r="3" fill="rgba(86,204,242,0.7)"/>
+            </svg>
+          </div>
+
+          <h2>接触判定の不備を修正した</h2>
+
+          <p>できあがった映像を眺めていて、手が止まりました。<strong>ペン先が盤面にめり込んでいる。</strong></p>
+
+          <p>最初のシミュレーターは接触の計算を手抜きしていました。ペン先に衝突判定がなく、「面をどれだけ越えたか」をそのまま押し込み量として数えていたのです。シミュレーターの中でしか成立しない動きで、実機で同じことをやれば盤面を壊します。<strong>数字は良くても、持っていけない数字でした。</strong></p>
+
+          <aside class="callout callout--warn">
+            <div class="callout__head"><span class="callout__icon" aria-hidden="true">⚠️</span><span>注意</span></div>
+            <p>シミュレーターの中の成功率は、実機で動く保証になりません。<strong>評価の前に「シミュレーターが現実より甘くなっていないか」を疑う</strong>手順が要ります。今回それに気づけたのは、たまたま映像を眺めていたからでした。</p>
+          </aside>
+
+          <p>そこでシミュレーターを作り直しました。変更点は次のとおりです。</p>
+
+          <ul>
+            <li><strong>物理ボタンを置いた</strong>——直径12mm、盤面から5mm突出、バネのストロークは4mm。満押しでも1mm残るので、ペン先が盤面に届くこと自体が構造上ありえない</li>
+            <li><strong>ペン先に衝突判定を入れた</strong>——貫通が物理的に不可能になった</li>
+            <li><strong>触れたら即失格のルールを足した</strong>——アームやペン先が壁・床に当たった時点で終了。合格条件にも「安全違反0%」を追加</li>
+          </ul>
+
+          <p>成功の判定も変えました。「面を越えた量」ではなく、<strong>ボタンが実際に3mm沈んで、その状態が保たれたかどうか</strong>で見ます。</p>
+
+          <figure class="video reveal">
+            <div class="video__box">
+              <button class="video__facade" type="button" data-vid="zqsYZwaHcqw"
+                      style="background-image:url('assets/edge-gpu-parallel-rl/press_closeup.png')"
+                      aria-label="学習済みポリシーが物理ボタンを押す接写映像（YouTubeで再生）">
+                <span class="video__play" aria-hidden="true"></span>
+                <span class="video__label">YouTube</span>
+              </button>
+            </div>
+            <figcaption><span class="fig__no">FIG. 05</span>学習済みポリシーが物理ボタンを押しているところ。ペン先が衝突して止まり、ボタンがバネで約4mm沈み、離すと5mm突出へ戻ります。右のゲージは沈み込み量のライブ表示。</figcaption>
+          </figure>
+
+          <p>作り直した物理で訓練し直すと、総合成功率は<strong>59.5%から48.0%に下がりました</strong>。腕が下手になったわけではありません。試験のほうを現実に寄せた結果です。この11.5ポイントは、見栄えのいい数字を実機に持っていける数字に替えるための代金でした。</p>
+
+          <p>むしろ、下がった数字より嬉しい結果がありました。<strong>安全違反 0.0%。</strong>2,048体が数千万回の訓練を重ねるあいだ、「壁と床には触れない」という縛りを最後まで破りませんでした。どの構成で測っても0.0%です。</p>
+
+          <figure class="chart reveal">
+            <div class="chart__box">
+              <svg class="chart-svg" viewBox="0 0 980 600" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="成功率の歩み — 最後の一段は「シムの正直化」">
+              <rect width="980" height="600" fill="#faf9f6" rx="10"/>
+              <text x="490.0" y="38" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="22" font-weight="700" fill="#33373d">成功率の歩み — 最後の一段は「シムの正直化」</text>
+              <text x="490.0" y="60" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" fill="#8f959d">全て 15mmバイアス+サーボ の正式評価値</text>
+              <line x1="96" y1="74" x2="96" y2="450" stroke="#c7c5be" stroke-width="1"/>
+              <line x1="96" y1="450.0" x2="946" y2="450.0" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="455.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">0%</text>
+              <line x1="96" y1="356.0" x2="946" y2="356.0" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="361.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">25%</text>
+              <line x1="96" y1="262.0" x2="946" y2="262.0" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="267.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">50%</text>
+              <line x1="96" y1="168.0" x2="946" y2="168.0" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="173.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">75%</text>
+              <line x1="96" y1="74.0" x2="946" y2="74.0" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="79.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">100%</text>
+              <text x="26" y="262.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" fill="#33373d" transform="rotate(-90 26 262.0)">成功率 (%)</text>
+              <line x1="96" y1="450" x2="946" y2="450" stroke="#c7c5be" stroke-width="1"/>
+              <line x1="96" y1="111.6" x2="946" y2="111.6" stroke="#b1543f" stroke-width="1.8" stroke-dasharray="8 6"/>
+              <text x="942.0" y="102.6" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#b1543f">合格ライン 90%（全段未達）</text>
+              <defs><pattern id="hatch" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#2f8f86" opacity="0.25"/><line x1="0" y1="0" x2="0" y2="7" stroke="#2f8f86" stroke-width="3"/></pattern></defs>
+              <rect x="138.0" y="367.3" width="40" height="82.7" fill="#2f8f86" rx="3"/>
+              <rect x="184.0" y="292.1" width="40" height="157.9" fill="#c47a3d" opacity="1" rx="3"/>
+              <text x="158.0" y="359.3" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#33373d">22</text>
+              <text x="204.0" y="284.1" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#c47a3d">42</text>
+              <text x="181.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">CPU</text>
+              <text x="181.0" y="491.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">端から端</text>
+              <rect x="308.0" y="314.6" width="40" height="135.4" fill="#2f8f86" rx="3"/>
+              <rect x="354.0" y="210.1" width="40" height="239.9" fill="#c47a3d" opacity="1" rx="3"/>
+              <text x="328.0" y="306.6" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#33373d">36</text>
+              <text x="374.0" y="202.1" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#c47a3d">63.8</text>
+              <text x="351.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">残差制御</text>
+              <rect x="478.0" y="256.4" width="40" height="193.6" fill="#2f8f86" rx="3"/>
+              <rect x="524.0" y="160.1" width="40" height="289.9" fill="#c47a3d" opacity="1" rx="3"/>
+              <text x="498.0" y="248.4" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#33373d">51.5</text>
+              <text x="544.0" y="152.1" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#c47a3d">77.1</text>
+              <text x="521.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">校正平面</text>
+              <text x="521.0" y="491.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">+残差</text>
+              <rect x="648.0" y="226.3" width="40" height="223.7" fill="url(#hatch)" rx="3"/>
+              <rect x="694.0" y="160.1" width="40" height="289.9" fill="#c47a3d" opacity="0.45" rx="3"/>
+              <text x="668.0" y="218.3" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#33373d">59.5</text>
+              <text x="714.0" y="152.1" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#c47a3d">77.1</text>
+              <text x="691.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">旧物理</text>
+              <text x="691.0" y="491.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">ハイブリッド</text>
+              <rect x="818.0" y="269.5" width="40" height="180.5" fill="#2f8f86" rx="3"/>
+              <rect x="864.0" y="199.2" width="40" height="250.8" fill="#c47a3d" opacity="1" rx="3"/>
+              <text x="838.0" y="261.5" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#33373d">48</text>
+              <text x="884.0" y="191.2" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#c47a3d">66.7</text>
+              <text x="861.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">物理ボタン+安全</text>
+              <text x="861.0" y="491.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">ハイブリッド(採用)</text>
+              <line x1="96" y1="538" x2="130" y2="538" stroke="#2f8f86" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="113" cy="538" r="5" fill="#2f8f86"/>
+              <text x="140.0" y="543.0" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">総合成功率</text>
+              <line x1="240.0" y1="538" x2="274.0" y2="538" stroke="#c47a3d" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="257.0" cy="538" r="5" fill="#c47a3d"/>
+              <text x="284.0" y="543.0" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">press単体</text>
+              <text x="16" y="586" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12" fill="#8f959d">斜線=旧物理（先端非衝突）の履歴。59.5→48.0 は難易度上昇であり精度低下ではない。</text>
+              <text x="964" y="586" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12" fill="#8f959d">自社検証環境 実測 2026-07</text>
+              </svg>
+            </div>
+            <figcaption><span class="fig__no">FIG. 06</span>成功率の歩み。22%→36%→51.5%→59.5%（旧物理）→48.0%（物理ボタン＋安全制約）。最後の一段は難易度が上がったことによるものです。</figcaption>
+          </figure>
+
+          <h2>最終的な成功率と安全違反率</h2>
+
+          <p>最終的な成績です。合格の条件は着手前に決めてありました。<strong>初期ずれ15mm・視覚サーボON・各条件200回試して、総合成功率90%以上、かつ安全違反0%。</strong></p>
+
+          <div class="table-wrap">
+            <table class="compare-table">
+              <caption>TABLE 03 — 構成別の最終成績（新物理・正式評価）</caption>
+              <thead>
+                <tr>
+                  <th>構成</th>
+                  <th>総合</th>
+                  <th>押す</th>
+                  <th>滑らせる</th>
+                  <th class="is-hl">安全違反</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>強化学習のAIだけ</th>
+                  <td>34.0%</td>
+                  <td>66.7%</td>
+                  <td>0.0%</td>
+                  <td class="is-hl">0.0%</td>
+                </tr>
+                <tr>
+                  <th>強化学習＋制御器（採用）</th>
+                  <td>48.0%</td>
+                  <td>66.7%</td>
+                  <td>28.6%</td>
+                  <td class="is-hl">0.0%</td>
+                </tr>
+                <tr>
+                  <th>合格ライン</th>
+                  <td>90%以上</td>
+                  <td>—</td>
+                  <td>—</td>
+                  <td class="is-hl">0%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p><strong>90%には届きませんでした。</strong>安全のほうは条件を満たしましたが、成功率が足りません。残りは実機でのキャリブレーションで詰めていきます。</p>
+
+          <p>ひとつ補足を。押す動作の合否には「ペン先の傾きを何度まで許すか」という線引きが要ります。今回は40度にしました。勘で決めた数字ではありません。実際にボタンが作動した回のうち、96.6%が40度以内に収まっていたからです（97パーセンタイルが40.2度）。</p>
+
+          <figure class="chart reveal">
+            <div class="chart__box">
+              <svg class="chart-svg" viewBox="0 0 980 600" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="40°基準の裏付け: 作動プレスの整列分布">
+              <rect width="980" height="600" fill="#faf9f6" rx="10"/>
+              <text x="490.0" y="38" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="22" font-weight="700" fill="#33373d">40°基準の裏付け: 作動プレスの整列分布</text>
+              <text x="490.0" y="60" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" fill="#8f959d">作動プレス=ボタンを3mm以上沈めたエピソード (1,024件)</text>
+              <line x1="96" y1="74" x2="96" y2="450" stroke="#c7c5be" stroke-width="1"/>
+              <line x1="96" y1="450.0" x2="946" y2="450.0" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="455.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">20%</text>
+              <line x1="96" y1="361.5" x2="946" y2="361.5" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="366.5" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">40%</text>
+              <line x1="96" y1="273.1" x2="946" y2="273.1" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="278.1" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">60%</text>
+              <line x1="96" y1="184.6" x2="946" y2="184.6" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="189.6" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">80%</text>
+              <line x1="96" y1="96.1" x2="946" y2="96.1" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="101.1" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">100%</text>
+              <text x="26" y="262.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" fill="#33373d" transform="rotate(-90 26 262.0)">その範囲に入る割合 (%)</text>
+              <line x1="96" y1="450" x2="946" y2="450" stroke="#c7c5be" stroke-width="1"/>
+              <text x="154.6" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">20°</text>
+              <text x="301.2" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">25°</text>
+              <text x="447.7" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">30°</text>
+              <text x="594.3" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">35°</text>
+              <text x="740.8" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">40°</text>
+              <text x="887.4" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">45°</text>
+              <text x="521.0" y="502.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">作動時の整列ずれ 上限 (度)</text>
+              <line x1="301.2" y1="74" x2="301.2" y2="450" stroke="#8f959d" stroke-width="1.4" stroke-dasharray="3 4"/>
+              <text x="293.2" y="96.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#8f959d">レガシー 25° (54.2%)</text>
+              <line x1="740.8" y1="74" x2="740.8" y2="450" stroke="#b1543f" stroke-width="1.8" stroke-dasharray="8 5"/>
+              <polyline fill="none" stroke="#2f8f86" stroke-width="3.2" points="154.6,319.9 301.2,298.7 447.7,265.1 594.3,185.9 740.8,111.2 887.4,97.0"/>
+              <circle cx="154.6" cy="319.9" r="6" fill="#2f8f86"/>
+              <text x="154.6" y="305.9" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">49.4</text>
+              <circle cx="301.2" cy="298.7" r="6" fill="#2f8f86"/>
+              <text x="301.2" y="284.7" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">54.2</text>
+              <circle cx="447.7" cy="265.1" r="6" fill="#2f8f86"/>
+              <text x="447.7" y="251.1" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">61.8</text>
+              <circle cx="594.3" cy="185.9" r="6" fill="#2f8f86"/>
+              <text x="594.3" y="171.9" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">79.7</text>
+              <circle cx="740.8" cy="111.2" r="6" fill="#2f8f86"/>
+              <circle cx="887.4" cy="97.0" r="6" fill="#2f8f86"/>
+              <text x="887.4" y="83.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">99.8</text>
+              <circle cx="740.8" cy="111.2" r="9" fill="#b1543f"/>
+              <text x="722.8" y="220.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13.5" font-weight="700" fill="#b1543f">採用: 40° で 96.6%</text>
+              <text x="722.8" y="238.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#b1543f">(p97 = 40.2°)</text>
+              </svg>
+            </div>
+            <figcaption><span class="fig__no">FIG. 07</span>作動した1,024件の傾きずれ分布。40度で96.6%をカバーします。</figcaption>
+          </figure>
+
+          <h2>滑らせる動作は強化学習だけでは解けなかった</h2>
+
+          <p>成績表をよく見ると、押す動作（66.7%）と滑らせる動作（28.6%）でずいぶん差がついています。しかも<strong>強化学習だけに任せた場合、滑らせる動作は0.0%。</strong>1回も成功しませんでした。</p>
+
+          <p>後から追いかけて分かったのは、<strong>記憶がないと解けない種類の動作だった</strong>ということです。滑らせる動作は「今どこまで滑らせたか」を覚えていないと最後まで持っていけません。ところが今回のAIは、毎回その瞬間に見えているものだけを頼りに動きます。いくら数を回しても、記憶を持たない設計では届かない場所がありました。</p>
+
+          <p>そこで、押す動作は強化学習のAIに、滑らせる動作は状態を覚えておける昔ながらの制御プログラムに任せ、指令ごとに振り分けることにしました。総合48.0%はこの組み合わせでの数字です。</p>
+
+          <aside class="callout callout--point">
+            <div class="callout__head"><span class="callout__icon" aria-hidden="true">💡</span><span>ポイント</span></div>
+            <p><strong>全部をAIで解こうとしない。</strong>「どこがAIに向いていないのか」さえ分かれば、そこは従来のやり方に渡せます。丸ごと置き換える構成より、この住み分けのほうが結局は早く現場に載ります。</p>
+          </aside>
+
+          <h2>分かったこと</h2>
+
+          <p>ロボットアームの検証として書いてきましたが、AIの導入を検討する立場から見ても、そのまま当てはまる点がありました。</p>
+
+          <ol>
+            <li><strong>テスト環境を、現実より甘くも辛くもしない。</strong>止まっているはずの対象の座標を毎フレーム±8mm揺らす設定を入れていた時期があり、これは現場に存在しない難問をAIに解かせていました。逆に貫通のように「シミュレーターだけが甘い」箇所もある。ズレは両方向に出ます。</li>
+            <li><strong>一発の成功率だけで判断しない。</strong>実際の運用は「押す→カメラで画面が変わったか確かめる→ダメならもう一度」の繰り返しです。一発66.7%でも、3回試せる前提なら計算上96%まで来ます。見るべきなのは単発の精度ではなく、やり直しを含めた到達率のほうです。</li>
+            <li><strong>できなかったことを残しておく。</strong>今回なら「滑らせる動作が解けなかった」という一行が、次の設計をそのまま決めました。どこで失敗したのか切り分けられていない検証は、次に何も渡せません。</li>
+          </ol>
+
+          <figure class="chart reveal">
+            <div class="chart__box">
+              <svg class="chart-svg" viewBox="0 0 980 600" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="slide事後解剖: 接触はできる、完遂できない">
+              <rect width="980" height="600" fill="#faf9f6" rx="10"/>
+              <text x="490.0" y="38" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="22" font-weight="700" fill="#33373d">slide事後解剖: 接触はできる、完遂できない</text>
+              <text x="490.0" y="60" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" fill="#8f959d">強化学習だけでは滑らせる動作が解けなかった理由</text>
+              <line x1="96" y1="74" x2="96" y2="450" stroke="#c7c5be" stroke-width="1"/>
+              <line x1="96" y1="450.0" x2="946" y2="450.0" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="455.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">0%</text>
+              <line x1="96" y1="360.5" x2="946" y2="360.5" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="365.5" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">10%</text>
+              <line x1="96" y1="271.0" x2="946" y2="271.0" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="276.0" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">20%</text>
+              <line x1="96" y1="181.4" x2="946" y2="181.4" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="186.4" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">30%</text>
+              <line x1="96" y1="91.9" x2="946" y2="91.9" stroke="#e4e2dc" stroke-width="1"/>
+              <text x="84.0" y="96.9" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">40%</text>
+              <text x="26" y="262.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" fill="#33373d" transform="rotate(-90 26 262.0)">スライド指標 (%)</text>
+              <line x1="96" y1="450" x2="946" y2="450" stroke="#c7c5be" stroke-width="1"/>
+              <polyline fill="none" stroke="#5b7ba3" stroke-width="3.2" points="186.0,427.6 481.0,352.4 776.0,145.6"/>
+              <circle cx="186.0" cy="427.6" r="7" fill="#5b7ba3"/>
+              <text x="186.0" y="411.6" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#5b7ba3">2.5%</text>
+              <circle cx="481.0" cy="352.4" r="7" fill="#5b7ba3"/>
+              <text x="481.0" y="336.4" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#5b7ba3">10.9%</text>
+              <circle cx="776.0" cy="145.6" r="7" fill="#5b7ba3"/>
+              <text x="776.0" y="129.6" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#5b7ba3">34.0%</text>
+              <polyline fill="none" stroke="#b1543f" stroke-width="3.2" points="186.0,448.2 481.0,383.8 776.0,405.2"/>
+              <circle cx="186.0" cy="448.2" r="7" fill="#b1543f"/>
+              <text x="172.0" y="453.2" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#b1543f">0.2%</text>
+              <circle cx="481.0" cy="383.8" r="7" fill="#b1543f"/>
+              <text x="481.0" y="409.8" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#b1543f">7.4%</text>
+              <circle cx="776.0" cy="405.2" r="7" fill="#b1543f"/>
+              <text x="776.0" y="431.2" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#b1543f">5.0%</text>
+              <text x="186.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">run3</text>
+              <text x="186.0" y="491.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">RSIのみ</text>
+              <text x="481.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">run4</text>
+              <text x="481.0" y="491.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">報酬整形</text>
+              <text x="776.0" y="474.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">run5</text>
+              <text x="776.0" y="491.0" text-anchor="middle" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12.5" font-weight="400" fill="#33373d">二頭+状態特徴</text>
+              <line x1="776.0" y1="145.6" x2="776.0" y2="405.2" stroke="#8f959d" stroke-width="1.4" stroke-dasharray="4 4"/>
+              <text x="792.0" y="263.4" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">ラッチは14倍改善</text>
+              <text x="792.0" y="282.4" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">でも完遂は動かず</text>
+              <text x="792.0" y="301.4" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="700" fill="#33373d">= 部分観測性の壁</text>
+              <line x1="96" y1="538" x2="130" y2="538" stroke="#5b7ba3" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="113" cy="538" r="5" fill="#5b7ba3"/>
+              <text x="140.0" y="543.0" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">ラッチ率 (接触確立)</text>
+              <line x1="319.2" y1="538" x2="353.2" y2="538" stroke="#b1543f" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="336.2" cy="538" r="5" fill="#b1543f"/>
+              <text x="363.2" y="543.0" text-anchor="start" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="13" font-weight="400" fill="#33373d">完遂率 (スライド成功)</text>
+              <text x="964" y="586" text-anchor="end" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="12" fill="#8f959d">自社検証環境 実測 2026-07</text>
+              </svg>
+            </div>
+            <figcaption><span class="fig__no">FIG. 08</span>滑らせる動作を後から調べ直したもの。ラッチ率と完遂率の差が、記憶を持たない設計の限界を示しています。</figcaption>
+          </figure>
+
+          <aside class="callout callout--warn">
+            <div class="callout__head"><span class="callout__icon" aria-hidden="true">⚠️</span><span>注意</span></div>
+            <p>ここまでの数値はすべてシミュレーター上のものです。実機に移す際は、カメラキャリブレーションの精度とアームの個体差で成功率が変わります。<strong>シミュレーターの数字をそのまま実機の見積もりに使わない</strong>でください。</p>
+          </aside>
+
+          <h2>まとめ</h2>
+
+          <p>この記事では、RTコアを持たないエッジ端末1台で2,048体のロボットアームを並列訓練した方法を解説しました。描画を捨ててMuJoCo-Warpに物理計算だけを任せ、強化学習にはカメラ画像を渡さず関節角度と目標座標だけを渡す構成です。制御ステップ換算で CPU比3.1倍（2,048体並列）、訓練パイプライン全体では2.8倍でした。「ボタンを押す」動作は成功率66.7%、安全違反は全構成で0.0%です。</p>
+
+          <p>一方、滑らせる動作は強化学習だけでは0.0%のままで、状態を保持する制御プログラムと組み合わせて28.6%。総合48.0%は、着手前に決めた合格ライン90%に届いていません。残りは実機でのキャリブレーションで詰めます。</p>
+
+          <p>Isaac Simが動かない機材で足止めされている場合、まず確認するとよいのは「学習させるAIが本当に画像を必要としているか」です。必要としていないなら、描画を捨てた時点でGPUの要件は一気に下がります。</p>
+
+          <div class="cta-banner reveal">
+            <span class="cta-banner__kicker">NEXT ACTION</span>
+            <p class="cta-banner__title">「うちの現場でも動くのか」を一緒に見極めます</p>
+            <p class="cta-banner__text">費用感は対象工程と設置環境で大きく変わるため、一律の金額はご提示していません。まずは現状の工程を伺ったうえで個別にお見積りします。</p>
+            <div class="cta-banner__btns">
+              <a class="btn btn--primary" href="https://nano-factory.net/company/">お問い合わせ</a>
+              <a class="btn btn--ghost" href="https://nano-factory.net/nanostep-lp/">作業認識AIを見る</a>
+            </div>
+          </div>
+
+          <div class="cta-banner reveal">
+            <span class="cta-banner__kicker">CONTACT</span>
+            <p class="cta-banner__title">現場の課題、まずは話してみませんか？</p>
+            <p class="cta-banner__text">nanoFACTORYは食品・医療・製造の現場に特化したエッジAIメーカーです。導入可否の判断段階からエンジニアが直接お話しします。</p>
+            <div class="cta-banner__btns">
+              <a class="btn btn--primary" href="https://nano-factory.net/company/">お問い合わせ</a>
+              <a class="btn btn--ghost" href="https://nano-factory.net/">製品ラインナップを見る</a>
+            </div>
+          </div>
+
+          <p style="font-size:0.86em;opacity:0.75;margin-top:2.2em;">検証環境：自社のエッジAI検証機（GPU搭載の組み込み向け端末）／ MuJoCo + MuJoCo-Warp ／ 6軸小型ロボットアーム（先端は固定タッチペン）。訓練も推論もVLMの常駐も、すべて同じ1台の上で動かしています。記事中の数字はすべてこの環境での実測値です。</p>
+
+        </div>
+        <!-- ▲▲ {{BODY}} ▲▲ -->
+      </article>
+
+      <!-- 追従目次（JSが #article-body の h2/h3 から自動生成） -->
+      <aside class="toc-wrap">
+        <nav class="toc" id="toc" aria-label="目次">
+          <div class="toc__head">
+            <span class="toc__label">CONTENTS</span>
+            <button class="toc__toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-list">目次</button>
+          </div>
+          <ol class="toc__list" id="toc-list"></ol>
+        </nav>
+      </aside>
+    </div>
+
+  </main>
+
+  <!-- ============================================================
+       フッター（既存HPトーン）
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3>About</h3>
+          <p>nanoFACTORY の技術の根底はロボット開発・フィジカルAI。製造業の現場で数々の課題を解決してきた経験から磨き上げたソフトウェアの販売と、AIエンジニアが現場に直接入り込む<strong>FDE(Forward Deployed Engineer)</strong>サービスが、私たちの事業です。</p>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>〒107-0062 東京都港区南青山５-11-14 H&amp;M南青山イースト308</p>
+          <p><a href="https://nano-factory.net/company/" style="color:var(--accent);">お問い合わせはこちら</a></p>
+        </div>
+        <div>
+          <h3>Links</h3>
+          <ul class="footer-links">
+            <li><a href="https://nano-factory.net/">Home</a></li>
+            <li><a href="https://nano-factory.net/nanostep-lp/">作業認識AI（nanoSTEP）</a></li>
+            <li><a href="https://nano-factory.net/nanosi-lp/">AI検査（nanoSI）</a></li>
+            <li><a href="https://nano-factory.net/nanoguard-lp/">AI監視カメラ（nanoGUARD）</a></li>
+            <li><a href="https://nano-factory.net/sanicam-lp/hand.html">手指衛生（SANI-CAM）</a></li>
+            <li><a href="https://nano-factory.net/news/">ニュース・事例</a></li>
+            <li><a href="/blog/">ブログ</a></li>
+            <li><a href="https://nano-factory.net/company/">会社情報</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">&copy; <span id="year"></span> nanoFACTORY Co. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    'use strict';
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- フッター年号 ---------- */
+    var y = document.getElementById('year');
+    if (y) y.textContent = new Date().getFullYear();
+
+    /* ---------- モバイルメニュー ---------- */
+    var toggle = document.querySelector('.menu-toggle');
+    var nav = document.getElementById('site-nav');
+    if (toggle && nav) {
+      toggle.addEventListener('click', function(){
+        var open = nav.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+    }
+
+    /* ---------- 目次：h2/h3走査 → id自動付与 → TOC自動生成 ---------- */
+    var body = document.getElementById('article-body');
+    var tocList = document.getElementById('toc-list');
+    var heads = [];
+    if (body && tocList) {
+      heads = Array.prototype.slice.call(body.querySelectorAll('h2, h3'));
+      var frag = document.createDocumentFragment();
+      heads.forEach(function(h, i){
+        if (!h.id) h.id = 'sec-' + (i + 1);
+        var li = document.createElement('li');
+        li.className = 'toc__item toc__item--' + h.tagName.toLowerCase();
+        var a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent;
+        li.appendChild(a);
+        frag.appendChild(li);
+      });
+      tocList.appendChild(frag);
+    }
+
+    /* ---------- 目次：モバイル折りたたみ ---------- */
+    var toc = document.getElementById('toc');
+    var tocToggle = document.getElementById('toc-toggle');
+    if (toc && tocToggle) {
+      tocToggle.addEventListener('click', function(){
+        var open = toc.classList.toggle('is-open');
+        tocToggle.setAttribute('aria-expanded', String(open));
+      });
+      // モバイルで目次リンクをタップしたら閉じる
+      toc.addEventListener('click', function(e){
+        if (e.target.tagName === 'A' && toc.classList.contains('is-open')) {
+          toc.classList.remove('is-open');
+          tocToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    /* ---------- 目次：現在地ハイライト（IntersectionObserver） ---------- */
+    if (heads.length && 'IntersectionObserver' in window) {
+      var linkMap = {};
+      tocList.querySelectorAll('a').forEach(function(a){
+        linkMap[decodeURIComponent(a.hash.slice(1))] = a;
+      });
+      var activeId = null;
+      var setActive = function(id){
+        if (id === activeId) return;
+        if (activeId && linkMap[activeId]) linkMap[activeId].classList.remove('is-active');
+        if (linkMap[id]) { linkMap[id].classList.add('is-active'); activeId = id; }
+      };
+      var spy = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting) setActive(en.target.id);
+        });
+      }, { rootMargin: '-72px 0px -62% 0px', threshold: 0 });
+      heads.forEach(function(h){ spy.observe(h); });
+      setActive(heads[0].id);
+    }
+
+    /* ---------- 登場アニメ（reveal：非テキストブロックのみ） ---------- */
+    var revealEls = document.querySelectorAll('.reveal');
+    if (reduced || !('IntersectionObserver' in window)) {
+      revealEls.forEach(function(el){ el.classList.add('is-in'); });
+    } else {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+      revealEls.forEach(function(el){ io.observe(el); });
+    }
+
+    /* ---------- スクロール連動：プログレスバー＋浮遊パララックス ----------
+       scroll + requestAnimationFrame、transformのみを操作（GPU合成・レイアウト不変） */
+    var bar = document.getElementById('progress');
+    var pxImgs = Array.prototype.slice.call(document.querySelectorAll('img.fx-img'))
+      .map(function(img){
+        return { img: img, frame: img.closest('.px-frame'), strength: parseFloat(img.getAttribute('data-px')) || 16 };
+      })
+      .filter(function(o){ return o.frame; });
+
+    function updateProgress(){
+      if (!bar) return;
+      var doc = document.documentElement;
+      var max = doc.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+      bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+    }
+    function updateImgParallax(){
+      var vh = window.innerHeight;
+      pxImgs.forEach(function(o){
+        var r = o.frame.getBoundingClientRect();
+        if (r.bottom < -60 || r.top > vh + 60) return;
+        var p = ((r.top + r.height / 2) - vh / 2) / vh;   // -0.5〜0.5前後
+        o.img.style.transform = 'translate3d(0,' + (p * o.strength).toFixed(1) + 'px,0) scale(1.1)';
+      });
+    }
+    var ticking = false;
+    function onFrame(){
+      ticking = false;
+      updateProgress();
+      if (!reduced) { updateImgParallax(); }
+    }
+    function requestTick(){
+      if (!ticking) { ticking = true; window.requestAnimationFrame(onFrame); }
+    }
+    window.addEventListener('scroll', requestTick, { passive: true });
+    window.addEventListener('resize', requestTick, { passive: true });
+    onFrame();
+  })();
+  
+  // 動画ファサード：file://ではYouTubeを新タブで開き、http(s)ではその場で埋め込み再生する
+  document.querySelectorAll('.video__facade').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.getAttribute('data-vid');
+      if (location.protocol === 'file:') {
+        window.open('https://youtu.be/' + id, '_blank', 'noopener');
+        return;
+      }
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?rel=0&autoplay=1';
+      f.title = btn.getAttribute('aria-label') || 'YouTube';
+      f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+      f.setAttribute('allowfullscreen','');
+      btn.replaceWith(f);
+    });
+  });
+</script>
+</body>
+</html>
