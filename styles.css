@@ -1758,6 +1758,7 @@
   margin-bottom: 1.25rem;
 }
 .ind-intro__headline .br-sp { display: none; }
+.ind-intro__headline .pc-only { display: inline; }
 .ind-intro__body {
   font-size: 0.98rem;
   color: rgba(255,255,255,0.55);
@@ -2587,6 +2588,7 @@
     text-wrap: balance;
   }
   .ind-intro__headline .br-sp { display: inline; }
+  .ind-intro__headline .pc-only { display: none; }
 
   .ind-intro__body {
     font-size: 0.95rem;
