@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <meta
     name="description"
-    content="nanoFACTORYは、ロボット開発・フィジカルAIを根底に持つ製造業向けソフトウェア企業。現場で磨いたソフトウェアの販売と、AIエンジニアが現場に入り込むFDE(Forward Deployed Engineer)サービスを提供します。"
+    content="nanoFACTORYは、AIを今ある現場に合わせることで、導入の負荷とコストを抑えながら現場の変革を実現します。すぐに試せるパッケージソリューションと、AIエンジニアが現場に入り込むFDE(Forward Deployed Engineer)サービスを提供しています。"
   />
   <meta
     name="keywords"
@@ -14,12 +14,11 @@
   <title>nanoFACTORY</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Audiowide&family=Orbitron:wght@400;700;900&display=swap" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Orbitron:wght@400;500&family=JetBrains+Mono:wght@400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="site.css" />
   <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" sizes="512x512" />
 </head>
 <body>
-
   <div class="sr-only">
     nanoFACTORYの技術の根底はロボット開発・フィジカルAI(Physical AI)。製造業の現場で数々の課題を解決してきた経験から磨き上げたソフトウェアの販売と、AIエンジニアが現場に入り込むFDE(Forward Deployed Engineer / フォワードデプロイドエンジニア)サービスを事業の柱としています。作業認識AI、AI検査、AI監視カメラ、熊検出AI、SANICAM、バーチャルセキュリティゲートなど、汎用パッケージでは届かない現場の現実に応えるソリューションを提供しています。
   </div>
@@ -28,9 +27,7 @@
   <header class="site-header">
     <div class="container">
       <div class="logo-wrapper">
-        <a href="#hero">
-          <img src="assets/site-logo-nanofactory.png" alt="nanoFACTORY Logo" class="logo-img" />
-        </a>
+        <a href="#hero"><img src="assets/site-logo-nanofactory.png" alt="nanoFACTORY" class="logo-img" /></a>
       </div>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
         <span class="menu-toggle__bar"></span>
@@ -38,573 +35,319 @@
       </button>
       <nav id="site-nav" class="nav">
         <a class="nav__link" href="#why-1">nanoFACTORYとは</a>
+        <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link nav__link--products" href="nanostep-lp/">作業認識AI</a>
         <a class="nav__link nav__link--products" href="nanosi-lp/">AI検査</a>
         <a class="nav__link nav__link--products" href="nanoguard-lp/">AI監視カメラ</a>
         <a class="nav__link nav__link--products" href="sanicam-lp/hand.html">手指衛生</a>
+        <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link" href="news/">ニュース・事例</a>
         <a class="nav__link" href="blog/">ブログ</a>
         <a class="nav__link" href="company/">会社情報</a>
+        <a class="nav__link nav__link--contact" href="#cta">CONTACT</a>
       </nav>
     </div>
   </header>
 
   <!-- Hero -->
-  <section id="hero" class="section hero hero--mfg">
-    <div class="overlay"></div>
-    <span class="hero-scan" aria-hidden="true"></span>
-    <div class="hero-content">
-      <h1 class="hero-brand fade-up">
-        <span class="brand-nano">nano</span><span class="brand-factory">FACT<span class="brand-o-eyes">O</span>RY</span>
-      </h1>
-
-      <!-- 業種セレクター（グローバル切り替え） -->
-      <div class="hero-industry-tabs fade-up delay-1">
-        <button class="hero-industry-tab is-active" data-industry-tab="mfg">製造業</button>
-        <button class="hero-industry-tab" data-industry-tab="med">医療機関</button>
-        <button class="hero-industry-tab" data-industry-tab="food">飲食店・食品工場</button>
+  <section id="hero" class="hero">
+    <!-- Hero メディア（ARグラス → 装置の動画 → 検査画面） -->
+    <div class="hero-media ss" data-slideshow data-interval="6000">
+      <div class="ss-stage" aria-hidden="true">
+        <figure class="ss-slide is-active" data-label="AR GUIDANCE"><img src="assets/opt/hero-ar-glasses.jpg" alt="" decoding="async" style="object-position:70% 30%" /></figure>
+        <figure class="ss-slide" data-label="INSPECTION UNIT" data-dur="14000">
+          <video muted playsinline preload="auto" poster="assets/opt/hero-device-poster.jpg"><source src="assets/hero-device.mp4" type="video/mp4"></video>
+        </figure>
+        <figure class="ss-slide" data-label="DEFECT DETECTION"><img src="assets/opt/nanosi-gear-detection.jpg" alt="" decoding="async" /></figure>
       </div>
-
-      <!-- 業種別キャッチコピー -->
-      <div class="hero-industry-lead is-active" data-industry-panel="mfg">
-        <span class="hero-industry-lead__desktop">日本の現場のために。<br>属人化と品質リスクを、AIカメラで解決する。</span>
-        <span class="hero-industry-lead__mobile">現場の属人化・品質リスクを、AIカメラで解決する</span>
+      <div class="hero-media__ui" aria-hidden="true"><span class="ss-count"><b>01</b> / 03</span><span class="ss-label">AR GUIDANCE</span><div class="ss-bar"><i></i><i></i><i></i></div></div>
+    </div>
+    <canvas class="hero__flow" id="hero-flow" aria-hidden="true"></canvas>
+    <div class="hero__status" aria-hidden="true"><i></i>EDGE AI <span>/</span> ONLINE</div>
+    <div class="container" id="why-1">
+      <div class="hero__en"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Physical AI for the Genba</div>
+      <h1 class="hero__title">日本の現場のために。<br><span class="soft">今ある現場を、AIで進化させる。</span></h1>
+      <div class="hero__body hero__body--pc">
+        <p>これまで、設備や仕組み、業務フローを大きく変える必要があったDX。<br>私たちは、AIを今ある現場に合わせることで、導入の負荷とコストを抑えながら、現場の変革を実現します。</p>
+        <p>すぐに試せる<strong>パッケージソリューション</strong>と、AIエンジニアがお客様の現場に入り込み、実際に動くところまで作り上げる<strong>FDEサービス</strong>を提供しています。</p>
       </div>
-      <div class="hero-industry-lead" data-industry-panel="med">
-        医療現場の安全・衛生管理を、AIカメラで自動化する
+      <p class="hero__body--sp">すぐに試せる<strong>パッケージソリューション</strong>と、<br><strong>FDEサービス</strong>を提供しています。</p>
+      <!-- 業種セレクター（切替は script.js の data-industry-tab） -->
+      <div class="hero-tabs" role="tablist" aria-label="業種を選ぶ">
+        <button class="hero-tab is-active" type="button" data-industry-tab="mfg" aria-selected="true"><span>MANUFACTURING</span>製造業</button>
+        <button class="hero-tab" type="button" data-industry-tab="med" aria-selected="false"><span>MEDICAL</span>医療機関</button>
+        <button class="hero-tab" type="button" data-industry-tab="food" aria-selected="false"><span>FOOD SERVICE</span>飲食店・食品工場</button>
       </div>
-      <div class="hero-industry-lead" data-industry-panel="food">
-        飲食・食品現場の品質と衛生管理を、AIで仕組み化する
-      </div>
-
     </div>
   </section>
 
   <!-- ━━━━━━━━━━━━━━━━━━━━ 製造業 ━━━━━━━━━━━━━━━━━━━━ -->
-  <section class="section industry-detail industry-detail--mfg is-active" data-industry-panel="mfg">
-
-    <div class="ind-intro">
-      <span class="ind-intro__kicker">製造業・食品工場</span>
-      <h2 class="ind-intro__headline">標準・検品・安全<br>現場の<span class="kadai-neon">3課題</span>に<span class="pc-only">、</span><br class="br-sp">AIソリューションを<span class="pc-only">。</span></h2>
-      <p class="ind-intro__body">ノウハウの属人化、目視頼りの検品、守られない安全ルール——nanoFACTORYは「作業手順の標準化」「全数AI検査」「エリア入退室管理」の3つをパッケージで提供し、現場の再現性を高めます。</p>
-    </div>
-
-    <!-- 01 nanoSTEP -->
-    <div class="ind-solution">
-      <div class="ind-solution__inner">
-        <div class="ind-solution__visual ind-vis--step">
-          <img src="assets/homepage-solution-manufacturing-ai-work-management.png" alt="nanoSTEP 作業認識AI" loading="lazy" />
-          <div class="vsg-slider" data-vsg-slider>
-            <div class="vsg-slider__inner">
-              <div class="vsg-slider__track">
-                <div class="vsg-slide is-active" data-slide="0">
-                  <div class="vsg-slide__icon">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="7" y="14" width="18" height="13" rx="2"/>
-                      <path d="M11 14 v-3 a5 5 0 0 1 10 0 v3"/>
-                      <circle cx="16" cy="20" r="1.6"/>
-                      <line x1="16" y1="21.6" x2="16" y2="24"/>
-                    </svg>
-                  </div>
-                  <div class="vsg-slide__counter">01 / 04</div>
-                  <h4 class="vsg-slide__title">ノウハウ属人化</h4>
-                  <p class="vsg-slide__desc">退職・異動でベテランの暗黙知が失われ、品質再現が崩れる</p>
-                </div>
-                <div class="vsg-slide" data-slide="1">
-                  <div class="vsg-slide__icon">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="16" cy="16" r="11"/>
-                      <path d="M5 16 h22 M16 5 c-3.5 3.5 -5 7 -5 11 s1.5 7.5 5 11 c3.5 -3.5 5 -7 5 -11 s-1.5 -7.5 -5 -11"/>
-                    </svg>
-                  </div>
-                  <div class="vsg-slide__counter">02 / 04</div>
-                  <h4 class="vsg-slide__title">外国人教育</h4>
-                  <p class="vsg-slide__desc">言葉の壁で実習生の戦力化に時間がかかる</p>
-                </div>
-                <div class="vsg-slide" data-slide="2">
-                  <div class="vsg-slide__icon">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="13" y="22" width="6" height="5" rx="1"/>
-                      <line x1="16" y1="22" x2="10" y2="10"/>
-                      <circle cx="10" cy="10" r="2"/>
-                      <line x1="10" y1="10" x2="6" y2="6"/>
-                      <line x1="10" y1="10" x2="13" y2="6"/>
-                      <line x1="6" y1="27" x2="26" y2="27"/>
-                    </svg>
-                  </div>
-                  <div class="vsg-slide__counter">03 / 04</div>
-                  <h4 class="vsg-slide__title">自動化</h4>
-                  <p class="vsg-slide__desc">機械化したいが、人の動きが標準化できない</p>
-                </div>
-                <div class="vsg-slide" data-slide="3">
-                  <div class="vsg-slide__icon">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="16" y1="3" x2="16" y2="6"/>
-                      <circle cx="16" cy="2.5" r="1.2"/>
-                      <rect x="9" y="6" width="14" height="11" rx="2.5"/>
-                      <circle cx="13" cy="11" r="1.5"/>
-                      <circle cx="19" cy="11" r="1.5"/>
-                      <line x1="12" y1="14.5" x2="20" y2="14.5"/>
-                      <line x1="7" y1="11" x2="9" y2="11"/>
-                      <line x1="23" y1="11" x2="25" y2="11"/>
-                      <rect x="11" y="17" width="10" height="9" rx="1.5"/>
-                      <line x1="11" y1="22" x2="6" y2="22"/>
-                      <line x1="21" y1="22" x2="26" y2="22"/>
-                    </svg>
-                  </div>
-                  <div class="vsg-slide__counter">04 / 04</div>
-                  <h4 class="vsg-slide__title">フィジカルAI・ロボット</h4>
-                  <p class="vsg-slide__desc">蓄積データから人の動きを機械が学び、作業を代替する</p>
-                </div>
-              </div>
-            </div>
-            <div class="vsg-slider__dots">
-              <button class="vsg-dot is-active" data-goto="0" aria-label="スライド 1"></button>
-              <button class="vsg-dot" data-goto="1" aria-label="スライド 2"></button>
-              <button class="vsg-dot" data-goto="2" aria-label="スライド 3"></button>
-              <button class="vsg-dot" data-goto="3" aria-label="スライド 4"></button>
-            </div>
-          </div>
+  <section class="sec industry industry--mfg is-active" data-industry-panel="mfg" aria-label="製造業・食品工場">
+    <div class="container">
+      <div class="sec-head">
+        <div>
+          <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Solutions<span class="jp">— 製造業・食品工場</span></div>
+          <h2>標準・検品・安全。<br>現場の3課題に、<br class="br-sp">AIソリューションを。</h2>
         </div>
-        <div class="ind-solution__content">
-          <span class="ind-solution__num">01</span>
-          <a class="ind-solution__badge ind-solution__badge--link" href="nanostep-lp/">
-            <span class="ind-solution__badge-name">作業認識AI</span>
-            <span class="ind-solution__badge-cta">詳細はこちら</span>
-          </a>
-          <h3 class="ind-solution__headline">人手不足・人材流動化を、<br>「作業をデータ化するAIエージェント」で解く</h3>
-          <p class="ind-solution__quote">「主力職人が定年で3人抜けた。引き継ぎはしたつもりだったが、その後クレームが増えた。誰の、どの工程が原因かすら分からない。」</p>
-          <p class="ind-solution__body">独自AIエージェント "VF3.0" が手順書と現場をつなぎ、ノウハウのデータ化からフィジカルAIまで段階的に展開します。</p>
-        </div>
+        <p>ノウハウの属人化、目視頼りの検品、守られない安全ルール——nanoFACTORYは「作業手順の標準化」「全数AI検査」「エリア入退室管理」の3つをパッケージで提供し、現場の再現性を高めます。</p>
       </div>
-    </div>
-
-    <!-- 02 nanoSI -->
-    <div class="ind-solution ind-solution--rev">
-      <div class="ind-solution__inner">
-        <div class="ind-solution__visual ind-vis--si">
-          <img src="assets/homepage-solution-manufacturing-ai-inspection-automation.png" alt="AI検査ライン自動化" loading="lazy" />
-          <div class="vsg-slider" data-vsg-slider>
-            <div class="vsg-slider__inner">
-              <div class="vsg-slider__track">
-                <div class="vsg-slide is-active" data-slide="0">
-                  <div class="vsg-slide__icon">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="14" y="6" width="14" height="20" rx="2"/>
-                      <line x1="17" y1="11" x2="25" y2="11"/>
-                      <line x1="17" y1="15" x2="25" y2="15"/>
-                      <line x1="17" y1="19" x2="25" y2="19"/>
-                      <circle cx="7" cy="9" r="2.5"/>
-                      <path d="M4 22 L4 14 Q4 12 7 12 Q10 12 10 14 L10 22"/>
-                      <line x1="2" y1="27" x2="30" y2="27"/>
-                    </svg>
-                  </div>
-                  <div class="vsg-slide__counter">01 / 04</div>
-                  <h4 class="vsg-slide__title">装置への張り付き</h4>
-                  <p class="vsg-slide__desc">検査装置を入れても、結局人が付き添うことから抜け出せない</p>
-                </div>
-                <div class="vsg-slide" data-slide="1">
-                  <div class="vsg-slide__icon">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M4 11 v15 a2 2 0 0 0 2 2 h20 a2 2 0 0 0 2 -2 V13 a2 2 0 0 0 -2 -2 H15 L12 8 H6 a2 2 0 0 0 -2 2 z"/>
-                      <circle cx="11" cy="19" r="1.5"/>
-                      <circle cx="16" cy="19" r="1.5"/>
-                      <circle cx="21" cy="19" r="1.5"/>
-                      <path d="M9.5 23.5 l1 1 2 -2"/>
-                      <path d="M19.5 23.5 l1 1 2 -2"/>
-                    </svg>
-                  </div>
-                  <div class="vsg-slide__counter">02 / 04</div>
-                  <h4 class="vsg-slide__title">学習データ作り</h4>
-                  <p class="vsg-slide__desc">良品・不良品サンプル収集とラベル付けが大きな負担</p>
-                </div>
-                <div class="vsg-slide" data-slide="2">
-                  <div class="vsg-slide__icon">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="3" y="5" width="11" height="10" rx="1"/>
-                      <rect x="18" y="5" width="11" height="10" rx="1"/>
-                      <rect x="3" y="18" width="11" height="10" rx="1"/>
-                      <rect x="18" y="18" width="11" height="10" rx="1"/>
-                      <line x1="6" y1="10" x2="11" y2="10"/>
-                      <line x1="21" y1="10" x2="26" y2="10"/>
-                      <circle cx="8.5" cy="23" r="2"/>
-                      <path d="M21 25 l2 -2 3 3"/>
-                    </svg>
-                  </div>
-                  <div class="vsg-slide__counter">03 / 04</div>
-                  <h4 class="vsg-slide__title">多品種小ロット</h4>
-                  <p class="vsg-slide__desc">品種切替のたびにパラメータ再調整、人手が抜けない</p>
-                </div>
-                <div class="vsg-slide" data-slide="3">
-                  <div class="vsg-slide__icon">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="12" y="5" width="9" height="6" rx="1"/>
-                      <path d="M7 27 L7 17 Q7 14 10 14 L19 14 Q23 14 23 18 L23 22 L25 22 Q27 22 27 24 L27 27 z"/>
-                      <line x1="3" y1="30" x2="29" y2="30"/>
-                    </svg>
-                  </div>
-                  <div class="vsg-slide__counter">04 / 04</div>
-                  <h4 class="vsg-slide__title">周辺工程の手作業</h4>
-                  <p class="vsg-slide__desc">搬送・仕分け・最終確認が残り、自動化が完成しない</p>
-                </div>
+      <article class="sol">
+        <div class="sol__vis">
+          <figure class="sol__img hud-frame">
+            <img src="assets/opt/nanostep-hand-recognition.jpg" alt="nanoSTEP 作業認識AIの画面" decoding="async" />
+            <figcaption class="sol__cap"><span class="sol__cam">CAM-01 · nanoSTEP</span><span class="sol__txt">作業者の手の動きをAIが認識</span></figcaption>
+          </figure>
+        </div>
+        <div class="sol__content">
+          <div class="sol__meta"><span class="sol__num">01</span><a class="sol__tag" href="nanostep-lp/">作業認識AI</a></div>
+          <h3 class="sol__title">人手不足・人材流動化を、<br>「作業をデータ化するAIエージェント」で解く</h3>
+          <p class="sol__quote">「主力職人が定年で3人抜けた。引き継ぎはしたつもりだったが、その後クレームが増えた。誰の、どの工程が原因かすら分からない。」</p>
+          <p class="sol__body">独自AIエージェント "VF3.0" が手順書と現場をつなぎ、ノウハウのデータ化からフィジカルAIまで段階的に展開します。</p>
+          <a class="more" href="nanostep-lp/"><span class="more__arrow" aria-hidden="true">→</span><span>詳細を見る</span></a>
+        </div>
+      </article>
+      <article class="sol sol--rev">
+        <div class="sol__vis">
+          <figure class="sol__img hud-frame">
+            <div class="ss ss--images" data-slideshow data-interval="4200">
+              <div class="ss-stage">
+                <figure class="ss-slide is-active"><img src="assets/opt/nanosi-gear-detection.jpg" alt="AI外観検査の判定画面" decoding="async" /><figcaption class="sol__cap"><span class="sol__cam">CAM-02 · nanoI</span><span class="sol__txt">傷・打痕・異物をAIが検出</span></figcaption></figure>
+                <figure class="ss-slide"><img src="assets/opt/nanosi-device-ng.jpg" alt="外観検査装置の検査ユニット" decoding="async" /><figcaption class="sol__cap"><span class="sol__cam">CAM-02 · nanoI</span><span class="sol__txt">外観検査装置の検査ユニット</span></figcaption></figure>
+                <figure class="ss-slide"><img src="assets/opt/nanosi-gear-grid.jpg" alt="外観検査結果の一覧" decoding="async" /><figcaption class="sol__cap"><span class="sol__cam">CAM-02 · nanoI</span><span class="sol__txt">検査結果を一覧で確認</span></figcaption></figure>
               </div>
+              <div class="ss-ui" aria-hidden="true"><span class="ss-count"><b>01</b> / 03</span><div class="ss-bar"><i></i><i></i><i></i></div></div>
             </div>
-            <div class="vsg-slider__dots">
-              <button class="vsg-dot is-active" data-goto="0" aria-label="スライド 1"></button>
-              <button class="vsg-dot" data-goto="1" aria-label="スライド 2"></button>
-              <button class="vsg-dot" data-goto="2" aria-label="スライド 3"></button>
-              <button class="vsg-dot" data-goto="3" aria-label="スライド 4"></button>
-            </div>
-          </div>
+          </figure>
         </div>
-        <div class="ind-solution__content">
-          <span class="ind-solution__num">02</span>
-          <a class="ind-solution__badge ind-solution__badge--link" href="nanosi-lp/">
-            <span class="ind-solution__badge-name">AI検査</span>
-            <span class="ind-solution__badge-cta">詳細はこちら</span>
-          </a>
-          <h3 class="ind-solution__headline">高い検査装置を入れたのに、<br>いつまでも人が必要なままだ</h3>
-          <p class="ind-solution__quote">「検査装置は導入した。でも結局、サンプルデータの収集も、装置の設定変更も、判定が怪しいときの最終確認も、全部人がやっている。装置に人が付き添っている状態から抜け出せない。」</p>
-          <p class="ind-solution__body">AIの自動学習とラインへの組み込み設計により、装置導入後に残る「人手が必要な作業」までまとめて自動化します。</p>
+        <div class="sol__content">
+          <div class="sol__meta"><span class="sol__num">02</span><a class="sol__tag" href="nanosi-lp/">AI検査</a></div>
+          <h3 class="sol__title">高い検査装置を入れたのに、<br>いつまでも人が必要なままだ</h3>
+          <p class="sol__quote">「検査装置は導入した。でも結局、サンプルデータの収集も、装置の設定変更も、判定が怪しいときの最終確認も、全部人がやっている。装置に人が付き添っている状態から抜け出せない。」</p>
+          <p class="sol__body">AIの自動学習とラインへの組み込み設計により、装置導入後に残る「人手が必要な作業」までまとめて自動化します。</p>
+          <a class="more" href="nanosi-lp/"><span class="more__arrow" aria-hidden="true">→</span><span>詳細を見る</span></a>
         </div>
-      </div>
+      </article>
+      <article class="sol">
+        <div class="sol__vis">
+          <figure class="sol__img hud-frame">
+            <img src="assets/opt/nanoguard-detection.jpg" alt="nanoGUARD AI監視カメラの検知画面" decoding="async" />
+            <figcaption class="sol__cap"><span class="sol__cam">CAM-03 · nanoGUARD</span><span class="sol__txt">作業エリアの人をAIが検知・判定</span></figcaption>
+          </figure>
+        </div>
+        <div class="sol__content">
+          <div class="sol__meta"><span class="sol__num">03</span><a class="sol__tag" href="nanoguard-lp/">AI監視カメラ</a></div>
+          <h3 class="sol__title">ルールは決めた。<br>それでも事故とトラブルが絶えない</h3>
+          <p class="sol__quote">「フォークリフトと作業員のニアミスが月に3件。ヒヤリハット報告書を書くたびに、次は本当の事故になると思う。」</p>
+          <p class="sol__body">AIが立入禁止区域への侵入を検知した瞬間、音声・映像でリアルタイム警告。「起きる前に止める」安全管理へ。</p>
+          <a class="more" href="nanoguard-lp/"><span class="more__arrow" aria-hidden="true">→</span><span>詳細を見る</span></a>
+        </div>
+      </article>
     </div>
-
-    <!-- 03 VSG (AI監視カメラ) -->
-    <div class="ind-solution">
-      <div class="ind-solution__inner">
-        <div class="ind-solution__visual ind-vis--vsg">
-          <img src="assets/homepage-solution-manufacturing-vsg-safety-monitoring.png" alt="AI監視カメラ" loading="lazy" />
-          <div class="vsg-slider" data-vsg-slider>
-            <div class="vsg-slider__inner">
-              <div class="vsg-slider__track">
-                <div class="vsg-slide is-active" data-slide="0">
-                  <div class="vsg-slide__icon">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M16 5 L28 26 H4 z"/>
-                      <line x1="16" y1="13" x2="16" y2="20" stroke-width="2.4"/>
-                      <circle cx="16" cy="23" r="1.3" fill="currentColor" stroke="none"/>
-                    </svg>
-                  </div>
-                  <div class="vsg-slide__counter">01 / 04</div>
-                  <h4 class="vsg-slide__title">ニアミス・転倒</h4>
-                  <p class="vsg-slide__desc">フォークリフトと作業員の接触、一人作業中の事故リスク</p>
-                </div>
-                <div class="vsg-slide" data-slide="1">
-                  <div class="vsg-slide__icon">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="16" cy="16" r="12"/>
-                      <line x1="9" y1="16" x2="23" y2="16" stroke-width="3"/>
-                    </svg>
-                  </div>
-                  <div class="vsg-slide__counter">02 / 04</div>
-                  <h4 class="vsg-slide__title">立入禁止侵入</h4>
-                  <p class="vsg-slide__desc">物理工事なしで危険エリアへの侵入をリアルタイム警告したい</p>
-                </div>
-                <div class="vsg-slide" data-slide="2">
-                  <div class="vsg-slide__icon">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="6" y="6" width="20" height="22" rx="2"/>
-                      <rect x="11" y="3" width="10" height="5" rx="1"/>
-                      <path d="M11 17 l3 3 6 -7" stroke-width="2"/>
-                    </svg>
-                  </div>
-                  <div class="vsg-slide__counter">03 / 04</div>
-                  <h4 class="vsg-slide__title">ルール遵守の証拠</h4>
-                  <p class="vsg-slide__desc">「やった」の自己申告では、監査で形骸化を指摘される</p>
-                </div>
-                <div class="vsg-slide" data-slide="3">
-                  <div class="vsg-slide__icon">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="9" y="5" width="16" height="20" rx="1"/>
-                      <rect x="6" y="9" width="16" height="20" rx="1"/>
-                      <line x1="9" y1="17" x2="19" y2="17"/>
-                      <line x1="9" y1="21" x2="19" y2="21"/>
-                      <line x1="9" y1="25" x2="15" y2="25"/>
-                    </svg>
-                  </div>
-                  <div class="vsg-slide__counter">04 / 04</div>
-                  <h4 class="vsg-slide__title">監査証跡の自動化</h4>
-                  <p class="vsg-slide__desc">手作業のログ作成・映像確認が後追いで重い</p>
-                </div>
-              </div>
-            </div>
-            <div class="vsg-slider__dots">
-              <button class="vsg-dot is-active" data-goto="0" aria-label="スライド 1"></button>
-              <button class="vsg-dot" data-goto="1" aria-label="スライド 2"></button>
-              <button class="vsg-dot" data-goto="2" aria-label="スライド 3"></button>
-              <button class="vsg-dot" data-goto="3" aria-label="スライド 4"></button>
-            </div>
-          </div>
-        </div>
-        <div class="ind-solution__content">
-          <span class="ind-solution__num">03</span>
-          <a class="ind-solution__badge ind-solution__badge--link" href="nanoguard-lp/">
-            <span class="ind-solution__badge-name">AI監視カメラ</span>
-            <span class="ind-solution__badge-cta">詳細はこちら</span>
-          </a>
-          <h3 class="ind-solution__headline">ルールは決めた。それでも事故と<br>トラブルが絶えない</h3>
-          <p class="ind-solution__quote">「フォークリフトと作業員のニアミスが月に3件。ヒヤリハット報告書を書くたびに、次は本当の事故になると思う。」</p>
-          <p class="ind-solution__body">AIが立入禁止区域への侵入を検知した瞬間、音声・映像でリアルタイム警告。「起きる前に止める」安全管理へ。</p>
-        </div>
-      </div>
-    </div>
-
   </section>
-
   <!-- ━━━━━━━━━━━━━━━━━━━━ 医療機関 ━━━━━━━━━━━━━━━━━━━━ -->
-  <section class="section industry-detail industry-detail--med" data-industry-panel="med">
-
-    <div class="ind-intro">
-      <span class="ind-intro__kicker">医療機関・クリニック</span>
-      <h2 class="ind-intro__headline">手指衛生・手順遵守・エリア管理。<br>医療安全の<span class="kadai-neon">3つの課題</span>に、<br class="br-sp">AIで答える。</h2>
-      <p class="ind-intro__body">手書きの自己チェック、目視でのゾーン確認、プロトコルの周知徹底——いずれも「人を信じる」前提の管理です。nanoFACTORYはAIカメラを使い、手指衛生・手順遵守・ゾーン管理を客観データとして自動記録します。</p>
-    </div>
-
-    <!-- 01 SANI-CAM -->
-    <div class="ind-solution">
-      <div class="ind-solution__inner">
-        <div class="ind-solution__visual ind-vis--sani">
-          <video id="sani-video" autoplay loop muted playsinline poster="assets/homepage-product-sanicam-video-poster.png">
-            <source src="assets/sanicam-demo-japan.mp4" type="video/mp4">
-          </video>
+  <section class="sec industry industry--med" data-industry-panel="med" aria-label="医療機関・クリニック">
+    <div class="container">
+      <div class="sec-head">
+        <div>
+          <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Solutions<span class="jp">— 医療機関・クリニック</span></div>
+          <h2>手指衛生・手順遵守・エリア管理。<br>医療安全の3つの課題に、<br class="br-sp">AIで答える。</h2>
         </div>
-        <div class="ind-solution__content">
-          <span class="ind-solution__num">01</span>
-          <span class="ind-solution__badge">SANI-CAM — 衛生管理AIカメラ</span>
-          <h3 class="ind-solution__headline">手指衛生が人任せのまま。<br>教育も難しく、実態も把握できない</h3>
-          <p class="ind-solution__quote">「手洗い記録が紙の自己チェックのまま。監査のたびに形骸化を指摘される。6ステップが本当に実施されているか、確認する方法がない。」</p>
-          <p class="ind-solution__body">AIカメラがWHO準拠の手洗い6ステップを自動検出・採点・タイムスタンプ付きで記録します。"やった・やらない"が客観データとして残るため、自己申告ベースの管理から脱却できます。感染対策監査・認定取得のエビデンスとしてそのまま提出可能です。</p>
-          <a class="ind-solution__cta" href="sanicam-lp/hand.html">SANI-CAMの詳細を見る</a>
-        </div>
+        <p>手書きの自己チェック、目視でのゾーン確認、プロトコルの周知徹底——いずれも「人を信じる」前提の管理です。nanoFACTORYはAIカメラを使い、手指衛生・手順遵守・ゾーン管理を客観データとして自動記録します。</p>
       </div>
+      <article class="sol">
+        <div class="sol__vis">
+          <figure class="sol__img hud-frame">
+            <video id="sani-video" autoplay loop muted playsinline poster="assets/opt/homepage-product-sanicam-video-poster.jpg">
+              <source src="assets/sanicam-demo-japan.mp4" type="video/mp4">
+            </video>
+            <figcaption class="sol__cap"><span class="sol__cam">CAM-01 · SANI-CAM</span><span class="sol__txt">WHO準拠の手洗い6ステップをAIが判定</span></figcaption>
+          </figure>
+        </div>
+        <div class="sol__content">
+          <div class="sol__meta"><span class="sol__num">01</span><a class="sol__tag" href="sanicam-lp/hand.html">SANI-CAM — 衛生管理AIカメラ</a></div>
+          <h3 class="sol__title">手指衛生が人任せのまま。<br>教育も難しく、実態も把握できない</h3>
+          <p class="sol__quote">「手洗い記録が紙の自己チェックのまま。監査のたびに形骸化を指摘される。6ステップが本当に実施されているか、確認する方法がない。」</p>
+          <p class="sol__body">AIカメラがWHO準拠の手洗い6ステップを自動検出・採点・タイムスタンプ付きで記録します。"やった・やらない"が客観データとして残るため、自己申告ベースの管理から脱却できます。感染対策監査・認定取得のエビデンスとしてそのまま提出可能です。</p>
+          <a class="more" href="sanicam-lp/hand.html"><span class="more__arrow" aria-hidden="true">→</span><span>SANI-CAMの詳細を見る</span></a>
+        </div>
+      </article>
+      <article class="sol sol--rev">
+        <div class="sol__vis">
+          <figure class="sol__img hud-frame">
+            <img src="assets/opt/homepage-solution-medical-ai-procedure-monitoring.jpg" alt="nanoSTEP 処置・看護手順" decoding="async" />
+            <figcaption class="sol__cap"><span class="sol__cam">CAM-02 · nanoSTEP</span><span class="sol__txt">点滴準備の手順をAIが確認</span></figcaption>
+          </figure>
+        </div>
+        <div class="sol__content">
+          <div class="sol__meta"><span class="sol__num">02</span><a class="sol__tag" href="nanostep-lp/">AI手順監視・標準化システム</a></div>
+          <h3 class="sol__title">プロトコルを知っていることと、<br>プロトコルを守ることは、別の問題だ</h3>
+          <p class="sol__quote">「インシデントレポートを見ると、手順の省略・順序ミスが半数以上を占める。ルールは周知しているのに、なぜ繰り返されるのか分からない。」</p>
+          <p class="sol__body">医療処置・感染対策プロトコルをAIカメラが常時監視し、手順の抜けや順序ミスをリアルタイムで検知・通知します。「知っているが守らない」を「守らざるを得ない環境」に変え、インシデント低減と手順遵守の自動記録を同時に実現します。</p>
+          <a class="more" href="nanostep-lp/"><span class="more__arrow" aria-hidden="true">→</span><span>このソリューションの詳細を見る</span></a>
+        </div>
+      </article>
+      <article class="sol">
+        <div class="sol__vis">
+          <figure class="sol__img hud-frame">
+            <img src="assets/opt/homepage-solution-medical-vsg-hygiene-zone.jpg" alt="バーチャルセキュリティゲート 衛生ゾーン管理" decoding="async" />
+            <figcaption class="sol__cap"><span class="sol__cam">CAM-03 · VSG</span><span class="sol__txt">衛生エリアへの入室をAIが管理</span></figcaption>
+          </figure>
+        </div>
+        <div class="sol__content">
+          <div class="sol__meta"><span class="sol__num">03</span><a class="sol__tag" href="virtual-security-gate-lp/index.html">バーチャルセキュリティゲート — 衛生ゾーン管理</a></div>
+          <h3 class="sol__title">衛生エリアへの入室ルールを、<br>無人で厳格に管理する</h3>
+          <p class="sol__quote">「無菌室・手術室の入室前チェックが本当に徹底されているか、夜間・休日は特に確認できない。問題が起きてもゾーン管理の証跡が残らない。」</p>
+          <p class="sol__body">カメラとAIで仮想ゲートを設置。入室前の手洗い・着替えが完了していない場合は即座に警告します。24時間365日、人が確認しなくてもルールを徹底でき、入退室ログがそのまま感染管理・安全管理の証跡になります。</p>
+          <a class="more" href="virtual-security-gate-lp/index.html"><span class="more__arrow" aria-hidden="true">→</span><span>VSGの詳細を見る</span></a>
+        </div>
+      </article>
     </div>
-
-    <!-- 02 nanoSTEP -->
-    <div class="ind-solution ind-solution--rev">
-      <div class="ind-solution__inner">
-        <div class="ind-solution__visual ind-vis--step">
-          <img src="assets/homepage-solution-medical-ai-procedure-monitoring.png" alt="nanoSTEP 処置・看護手順" loading="lazy" />
-        </div>
-        <div class="ind-solution__content">
-          <span class="ind-solution__num">02</span>
-          <span class="ind-solution__badge">AI手順監視・標準化システム</span>
-          <h3 class="ind-solution__headline">プロトコルを知っていることと、<br>プロトコルを守ることは、別の問題だ</h3>
-          <p class="ind-solution__quote">「インシデントレポートを見ると、手順の省略・順序ミスが半数以上を占める。ルールは周知しているのに、なぜ繰り返されるのか分からない。」</p>
-          <p class="ind-solution__body">医療処置・感染対策プロトコルをAIカメラが常時監視し、手順の抜けや順序ミスをリアルタイムで検知・通知します。「知っているが守らない」を「守らざるを得ない環境」に変え、インシデント低減と手順遵守の自動記録を同時に実現します。</p>
-          <a class="ind-solution__cta" href="nanostep-lp/">このソリューションの詳細を見る</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- 03 VSG -->
-    <div class="ind-solution">
-      <div class="ind-solution__inner">
-        <div class="ind-solution__visual ind-vis--vsg">
-          <img src="assets/homepage-solution-medical-vsg-hygiene-zone.png" alt="バーチャルセキュリティゲート 衛生ゾーン管理" loading="lazy" />
-        </div>
-        <div class="ind-solution__content">
-          <span class="ind-solution__num">03</span>
-          <span class="ind-solution__badge">バーチャルセキュリティゲート — 衛生ゾーン管理</span>
-          <h3 class="ind-solution__headline">衛生エリアへの入室ルールを、<br>無人で厳格に管理する</h3>
-          <p class="ind-solution__quote">「無菌室・手術室の入室前チェックが本当に徹底されているか、夜間・休日は特に確認できない。問題が起きてもゾーン管理の証跡が残らない。」</p>
-          <p class="ind-solution__body">カメラとAIで仮想ゲートを設置。入室前の手洗い・着替えが完了していない場合は即座に警告します。24時間365日、人が確認しなくてもルールを徹底でき、入退室ログがそのまま感染管理・安全管理の証跡になります。</p>
-          <a class="ind-solution__cta" href="virtual-security-gate-lp/index.html">VSGの詳細を見る</a>
-        </div>
-      </div>
-    </div>
-
   </section>
-
   <!-- ━━━━━━━━━━━━━━━━━━━━ 飲食店・食品工場 ━━━━━━━━━━━━━━━━━━━━ -->
-  <section class="section industry-detail industry-detail--food" data-industry-panel="food">
-
-    <div class="ind-intro">
-      <span class="ind-intro__kicker">飲食店・食品工場</span>
-      <h2 class="ind-intro__headline">調理手順・厨房監視・品質検査。<br>飲食現場の<span class="kadai-neon">3つの課題</span>に、<br class="br-sp">AIで答える。</h2>
-      <p class="ind-intro__body">アルバイト依存・高離職率・ベテランシフト偏り——どれも「人が変わると品質が変わる」構造の問題です。nanoFACTORYは「手順標準化」「厨房モニタリング」「提供品検査」をデータ化し、誰が担当しても基準が維持される現場をつくります。</p>
-    </div>
-
-    <!-- 01 nanoSTEP -->
-    <div class="ind-solution">
-      <div class="ind-solution__inner">
-        <div class="ind-solution__visual ind-vis--step">
-          <img src="assets/homepage-solution-food-ai-cooking-hygiene-steps.png" alt="nanoSTEP 調理・衛生手順" loading="lazy" />
+  <section class="sec industry industry--food" data-industry-panel="food" aria-label="飲食店・食品工場">
+    <div class="container">
+      <div class="sec-head">
+        <div>
+          <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Solutions<span class="jp">— 飲食店・食品工場</span></div>
+          <h2>調理手順・厨房監視・品質検査。<br>飲食現場の3つの課題に、<br class="br-sp">AIで答える。</h2>
         </div>
-        <div class="ind-solution__content">
-          <span class="ind-solution__num">01</span>
-          <span class="ind-solution__badge">AI調理・衛生手順管理</span>
-          <h3 class="ind-solution__headline">スタッフが変わっても、<br>教育コストは上がらない仕組みをつくる</h3>
-          <p class="ind-solution__quote">「バイトが辞めるたびにゼロから教え直し。人件費より教育コストの方が問題になってきた。」</p>
-          <p class="ind-solution__body">調理・仕込み手順をAIが常時監視し、逸脱をその場で通知。新人でも即日一定品質で動けるため、OJTにかかる時間・人件費を大幅に削減できます。HACCP記録の自動生成で、保健所対応も省力化されます。</p>
-          <a class="ind-solution__cta" href="nanostep-lp/">このソリューションの詳細を見る</a>
-        </div>
+        <p>アルバイト依存・高離職率・ベテランシフト偏り——どれも「人が変わると品質が変わる」構造の問題です。nanoFACTORYは「手順標準化」「厨房モニタリング」「提供品検査」をデータ化し、誰が担当しても基準が維持される現場をつくります。</p>
       </div>
+      <article class="sol">
+        <div class="sol__vis">
+          <figure class="sol__img hud-frame">
+            <img src="assets/opt/homepage-solution-food-ai-cooking-hygiene-steps.jpg" alt="nanoSTEP 調理・衛生手順" decoding="async" />
+            <figcaption class="sol__cap"><span class="sol__cam">CAM-01 · nanoSTEP</span><span class="sol__txt">調理手順をタブレットに表示しながら調理</span></figcaption>
+          </figure>
+        </div>
+        <div class="sol__content">
+          <div class="sol__meta"><span class="sol__num">01</span><a class="sol__tag" href="nanostep-lp/">AI調理・衛生手順管理</a></div>
+          <h3 class="sol__title">スタッフが変わっても、<br>教育コストは上がらない仕組みをつくる</h3>
+          <p class="sol__quote">「バイトが辞めるたびにゼロから教え直し。人件費より教育コストの方が問題になってきた。」</p>
+          <p class="sol__body">調理・仕込み手順をAIが常時監視し、逸脱をその場で通知。新人でも即日一定品質で動けるため、OJTにかかる時間・人件費を大幅に削減できます。HACCP記録の自動生成で、保健所対応も省力化されます。</p>
+          <a class="more" href="nanostep-lp/"><span class="more__arrow" aria-hidden="true">→</span><span>このソリューションの詳細を見る</span></a>
+        </div>
+      </article>
+      <article class="sol sol--rev">
+        <div class="sol__vis">
+          <figure class="sol__img hud-frame">
+            <img src="assets/opt/homepage-solution-food-vsg-kitchen-monitoring.jpg" alt="バーチャルセキュリティゲート 厨房モニタリング" decoding="async" />
+            <figcaption class="sol__cap"><span class="sol__cam">CAM-02 · VSG</span><span class="sol__txt">作業場の行動をAIカメラで記録</span></figcaption>
+          </figure>
+        </div>
+        <div class="sol__content">
+          <div class="sol__meta"><span class="sol__num">02</span><a class="sol__tag" href="virtual-security-gate-lp/index.html">バーチャルセキュリティゲート — 厨房モニタリング</a></div>
+          <h3 class="sol__title">厨房の"見えない"が、<br>バイトテロとSNS炎上のリスクになる</h3>
+          <p class="sol__quote">「厨房内の行動が外から確認できない。不衛生な行為や悪ふざけがSNSに拡散されたら取り返しがつかない。」</p>
+          <p class="sol__body">厨房を24時間AIが記録・監視。不審な行動・ルール違反をリアルタイム検知し、映像ログを自動保存します。「見られている」という抑止効果が問題行動を未然に防ぎ、万が一のときは映像が証拠になります。バックヤードへの不正入室管理も同時に対応できます。</p>
+          <a class="more" href="virtual-security-gate-lp/index.html"><span class="more__arrow" aria-hidden="true">→</span><span>VSGの詳細を見る</span></a>
+        </div>
+      </article>
+      <article class="sol">
+        <div class="sol__vis">
+          <figure class="sol__img hud-frame">
+            <img src="assets/opt/homepage-solution-food-ai-serving-inspection.jpg" alt="nanoI 提供品チェック" decoding="async" />
+            <figcaption class="sol__cap"><span class="sol__cam">CAM-03 · nanoI</span><span class="sol__txt">提供前の料理をカメラで検査</span></figcaption>
+          </figure>
+        </div>
+        <div class="sol__content">
+          <div class="sol__meta"><span class="sol__num">03</span><a class="sol__tag" href="nanosi-lp/">AI提供品チェック・品質記録</a></div>
+          <h3 class="sol__title">"映え"が評価される時代に、<br>提供する見た目を感覚に任せない</h3>
+          <p class="sol__quote">「SNSに投稿される写真で評価が決まる時代。盛り付けのバラつきや異物混入が一枚の写真で炎上につながる。」</p>
+          <p class="sol__body">料理のビジュアル・盛り付け量・異物混入をAIカメラが自動検査。基準を下回る品を提供前に検出し、SNS炎上・クレームを構造的に防ぎます。「映えの均一化」はブランド価値の向上にも直結します。セントラルキッチン・食品製造ラインへの導入で、品質記録のデータ化も同時に実現します。</p>
+          <a class="more" href="nanosi-lp/"><span class="more__arrow" aria-hidden="true">→</span><span>このソリューションの詳細を見る</span></a>
+        </div>
+      </article>
     </div>
-
-    <!-- 02 VSG -->
-    <div class="ind-solution ind-solution--rev">
-      <div class="ind-solution__inner">
-        <div class="ind-solution__visual ind-vis--vsg">
-          <img src="assets/homepage-solution-food-vsg-kitchen-monitoring.png" alt="バーチャルセキュリティゲート 厨房モニタリング" loading="lazy" />
-        </div>
-        <div class="ind-solution__content">
-          <span class="ind-solution__num">02</span>
-          <span class="ind-solution__badge">バーチャルセキュリティゲート — 厨房モニタリング</span>
-          <h3 class="ind-solution__headline">厨房の"見えない"が、<br>バイトテロとSNS炎上のリスクになる</h3>
-          <p class="ind-solution__quote">「厨房内の行動が外から確認できない。不衛生な行為や悪ふざけがSNSに拡散されたら取り返しがつかない。」</p>
-          <p class="ind-solution__body">厨房を24時間AIが記録・監視。不審な行動・ルール違反をリアルタイム検知し、映像ログを自動保存します。「見られている」という抑止効果が問題行動を未然に防ぎ、万が一のときは映像が証拠になります。バックヤードへの不正入室管理も同時に対応できます。</p>
-          <a class="ind-solution__cta" href="virtual-security-gate-lp/index.html">VSGの詳細を見る</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- 03 nanoSI -->
-    <div class="ind-solution">
-      <div class="ind-solution__inner">
-        <div class="ind-solution__visual ind-vis--si">
-          <img src="assets/homepage-solution-food-ai-serving-inspection.png" alt="nanoSI 提供品チェック" loading="lazy" />
-        </div>
-        <div class="ind-solution__content">
-          <span class="ind-solution__num">03</span>
-          <span class="ind-solution__badge">AI提供品チェック・品質記録</span>
-          <h3 class="ind-solution__headline">"映え"が評価される時代に、<br>提供する見た目を感覚に任せない</h3>
-          <p class="ind-solution__quote">「SNSに投稿される写真で評価が決まる時代。盛り付けのバラつきや異物混入が一枚の写真で炎上につながる。」</p>
-          <p class="ind-solution__body">料理のビジュアル・盛り付け量・異物混入をAIカメラが自動検査。基準を下回る品を提供前に検出し、SNS炎上・クレームを構造的に防ぎます。「映えの均一化」はブランド価値の向上にも直結します。セントラルキッチン・食品製造ラインへの導入で、品質記録のデータ化も同時に実現します。</p>
-          <a class="ind-solution__cta" href="nanosi-lp/">このソリューションの詳細を見る</a>
-        </div>
-      </div>
-    </div>
-
   </section>
 
   <!-- 技術紹介 -->
-  <section id="tech" class="section tech">
+  <section id="tech" class="sec sec--raised">
     <div class="container">
-      <h2 class="fade-up">コア技術</h2>
-      <p class="fade-up delay-1">nanoFACTORYの製品群は、3つの独自技術によって支えられています。</p>
+      <div class="sec-head">
+        <div>
+          <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Technology</div>
+          <h2>コア技術</h2>
+        </div>
+        <p>nanoFACTORYの製品群は、3つの独自技術によって支えられています。</p>
+      </div>
       <div class="tech-grid">
-        <div class="tech-item fade-in">
-          <div class="tech-name">作業手順解析エージェント</div>
+        <div class="tech-item">
+          <div class="tech-item__num">01</div>
+          <div class="tech-item__name">作業手順解析エージェント</div>
           <h3>ノウハウを学習し、人間に教える</h3>
+          <div class="tech-item__img"><img src="assets/opt/homepage-tech-knowledge-learning-concept.jpg" alt="ノウハウ学習AI概念図" loading="lazy" /></div>
           <p>作業手順をカメラで撮影するだけで、AIがその動きを学習・パターン化します。以降は現場カメラが作業者をリアルタイム採点し、ズレがあれば即通知。ベテランが退職しても、学習済みのノウハウが現場に残り続けます。</p>
-          <div class="tech-img">
-            <img src="assets/homepage-tech-knowledge-learning-concept.jpg" alt="ノウハウ学習AI概念図" loading="lazy" />
-          </div>
-          <div class="tech-anim js-tech-anim js-chart-carousel">
-            <div class="comp-chart-panel is-active">
-              <div class="comp-chart-title">ノウハウ習得にかかる工数</div>
-              <div class="comp-chart">
-                <div class="comp-row"><span class="comp-label">従来OJT</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--other" style="--w:92%"><span class="comp-bar__val">大</span></div></div></div>
-                <div class="comp-row"><span class="comp-label">汎用ツール</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--human" style="--w:58%"><span class="comp-bar__val">中</span></div></div></div>
-                <div class="comp-row"><span class="comp-label comp-label--nano">nanoFACTORY</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--nano" style="--w:16%"><span class="comp-bar__val">小</span></div></div></div>
-              </div>
+          <div class="cmp" data-cmp>
+            <div class="cmp__tabs"><button type="button" data-j="0" aria-selected="true" title="ノウハウ習得にかかる工数">習得工数</button><button type="button" data-j="1" aria-selected="false" title="リアルタイム解析の速度">解析速度</button><button type="button" data-j="2" aria-selected="false" title="教育コスト削減率">教育コスト削減</button></div>
+            <div class="cmp__panel is-active" aria-label="ノウハウ習得にかかる工数">
+              <div class="cmp__row"><span class="cmp__lb">従来OJT</span><div class="cmp__track"><span class="cmp__bar" style="--w:92%"></span><span class="cmp__val">大</span></div></div>
+              <div class="cmp__row"><span class="cmp__lb">汎用ツール</span><div class="cmp__track"><span class="cmp__bar" style="--w:58%"></span><span class="cmp__val">中</span></div></div>
+              <div class="cmp__row cmp__row--nano"><span class="cmp__lb">nanoFACTORY</span><div class="cmp__track"><span class="cmp__bar" style="--w:16%"></span><span class="cmp__val">小</span></div></div>
             </div>
-            <div class="comp-chart-panel">
-              <div class="comp-chart-title">リアルタイム解析の速度</div>
-              <div class="comp-chart">
-                <div class="comp-row"><span class="comp-label">従来（手動）</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--other" style="--w:12%"><span class="comp-bar__val">遅延大</span></div></div></div>
-                <div class="comp-row"><span class="comp-label">汎用ツール</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--human" style="--w:55%"><span class="comp-bar__val">数秒</span></div></div></div>
-                <div class="comp-row"><span class="comp-label comp-label--nano">nanoFACTORY</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--nano" style="--w:98%"><span class="comp-bar__val">即時</span></div></div></div>
-              </div>
+            <div class="cmp__panel" aria-label="リアルタイム解析の速度">
+              <div class="cmp__row"><span class="cmp__lb">従来（手動）</span><div class="cmp__track"><span class="cmp__bar" style="--w:12%"></span><span class="cmp__val">遅延大</span></div></div>
+              <div class="cmp__row"><span class="cmp__lb">汎用ツール</span><div class="cmp__track"><span class="cmp__bar" style="--w:55%"></span><span class="cmp__val">数秒</span></div></div>
+              <div class="cmp__row cmp__row--nano"><span class="cmp__lb">nanoFACTORY</span><div class="cmp__track"><span class="cmp__bar" style="--w:98%"></span><span class="cmp__val">即時</span></div></div>
             </div>
-            <div class="comp-chart-panel">
-              <div class="comp-chart-title">教育コスト削減率</div>
-              <div class="comp-chart">
-                <div class="comp-row"><span class="comp-label">従来OJT</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--other" style="--w:8%"><span class="comp-bar__val">削減なし</span></div></div></div>
-                <div class="comp-row"><span class="comp-label">汎用ツール</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--human" style="--w:40%"><span class="comp-bar__val">約30%減</span></div></div></div>
-                <div class="comp-row"><span class="comp-label comp-label--nano">nanoFACTORY</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--nano" style="--w:88%"><span class="comp-bar__val">約80%減</span></div></div></div>
-              </div>
+            <div class="cmp__panel" aria-label="教育コスト削減率">
+              <div class="cmp__row"><span class="cmp__lb">従来OJT</span><div class="cmp__track"><span class="cmp__bar" style="--w:8%"></span><span class="cmp__val">削減なし</span></div></div>
+              <div class="cmp__row"><span class="cmp__lb">汎用ツール</span><div class="cmp__track"><span class="cmp__bar" style="--w:40%"></span><span class="cmp__val">約30%減</span></div></div>
+              <div class="cmp__row cmp__row--nano"><span class="cmp__lb">nanoFACTORY</span><div class="cmp__track"><span class="cmp__bar" style="--w:88%"></span><span class="cmp__val">約80%減</span></div></div>
             </div>
-            <div class="carousel-dots">
-              <span class="carousel-dot is-active"></span>
-              <span class="carousel-dot"></span>
-              <span class="carousel-dot"></span>
-            </div>
-            <p class="tech-anim__label">作業手順解析エージェント — 他社比較</p>
-            <p class="comp-note">※社内テスト環境における特定作業工程での比較値です。実環境・工程により結果は異なります。</p>
+            <p class="cmp__note">※社内テスト環境における特定作業工程での比較値です。実環境・工程により結果は異なります。</p>
           </div>
         </div>
-        <div class="tech-item fade-in delay-1">
-          <div class="tech-name">高精度リアルタイム画像処理</div>
+        <div class="tech-item">
+          <div class="tech-item__num">02</div>
+          <div class="tech-item__name">高精度リアルタイム画像処理</div>
           <h3>人の目が届かない精度と速度で、全数を見続ける</h3>
+          <div class="tech-item__img"><img src="assets/opt/nanosi-gear-detection.jpg" alt="AI外観検査の判定画面（傷・打痕・異物を検出）" loading="lazy" /></div>
           <p>集中力・体調・時間帯によって精度が変わる人の目と違い、AIカメラは24時間・全数を同じ基準で判定し続けます。ミリ単位の傷・汚れ・寸法ズレも見逃さず、判定ログを自動記録。品質トレーサビリティも同時に確保します。</p>
-          <div class="tech-img">
-            <img src="assets/homepage-tech-high-precision-inspection-concept.png" alt="高精度AI検査概念図" loading="lazy" />
-          </div>
-          <div class="tech-anim js-tech-anim js-chart-carousel">
-            <div class="comp-chart-panel is-active">
-              <div class="comp-chart-title">検出精度</div>
-              <div class="comp-chart">
-                <div class="comp-row"><span class="comp-label">人の目</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--other" style="--w:72%"><span class="comp-bar__val">〜75%</span></div></div></div>
-                <div class="comp-row"><span class="comp-label">汎用AIカメラ</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--human" style="--w:86%"><span class="comp-bar__val">〜88%</span></div></div></div>
-                <div class="comp-row"><span class="comp-label comp-label--nano">nanoFACTORY</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--nano" style="--w:93%"><span class="comp-bar__val">90%以上</span></div></div></div>
-              </div>
+          <div class="cmp" data-cmp>
+            <div class="cmp__tabs"><button type="button" data-j="0" aria-selected="true" title="検出精度">検出精度</button><button type="button" data-j="1" aria-selected="false" title="検査速度（相対比較）">検査速度</button><button type="button" data-j="2" aria-selected="false" title="見落とし発生率（低いほど優秀）">見落とし率</button></div>
+            <div class="cmp__panel is-active" aria-label="検出精度">
+              <div class="cmp__row"><span class="cmp__lb">人の目</span><div class="cmp__track"><span class="cmp__bar" style="--w:72%"></span><span class="cmp__val">〜75%</span></div></div>
+              <div class="cmp__row"><span class="cmp__lb">汎用AIカメラ</span><div class="cmp__track"><span class="cmp__bar" style="--w:86%"></span><span class="cmp__val">〜88%</span></div></div>
+              <div class="cmp__row cmp__row--nano"><span class="cmp__lb">nanoFACTORY</span><div class="cmp__track"><span class="cmp__bar" style="--w:93%"></span><span class="cmp__val">90%以上</span></div></div>
             </div>
-            <div class="comp-chart-panel">
-              <div class="comp-chart-title">検査速度（相対比較）</div>
-              <div class="comp-chart">
-                <div class="comp-row"><span class="comp-label">人の目</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--other" style="--w:18%"><span class="comp-bar__val">低速</span></div></div></div>
-                <div class="comp-row"><span class="comp-label">汎用AIカメラ</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--human" style="--w:60%"><span class="comp-bar__val">中速</span></div></div></div>
-                <div class="comp-row"><span class="comp-label comp-label--nano">nanoFACTORY</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--nano" style="--w:98%"><span class="comp-bar__val">高速</span></div></div></div>
-              </div>
+            <div class="cmp__panel" aria-label="検査速度（相対比較）">
+              <div class="cmp__row"><span class="cmp__lb">人の目</span><div class="cmp__track"><span class="cmp__bar" style="--w:18%"></span><span class="cmp__val">低速</span></div></div>
+              <div class="cmp__row"><span class="cmp__lb">汎用AIカメラ</span><div class="cmp__track"><span class="cmp__bar" style="--w:60%"></span><span class="cmp__val">中速</span></div></div>
+              <div class="cmp__row cmp__row--nano"><span class="cmp__lb">nanoFACTORY</span><div class="cmp__track"><span class="cmp__bar" style="--w:98%"></span><span class="cmp__val">高速</span></div></div>
             </div>
-            <div class="comp-chart-panel">
-              <div class="comp-chart-title">見落とし発生率（低いほど優秀）</div>
-              <div class="comp-chart">
-                <div class="comp-row"><span class="comp-label">人の目</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--other" style="--w:82%"><span class="comp-bar__val">高い</span></div></div></div>
-                <div class="comp-row"><span class="comp-label">汎用AIカメラ</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--human" style="--w:40%"><span class="comp-bar__val">中程度</span></div></div></div>
-                <div class="comp-row"><span class="comp-label comp-label--nano">nanoFACTORY</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--nano" style="--w:5%"><span class="comp-bar__val">ほぼゼロ</span></div></div></div>
-              </div>
+            <div class="cmp__panel" aria-label="見落とし発生率（低いほど優秀）">
+              <div class="cmp__row"><span class="cmp__lb">人の目</span><div class="cmp__track"><span class="cmp__bar" style="--w:82%"></span><span class="cmp__val">高い</span></div></div>
+              <div class="cmp__row"><span class="cmp__lb">汎用AIカメラ</span><div class="cmp__track"><span class="cmp__bar" style="--w:40%"></span><span class="cmp__val">中程度</span></div></div>
+              <div class="cmp__row cmp__row--nano"><span class="cmp__lb">nanoFACTORY</span><div class="cmp__track"><span class="cmp__bar" style="--w:5%"></span><span class="cmp__val">ほぼゼロ</span></div></div>
             </div>
-            <div class="carousel-dots">
-              <span class="carousel-dot is-active"></span>
-              <span class="carousel-dot"></span>
-              <span class="carousel-dot"></span>
-            </div>
-            <p class="tech-anim__label">高精度リアルタイム画像処理 — 他社比較</p>
-            <p class="comp-note">※特定の外観検査条件における実測・比較値です。検査対象・照明・環境条件により精度は異なります。</p>
+            <p class="cmp__note">※特定の外観検査条件における実測・比較値です。検査対象・照明・環境条件により精度は異なります。</p>
           </div>
         </div>
-        <div class="tech-item fade-in delay-2">
-          <div class="tech-name">エッジコンピューティングシステム</div>
+        <div class="tech-item">
+          <div class="tech-item__num">03</div>
+          <div class="tech-item__name">エッジコンピューティングシステム</div>
           <h3>映像はすべて施設内で完結。外に出さない設計</h3>
+          <div class="tech-item__img"><img src="assets/opt/homepage-tech-edge-processing-concept.jpg" alt="完全エッジ処理概念図" loading="lazy" /></div>
           <p>AIの処理から映像の保存まで、施設内のデバイスだけで動作します。インターネット接続も、クラウドサーバーも不要。映像が外部に送られる経路が存在しないため、情報漏洩リスクはゼロ。月額クラウド費用も発生しません。</p>
-          <div class="tech-img">
-            <img src="assets/homepage-tech-edge-processing-concept.png" alt="完全エッジ処理概念図" loading="lazy" />
-          </div>
-          <div class="tech-anim js-tech-anim js-chart-carousel">
-            <div class="comp-chart-panel is-active">
-              <div class="comp-chart-title">ライセンス料（一部除く）</div>
-              <div class="comp-chart">
-                <div class="comp-row"><span class="comp-label">クラウドAI型</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--other" style="--w:95%"><span class="comp-bar__val">高コスト</span></div></div></div>
-                <div class="comp-row"><span class="comp-label">ハイブリッド型</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--human" style="--w:55%"><span class="comp-bar__val">中程度</span></div></div></div>
-                <div class="comp-row"><span class="comp-label comp-label--nano">nanoFACTORY</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--nano" style="--w:4%"><span class="comp-bar__val">0円</span></div></div></div>
-              </div>
+          <div class="cmp" data-cmp>
+            <div class="cmp__tabs"><button type="button" data-j="0" aria-selected="true" title="ライセンス料（一部除く）">ライセンス料</button><button type="button" data-j="1" aria-selected="false" title="情報漏洩リスク（低いほど優秀）">漏洩リスク</button><button type="button" data-j="2" aria-selected="false" title="処理遅延（低いほど優秀）">処理遅延</button></div>
+            <div class="cmp__panel is-active" aria-label="ライセンス料（一部除く）">
+              <div class="cmp__row"><span class="cmp__lb">クラウドAI型</span><div class="cmp__track"><span class="cmp__bar" style="--w:95%"></span><span class="cmp__val">高コスト</span></div></div>
+              <div class="cmp__row"><span class="cmp__lb">ハイブリッド型</span><div class="cmp__track"><span class="cmp__bar" style="--w:55%"></span><span class="cmp__val">中程度</span></div></div>
+              <div class="cmp__row cmp__row--nano"><span class="cmp__lb">nanoFACTORY</span><div class="cmp__track"><span class="cmp__bar" style="--w:4%"></span><span class="cmp__val">0円</span></div></div>
             </div>
-            <div class="comp-chart-panel">
-              <div class="comp-chart-title">情報漏洩リスク（低いほど優秀）</div>
-              <div class="comp-chart">
-                <div class="comp-row"><span class="comp-label">クラウドAI型</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--other" style="--w:90%"><span class="comp-bar__val">高リスク</span></div></div></div>
-                <div class="comp-row"><span class="comp-label">ハイブリッド型</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--human" style="--w:48%"><span class="comp-bar__val">中リスク</span></div></div></div>
-                <div class="comp-row"><span class="comp-label comp-label--nano">nanoFACTORY</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--nano" style="--w:4%"><span class="comp-bar__val">ゼロ</span></div></div></div>
-              </div>
+            <div class="cmp__panel" aria-label="情報漏洩リスク（低いほど優秀）">
+              <div class="cmp__row"><span class="cmp__lb">クラウドAI型</span><div class="cmp__track"><span class="cmp__bar" style="--w:90%"></span><span class="cmp__val">高リスク</span></div></div>
+              <div class="cmp__row"><span class="cmp__lb">ハイブリッド型</span><div class="cmp__track"><span class="cmp__bar" style="--w:48%"></span><span class="cmp__val">中リスク</span></div></div>
+              <div class="cmp__row cmp__row--nano"><span class="cmp__lb">nanoFACTORY</span><div class="cmp__track"><span class="cmp__bar" style="--w:4%"></span><span class="cmp__val">ゼロ</span></div></div>
             </div>
-            <div class="comp-chart-panel">
-              <div class="comp-chart-title">処理遅延（低いほど優秀）</div>
-              <div class="comp-chart">
-                <div class="comp-row"><span class="comp-label">クラウド処理</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--other" style="--w:88%"><span class="comp-bar__val">大きい</span></div></div></div>
-                <div class="comp-row"><span class="comp-label">ハイブリッド型</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--human" style="--w:45%"><span class="comp-bar__val">中程度</span></div></div></div>
-                <div class="comp-row"><span class="comp-label comp-label--nano">nanoFACTORY</span><div class="comp-bar-wrap"><div class="comp-bar comp-bar--nano" style="--w:5%"><span class="comp-bar__val">ほぼゼロ</span></div></div></div>
-              </div>
+            <div class="cmp__panel" aria-label="処理遅延（低いほど優秀）">
+              <div class="cmp__row"><span class="cmp__lb">クラウド処理</span><div class="cmp__track"><span class="cmp__bar" style="--w:88%"></span><span class="cmp__val">大きい</span></div></div>
+              <div class="cmp__row"><span class="cmp__lb">ハイブリッド型</span><div class="cmp__track"><span class="cmp__bar" style="--w:45%"></span><span class="cmp__val">中程度</span></div></div>
+              <div class="cmp__row cmp__row--nano"><span class="cmp__lb">nanoFACTORY</span><div class="cmp__track"><span class="cmp__bar" style="--w:5%"></span><span class="cmp__val">ほぼゼロ</span></div></div>
             </div>
-            <div class="carousel-dots">
-              <span class="carousel-dot is-active"></span>
-              <span class="carousel-dot"></span>
-              <span class="carousel-dot"></span>
-            </div>
-            <p class="tech-anim__label">エッジコンピューティングシステム — 他社比較</p>
-            <p class="comp-note">※完全エッジ構成時の比較値です。ネットワーク・保守契約等により費用が発生する場合があります。</p>
+            <p class="cmp__note">※完全エッジ構成時の比較値です。ネットワーク・保守契約等により費用が発生する場合があります。</p>
           </div>
         </div>
       </div>
@@ -612,16 +355,16 @@
   </section>
 
   <!-- CTA -->
-  <section id="cta" class="section cta-section">
+  <section id="cta" class="cta">
     <div class="container">
-      <h2 class="fade-up">まずはお気軽にご相談ください</h2>
-      <p class="lead-text fade-up delay-1">
-        デモのご依頼・お見積もりはメールにてお受けしております。<br>
-        Email: <span id="mail"></span>
-      </p>
-      <div class="cta-buttons fade-up delay-2">
-        <a class="cta-button" id="mail-cta-btn" href="#">メールで相談する</a>
-        <a class="cta-button cta-button--outline" href="products-services/">製品一覧を見る</a>
+      <div>
+        <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Contact</div>
+        <h2>まずはお気軽に<br>ご相談ください</h2>
+        <p>デモのご依頼・お見積もりはメールにてお受けしております。<br>Email: <span data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=" data-m-text></span></p>
+      </div>
+      <div class="cta__btns">
+        <a class="btn-block btn-block--primary" id="mail-cta-btn" href="#" data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M="><span><small>MAIL</small>メールで相談する</span><span aria-hidden="true">→</span></a>
+        <a class="btn-block" href="products-services/"><span><small>PRODUCTS</small>製品一覧を見る</span><span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
@@ -636,8 +379,8 @@
         </div>
         <div>
           <h3>Contact</h3>
-          <p>〒107-0062 東京都港区南青山５-11-14 H&M南青山イースト308</p>
-          <p>Email: <span id="mail-footer"></span></p>
+          <p>〒107-0062 東京都港区南青山５-11-14 H&amp;M南青山イースト308</p>
+          <p>Email: <span data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=" data-m-text></span></p>
         </div>
         <div>
           <h3>Links</h3>
@@ -646,26 +389,17 @@
             <li><a href="solutions/">ソリューション</a></li>
             <li><a href="products-services/">製品・サービス</a></li>
             <li><a href="news/">ニュース</a></li>
+            <li><a href="blog/">ブログ</a></li>
             <li><a href="company/">会社情報</a></li>
           </ul>
         </div>
       </div>
-      <div class="copyright">
-        &copy; <span id="year"></span> nanoFACTORY Co. All rights reserved.
-      </div>
+      <div class="copyright"><span>&copy; <span id="year"></span> nanoFACTORY Co. All rights reserved.</span><span>nano-factory.net</span></div>
     </div>
   </footer>
 
-  <script>
-    const user = "contact";
-    const domain = "nano-factory.jp";
-    const email = `${user}@${domain}`;
-    document.querySelectorAll("#mail, #mail-footer").forEach((el) => {
-      el.innerText = email;
-    });
-    const ctaBtn = document.getElementById("mail-cta-btn");
-    if (ctaBtn) ctaBtn.href = `mailto:${email}`;
-  </script>
   <script src="script.js"></script>
+  <script src="site.js"></script>
+  <script src="mail.js"></script>
 </body>
 </html>

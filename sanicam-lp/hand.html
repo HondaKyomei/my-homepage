@@ -58,54 +58,19 @@
 
   <link rel="icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-  <link rel="stylesheet" href="./assets/styles.css">
-
-  <!-- === サイト共通ヘッダー(他LPと統一) === -->
-  <style>
-    .site-header { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background: rgba(15,17,26,0.85); border-bottom: 1px solid rgba(255,255,255,0.05); }
-    /* sanicam の .container は padding なしなので、ヘッダー内では横余白を補う */
-    .site-header .container { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; transition: padding 0.35s ease; }
-    .site-header .logo-wrapper { display: flex; align-items: center; gap: 8px; text-decoration: none; overflow: hidden; }
-    .site-header .logo-img { height: 36px; width: auto; display: inline-block; object-fit: contain; border-radius: 4px; transition: opacity 0.35s ease, height 0.35s ease; }
-    .site-header .nav { display: flex; align-items: center; }
-    .site-header .nav__link { margin-left: 1rem; text-decoration: none; color: #cfcfe5; font-size: 0.9rem; position: relative; }
-    .site-header .nav__link:hover { color: #fff; }
-    .site-header .nav__link::after { content: ""; position: absolute; left: 0; bottom: -3px; width: 0%; height: 2px; background: #fff; transition: width 0.3s ease; }
-    .site-header .nav__link:hover::after { width: 100%; }
-    .site-header .nav__link--products { font-weight: 600; }
-    .site-header .menu-toggle { display: none; position: relative; width: 2.5rem; height: 2.5rem; border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; background: transparent; color: #cfcfe5; align-items: center; justify-content: center; cursor: pointer; transition: background 0.3s ease; }
-    .site-header .menu-toggle:hover { background: rgba(255,255,255,0.08); }
-    .site-header .menu-toggle__bar { position: relative; display: block; width: 1.2rem; height: 2px; background: currentColor; transition: background 0.3s ease; }
-    .site-header .menu-toggle__bar::before, .site-header .menu-toggle__bar::after { content: ""; position: absolute; left: 0; width: 100%; height: 2px; background: currentColor; transition: transform 0.3s ease; }
-    .site-header .menu-toggle__bar::before { top: -6px; }
-    .site-header .menu-toggle__bar::after  { top:  6px; }
-    .site-header .menu-toggle[aria-expanded="true"] .menu-toggle__bar { background: transparent; }
-    .site-header .menu-toggle[aria-expanded="true"] .menu-toggle__bar::before { transform: translateY(6px) rotate(45deg); }
-    .site-header .menu-toggle[aria-expanded="true"] .menu-toggle__bar::after  { transform: translateY(-6px) rotate(-45deg); }
-    .site-header .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-    @media (max-width: 900px) {
-      .site-header .nav { display: none; width: 100%; flex-direction: column; gap: 0; margin-top: 0.75rem; padding: 0.6rem 0 0.2rem; border-top: 1px solid rgba(255,255,255,0.08); }
-      .site-header .nav.is-open { display: flex; }
-      .site-header .nav__link { margin-left: 0; display: block; padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.98rem; }
-      .site-header .nav__link:last-child { border-bottom: none; }
-      .site-header .nav__link--products { font-weight: 700; color: #f3f5ff; }
-      .site-header .menu-toggle { display: inline-flex; }
-      .site-header .container { flex-wrap: wrap; }
-    }
-    @media (max-width: 720px) {
-      .site-header .container { gap: 0.75rem; }
-      .site-header .logo-img { height: 32px; }
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Orbitron:wght@400;500&family=JetBrains+Mono:wght@400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="../site.css" />
+  <link rel="stylesheet" href="./assets/styles.css" />
 </head>
 
-<body>
+<body class="sani">
+  <!-- ヘッダー（トップページと共通） -->
   <header class="site-header">
     <div class="container">
       <div class="logo-wrapper">
-        <a href="../index.html">
-          <img src="../assets/site-logo-nanofactory.png" alt="nanoFACTORY" class="logo-img" />
-        </a>
+        <a href="../index.html"><img src="../assets/site-logo-nanofactory.png" alt="nanoFACTORY" class="logo-img" /></a>
       </div>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
         <span class="menu-toggle__bar"></span>
@@ -113,13 +78,16 @@
       </button>
       <nav id="site-nav" class="nav">
         <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
+        <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link nav__link--products" href="../nanostep-lp/">作業認識AI</a>
         <a class="nav__link nav__link--products" href="../nanosi-lp/">AI検査</a>
         <a class="nav__link nav__link--products" href="../nanoguard-lp/">AI監視カメラ</a>
-        <a class="nav__link nav__link--products" href="../sanicam-lp/hand.html">手指衛生</a>
+        <a class="nav__link nav__link--products" href="../sanicam-lp/hand.html" aria-current="page">手指衛生</a>
+        <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link" href="../news/">ニュース・事例</a>
         <a class="nav__link" href="../blog/">ブログ</a>
         <a class="nav__link" href="../company/">会社情報</a>
+        <a class="nav__link nav__link--contact" href="../index.html#cta">CONTACT</a>
       </nav>
     </div>
   </header>
@@ -143,10 +111,11 @@
     })();
   </script>
 
-  <section class="hero-bear">
-    <div class="hero-bear__backdrop" aria-hidden="true">
+  <!-- Hero -->
+  <section class="hero sani-hero">
+    <div class="sani-hero__backdrop" aria-hidden="true">
       <video
-        class="hero-bear__video"
+        class="sani-hero__video"
         poster="./assets/sanicam-hero.png"
         autoplay
         muted
@@ -158,146 +127,221 @@
         <source src="./assets/hand-demo.mp4" type="video/mp4" />
       </video>
     </div>
-    <div class="hero-bear__inner container">
-      <div class="hero-bear__copy">
-        <div class="breadcrumbs">衛生管理AI SANICAM / 手指衛生</div>
-        <div class="kicker">WHO準拠の手洗い教育＆採点</div>
-        <h1 class="h1">手指衛生から清潔な現場をつくる</h1>
-        <p class="lead">WHO対応の6ステップ手洗いをAIが教育・採点し、履歴を自動記録。バーチャルセキュリティゲートと連携すれば、現場の手洗い実施率100%を目指せます。</p>
-        <div class="hero-bear__actions">
-          <a class="btn" href="#features">特長を見る</a>
-          <a class="btn secondary" href="#video">デモ動画</a>
-        </div>
+    <canvas class="hero__flow sani-hero__flow" id="hero-flow" aria-hidden="true"></canvas>
+    <div class="hero__status" aria-hidden="true"><i></i>SANI-CAM <span>/</span> RECORDING</div>
+    <div class="container">
+      <div class="sani-crumbs">衛生管理AI SANICAM / 手指衛生</div>
+      <div class="hero__en"><span class="eyes" aria-hidden="true"><i></i><i></i></span>WHO準拠の手洗い教育＆採点</div>
+      <h1 class="hero__title">手指衛生から<br>清潔な現場をつくる</h1>
+      <div class="hero__body">
+        <p>WHO対応の6ステップ手洗いをAIが教育・採点し、履歴を自動記録。バーチャルセキュリティゲートと連携すれば、現場の手洗い実施率100%を目指せます。</p>
+      </div>
+      <div class="sani-actions">
+        <a class="sani-btn sani-btn--primary" href="#features">特長を見る<span aria-hidden="true">→</span></a>
+        <a class="sani-btn" href="#video">デモ動画<span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
 
-  <section id="features" class="bear-highlight section">
-    <div class="bear-highlight__inner container">
-      <div class="bear-highlight__visual">
-        <img src="./assets/sanicam-kit.png" alt="衛生管理AI SANICAMのオールインワン構成">
+  <!-- 製品の特長 -->
+  <section id="features" class="sec">
+    <div class="container sani-split">
+      <div class="sani-split__vis">
+        <div class="sani-media sani-media--product hud-frame">
+          <img src="./assets/sanicam-kit.png" alt="衛生管理AI SANICAMのオールインワン構成">
+          <span class="hud-tag" aria-hidden="true">UNIT · SANICAM</span>
+        </div>
       </div>
-      <div class="bear-highlight__content">
-        <div class="kicker">製品の特長</div>
-        <h2 class="h2">衛生管理を1台に集約</h2>
-        <ul class="bear-highlight__list">
+      <div class="sani-split__body">
+        <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Features<span class="jp">— 製品の特長</span></div>
+        <h2 class="sani-h2">衛生管理を1台に集約</h2>
+        <ul class="sani-list">
           <li>
-            <span class="bear-highlight__item-title">オールインワン設計</span>
-            <span class="bear-highlight__item-sub">カメラ・AI・ディスプレイ・スピーカーを一体化</span>
+            <span class="sani-list__num">01</span>
+            <span class="sani-list__title">オールインワン設計</span>
+            <span class="sani-list__sub">カメラ・AI・ディスプレイ・スピーカーを一体化</span>
           </li>
           <li>
-            <span class="bear-highlight__item-title">社員証に対応</span>
-            <span class="bear-highlight__item-sub">QR/バーコードの社員証で個人を紐づけ</span>
+            <span class="sani-list__num">02</span>
+            <span class="sani-list__title">社員証に対応</span>
+            <span class="sani-list__sub">QR/バーコードの社員証で個人を紐づけ</span>
           </li>
           <li>
-            <span class="bear-highlight__item-title">オフライン運用</span>
-            <span class="bear-highlight__item-sub">Wi-Fiがなくても教育・採点が継続</span>
+            <span class="sani-list__num">03</span>
+            <span class="sani-list__title">オフライン運用</span>
+            <span class="sani-list__sub">Wi-Fiがなくても教育・採点が継続</span>
           </li>
         </ul>
       </div>
     </div>
   </section>
 
-  <section id="precision" class="ai-gate section">
+  <!-- 精度 -->
+  <section id="precision" class="sec sec--raised">
     <div class="container">
-      <div class="ai-gate__intro">
-        <div class="ai-gate__media">
-          <img src="./assets/hand-visual.jpg" alt="手洗い手順の判定画面イメージ">
+      <div class="sani-split sani-split--head">
+        <div class="sani-split__vis">
+          <div class="sani-media hud-frame">
+            <img src="./assets/hand-visual.jpg" alt="手洗い手順の判定画面イメージ" loading="lazy">
+            <span class="hud-tag" aria-hidden="true">CAM-01 · STEP DETECT</span>
+          </div>
         </div>
-        <div class="ai-gate__copy">
-          <div class="kicker">精度</div>
-          <h2 class="h2">未実施検出99.9%、各手順の平均検出精度90%</h2>
-          <p class="lead">手洗い未実施を高精度で検出し、各手順の抜け漏れも見逃しません。AI判定はすべてエッジ処理のため、撮影データが外部に出ない安全設計です。</p>
+        <div class="sani-split__body">
+          <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Precision<span class="jp">— 精度</span></div>
+          <h2 class="sani-h2">未実施検出<span class="sani-num">99.9%</span>、<br>各手順の平均検出精度<span class="sani-num">90%</span></h2>
+          <p class="sani-lead">手洗い未実施を高精度で検出し、各手順の抜け漏れも見逃しません。AI判定はすべてエッジ処理のため、撮影データが外部に出ない安全設計です。</p>
         </div>
       </div>
-      <div class="ai-gate__defense">
-        <article class="defense-card">
-          <div class="defense-card__media">
-            <img src="./assets/step-detection.png" alt="各手順の判定結果を示すUI">
+      <div class="sani-pair">
+        <article class="sani-pair__item">
+          <div class="sani-media sani-media--ui hud-frame">
+            <img src="./assets/step-detection.png" alt="各手順の判定結果を示すUI" loading="lazy">
           </div>
-          <div class="defense-card__body">
-            <h3 class="h3">手順ごとのスコア</h3>
-            <p>6ステップの得点を可視化し、苦手な手順を即座にフィードバック。個人別の教育プランに活用できます。</p>
-          </div>
+          <div class="sani-pair__meta">A <span>/</span> SCORE</div>
+          <h3 class="sani-h3">手順ごとのスコア</h3>
+          <p>6ステップの得点を可視化し、苦手な手順を即座にフィードバック。個人別の教育プランに活用できます。</p>
         </article>
-        <article class="defense-card">
-          <div class="defense-card__media">
-            <img src="./assets/gate-link.png" alt="バーチャルセキュリティゲートとの連携イメージ">
+        <article class="sani-pair__item">
+          <div class="sani-media sani-media--ui hud-frame">
+            <img src="./assets/gate-link.png" alt="バーチャルセキュリティゲートとの連携イメージ" loading="lazy">
           </div>
-          <div class="defense-card__body">
-            <h3 class="h3">ゲート連携</h3>
-            <p>手洗い未実施を検出すると、バーチャルセキュリティゲートが警告し、実施率100%を仕組みで後押しします。</p>
-          </div>
+          <div class="sani-pair__meta">B <span>/</span> GATE LINK</div>
+          <h3 class="sani-h3">ゲート連携</h3>
+          <p>手洗い未実施を検出すると、バーチャルセキュリティゲートが警告し、実施率100%を仕組みで後押しします。</p>
         </article>
       </div>
     </div>
   </section>
 
-  <section id="video" class="container section">
-    <div class="kicker">手洗い教育・採点の動画</div>
-    <h2 class="h2">現場で動くSANICAMを動画で確認</h2>
-    <p class="lead">AIが各手順を判定し、苦手ポイントをフィードバックする様子を動画でご覧いただけます。お手元の映像に差し替えてご活用ください。</p>
-    <!-- YouTube 埋め込み（差し替え想定）-->
-    <iframe
-      class="video-embed"
-      src="https://www.youtube.com/embed/LImGUkCrEVg?si=pjz7m7JoMt24ftfV" 
-      title="衛生管理AI SANICAM デモ"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allowfullscreen>
-    </iframe>
-  </section>
-
-  <section id="capability" class="container section">
-    <div class="kicker">特徴・機能</div>
-    <h2 class="h2">教育と運用の両方をAIでカバー</h2>
-    <div class="grid-3">
-      <article class="card">
-        <h3 class="h3">教育モード</h3>
-        <p>WHO準拠の正しい手洗いを動画と音声で案内しながら、手順ごとにリアルタイム採点します。</p>
-      </article>
-      <article class="card">
-        <h3 class="h3">弱点分析</h3>
-        <p>手順別の得意・不得意を自動集計し、重点指導が必要なポイントを可視化します。</p>
-      </article>
-      <article class="card">
-        <h3 class="h3">組織ダッシュボード</h3>
-        <p>部署・シフト別の教育成果と手洗い実施率を可視化し、衛生レベルを対外的にアピールできます。</p>
-      </article>
-    </div>
-  </section>
-
-  <section id="comparison" class="container section">
-    <div class="kicker">人による教育との比較</div>
-    <h2 class="h2">評価基準の明確化で心理的負担も軽減</h2>
-    <div class="grid-2">
-      <article class="card">
-        <h3 class="h3">公平な評価</h3>
-        <p>評価基準をAIで統一し、指導者によるばらつきを排除。安心して受講できる環境を提供します。</p>
-      </article>
-      <article class="card">
-        <h3 class="h3">効率化</h3>
-        <p>自動採点と動画教材により、指導担当者の心理的・時間的負担を軽減。教育リソースを本来業務に集中できます。</p>
-      </article>
-    </div>
-  </section>
-
-  <section id="contact" class="cta section">
+  <!-- 動画 -->
+  <section id="video" class="sec">
     <div class="container">
-      <h2 class="h2">導入やデモのご相談はこちら</h2>
-      <p class="lead">SANICAMの機能・価格・連携方法を担当者がご案内します。オンラインデモもお気軽にお申し込みください。</p>
-      <div class="hero-bear__actions" style="justify-content:center;">
-        <a class="btn" href="mailto:info@nano-factory.net">メールで相談する</a>
-        <a class="btn secondary" href="../virtual-security-gate-lp/index.html#contact">バーチャルセキュリティゲートと一緒に相談</a>
+      <div class="sec-head">
+        <div>
+          <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Demo Video<span class="jp">— 手洗い教育・採点の動画</span></div>
+          <h2>現場で動くSANICAMを動画で確認</h2>
+        </div>
+        <p>AIが各手順を判定し、苦手ポイントをフィードバックする様子を動画でご覧いただけます。お手元の映像に差し替えてご活用ください。</p>
+      </div>
+      <!-- YouTube 埋め込み（差し替え想定）-->
+      <div class="sani-video hud-frame">
+        <iframe
+          class="video-embed"
+          src="https://www.youtube.com/embed/LImGUkCrEVg?si=pjz7m7JoMt24ftfV"
+          title="衛生管理AI SANICAM デモ"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
       </div>
     </div>
   </section>
 
-  <footer class="site-footer">
+  <!-- 特徴・機能 -->
+  <section id="capability" class="sec sec--raised">
     <div class="container">
-      <p>&copy; Nano Factory</p>
+      <div class="sec-head sec-head--solo">
+        <div>
+          <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Capability<span class="jp">— 特徴・機能</span></div>
+          <h2>教育と運用の両方をAIでカバー</h2>
+        </div>
+      </div>
+      <div class="sani-cols sani-cols--3">
+        <article class="sani-col">
+          <div class="sani-col__num">01</div>
+          <h3 class="sani-h3">教育モード</h3>
+          <p>WHO準拠の正しい手洗いを動画と音声で案内しながら、手順ごとにリアルタイム採点します。</p>
+        </article>
+        <article class="sani-col">
+          <div class="sani-col__num">02</div>
+          <h3 class="sani-h3">弱点分析</h3>
+          <p>手順別の得意・不得意を自動集計し、重点指導が必要なポイントを可視化します。</p>
+        </article>
+        <article class="sani-col">
+          <div class="sani-col__num">03</div>
+          <h3 class="sani-h3">組織ダッシュボード</h3>
+          <p>部署・シフト別の教育成果と手洗い実施率を可視化し、衛生レベルを対外的にアピールできます。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 人による教育との比較 -->
+  <section id="comparison" class="sec">
+    <div class="container">
+      <div class="sec-head sec-head--solo">
+        <div>
+          <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Comparison<span class="jp">— 人による教育との比較</span></div>
+          <h2>評価基準の明確化で心理的負担も軽減</h2>
+        </div>
+      </div>
+      <div class="sani-cols sani-cols--2">
+        <article class="sani-col">
+          <div class="sani-col__num">A</div>
+          <h3 class="sani-h3">公平な評価</h3>
+          <p>評価基準をAIで統一し、指導者によるばらつきを排除。安心して受講できる環境を提供します。</p>
+        </article>
+        <article class="sani-col">
+          <div class="sani-col__num">B</div>
+          <h3 class="sani-h3">効率化</h3>
+          <p>自動採点と動画教材により、指導担当者の心理的・時間的負担を軽減。教育リソースを本来業務に集中できます。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="cta">
+    <div class="container">
+      <div>
+        <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Contact</div>
+        <h2>導入やデモのご相談はこちら</h2>
+        <p>SANICAMの機能・価格・連携方法を担当者がご案内します。オンラインデモもお気軽にお申し込みください。</p>
+      </div>
+      <div class="cta__btns">
+        <a class="btn-block btn-block--primary" href="#" data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M="><span><small>MAIL</small>メールで相談する</span><span aria-hidden="true">→</span></a>
+        <a class="btn-block" href="../virtual-security-gate-lp/index.html#contact"><span><small>WITH VIRTUAL SECURITY GATE</small>バーチャルセキュリティゲートと一緒に相談</span><span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- フッター（トップページと共通） -->
+  <footer id="about" class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3>About</h3>
+          <p>nanoFACTORY の技術の根底はロボット開発・フィジカルAI。製造業の現場で数々の課題を解決してきた経験から磨き上げたソフトウェアの販売と、AIエンジニアが現場に直接入り込む<strong>FDE(Forward Deployed Engineer)</strong>サービスが、私たちの事業です。</p>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>〒107-0062 東京都港区南青山５-11-14 H&amp;M南青山イースト308</p>
+          <p>Email: <span data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=" data-m-text></span></p>
+        </div>
+        <div>
+          <h3>Links</h3>
+          <ul class="footer-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../solutions/">ソリューション</a></li>
+            <li><a href="../products-services/">製品・サービス</a></li>
+            <li><a href="../news/">ニュース</a></li>
+            <li><a href="../blog/">ブログ</a></li>
+            <li><a href="../company/">会社情報</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright"><span>&copy; <span id="year"></span> nanoFACTORY Co. All rights reserved.</span><span>nano-factory.net</span></div>
     </div>
   </footer>
+
+<script>
+    (function () {
+      var y = document.getElementById("year");
+      if (y) y.textContent = new Date().getFullYear();
+    })();
+  </script>  <!-- ヒーローの流体ワイヤーフレーム（site.js は要素が無いと各処理が no-op になる） -->
+  <script src="../site.js"></script>
+  <script src="../mail.js"></script>
 </body>
 </html>

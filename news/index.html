@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>ニュース・事例 | nanoFACTORY</title>
   <meta name="description" content="nanoFACTORYからのお知らせと、全事業(作業認識AI・AI検査・AI監視カメラ)の現場取り組み事例をお届けします。" />
-  <link rel="stylesheet" href="../styles.css" />
-  <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" />
-  <style>
-    /* 親 styles.css の scroll-snap が news ページで暴れるのを抑制 */
-    html, body { scroll-snap-type: none !important; }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Orbitron:wght@400;500&family=JetBrains+Mono:wght@400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="../site.css" />
+  <link rel="stylesheet" href="../pages.css" />
+  <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" sizes="512x512" />
 </head>
 <body>
   <header class="site-header">
@@ -26,31 +26,34 @@
       </button>
       <nav id="site-nav" class="nav">
         <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
+        <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link nav__link--products" href="../nanostep-lp/">作業認識AI</a>
         <a class="nav__link nav__link--products" href="../nanosi-lp/">AI検査</a>
         <a class="nav__link nav__link--products" href="../nanoguard-lp/">AI監視カメラ</a>
         <a class="nav__link nav__link--products" href="../sanicam-lp/hand.html">手指衛生</a>
-        <a class="nav__link" href="../news/">ニュース・事例</a>
+        <span class="nav__sep" aria-hidden="true"></span>
+        <a class="nav__link" href="../news/" aria-current="page">ニュース・事例</a>
         <a class="nav__link" href="../blog/">ブログ</a>
         <a class="nav__link" href="../company/">会社情報</a>
+        <a class="nav__link nav__link--contact" href="../index.html#cta">CONTACT</a>
       </nav>
     </div>
   </header>
 
   <main>
     <!-- ページ見出し -->
-    <section class="lp-section lp-section--white" style="padding-bottom: 1rem;">
-      <div class="container" style="text-align: center;">
-        <div class="lp-kicker">NEWS &amp; CASE STUDIES</div>
-        <h2 style="margin-top: 0.4rem;">ニュース・事例</h2>
-        <p class="lead-text" style="max-width: 640px; margin: 0 auto;">
+    <section class="lp-section lp-section--white">
+      <div class="container text-center">
+        <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>News &amp; Case Studies</div>
+        <h2>ニュース・事例</h2>
+        <p class="lead-text">
           全事業の取り組みとお知らせをまとめてお届けします。新しいものから順に表示しています。
         </p>
       </div>
     </section>
 
     <!-- カードリスト + ページネーション(JSが日付降順ソート・1ページ5件) -->
-    <section id="case-list-section" class="lp-section lp-section--surface" style="padding-top: 1rem;">
+    <section id="case-list-section" class="lp-section lp-section--surface">
       <div class="container">
         <div class="case-list" data-cases data-page-size="5">
 
@@ -63,16 +66,23 @@
             </div>
             <h3 class="case-card__title">慶應義塾大学病院にてSANI-CAMの実証実験を開始</h3>
             <div class="nanostep-story">
-              <div class="nanostep-story__media" style="aspect-ratio: auto; display: grid; grid-template-rows: 1fr 1fr; gap: 0.4rem; background: transparent; border: none;">
-                <img src="../assets/case-keio-sanicam-sink.jpg" alt="病棟の洗面台に設置されたSANI-CAM" style="width:100%; height:100%; object-fit: cover; border-radius: 14px; border: 1px solid #e5e7eb;" onerror="this.style.display='none'" />
-                <img src="../assets/case-keio-sanicam-training.jpg" alt="研修医向け手指衛生講習会の様子(顔は匿名化処理)" style="width:100%; height:100%; object-fit: cover; border-radius: 14px; border: 1px solid #e5e7eb;" onerror="this.style.display='none'" />
-              </div>
-              <div class="nanostep-story__body" style="align-self: stretch; display: grid; grid-template-rows: 1fr 1fr; gap: 0.4rem;">
-                <div style="display: flex; flex-direction: column; justify-content: center;">
-                  <p>慶應義塾大学病院 感染制御部様と共同で、当社の<strong>作業認識AI</strong>を応用したSANI-CAM(AI手指衛生モニタリングカメラ)の実証実験を開始しました。</p>
-                  <p>あわせて、<strong>研修医向けの手指衛生教育講習会</strong>や<strong>医学部学生への授業</strong>でもSANI-CAMを活用。「正しい洗い方ができているか」をその場で客観的にフィードバックし、教育と現場運用を一気通貫でつなぎます。</p>
-                  <span class="nanostep-story__highlight">AIによる手技の数値化が、教育効果にどう寄与するかを検証中</span>
+              <div class="nanostep-story__media hud-frame ss ss--images" data-slideshow data-interval="4800" aria-label="慶應義塾大学病院での実証の様子">
+                <div class="ss-stage">
+                  <figure class="ss-slide is-active">
+                    <img src="../assets/opt/case-keio-sanicam-sink.jpg" alt="病棟の洗面台に設置されたSANI-CAM" />
+                    <figcaption class="ss-cap">病棟の洗面台に設置されたSANI-CAM</figcaption>
+                  </figure>
+                  <figure class="ss-slide">
+                    <img src="../assets/opt/case-keio-sanicam-training.jpg" alt="研修医向け手指衛生講習会の様子" />
+                    <figcaption class="ss-cap">研修医向け手指衛生講習会の様子</figcaption>
+                  </figure>
                 </div>
+                <div class="ss-ui" aria-hidden="true"><span class="ss-count"><b>01</b> / 02</span><div class="ss-bar"><i></i><i></i></div></div>
+              </div>
+              <div class="nanostep-story__body">
+                <p>慶應義塾大学病院 感染制御部様と共同で、当社の<strong>作業認識AI</strong>を応用したSANI-CAM(AI手指衛生モニタリングカメラ)の実証実験を開始しました。</p>
+                <p>あわせて、<strong>研修医向けの手指衛生教育講習会</strong>や<strong>医学部学生への授業</strong>でもSANI-CAMを活用。「正しい洗い方ができているか」をその場で客観的にフィードバックし、教育と現場運用を一気通貫でつなぎます。</p>
+                <span class="nanostep-story__highlight">AIによる手技の数値化が、教育効果にどう寄与するかを検証中</span>
               </div>
             </div>
           </a>
@@ -128,13 +138,36 @@
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer id="about" class="site-footer">
     <div class="container">
-      <p>&copy; nanoFACTORY</p>
+      <div class="footer-grid">
+        <div>
+          <h3>About</h3>
+          <p>nanoFACTORY の技術の根底はロボット開発・フィジカルAI。製造業の現場で数々の課題を解決してきた経験から磨き上げたソフトウェアの販売と、AIエンジニアが現場に直接入り込む<strong>FDE(Forward Deployed Engineer)</strong>サービスが、私たちの事業です。</p>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>〒107-0062 東京都港区南青山５-11-14 H&amp;M南青山イースト308</p>
+          <p>Email: <span data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=" data-m-text></span></p>
+        </div>
+        <div>
+          <h3>Links</h3>
+          <ul class="footer-links">
+            <li><a href="../index.html#hero">Home</a></li>
+            <li><a href="../solutions/">ソリューション</a></li>
+            <li><a href="../products-services/">製品・サービス</a></li>
+            <li><a href="../news/">ニュース</a></li>
+            <li><a href="../blog/">ブログ</a></li>
+            <li><a href="../company/">会社情報</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright"><span>&copy; <span id="year"></span> nanoFACTORY Co. All rights reserved.</span><span>nano-factory.net</span></div>
     </div>
   </footer>
 
   <script src="../script.js"></script>
+  <script src="../site.js"></script>
   <script>
     // 事例リスト: 日付降順ソート + ページネーション(5件/page)
     (function () {
@@ -191,5 +224,6 @@
       render();
     })();
   </script>
+  <script src="../mail.js"></script>
 </body>
 </html>

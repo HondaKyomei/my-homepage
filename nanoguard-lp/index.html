@@ -1140,7 +1140,7 @@
         用途・環境をお聞きして最適な構成をご提案します。
       </p>
       <div class="cta-buttons">
-        <a class="cta-button" id="nanoguard-mail-btn" href="#">メールで相談する</a>
+        <a class="cta-button" id="nanoguard-mail-btn" href="#" data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=">メールで相談する</a>
         <a class="cta-button cta-button--outline" href="../products-services/">製品一覧に戻る</a>
       </div>
     </div>
@@ -1153,10 +1153,6 @@
   </footer>
 
   <script>
-    const email = "contact@nano-factory.jp";
-    const btn = document.getElementById("nanoguard-mail-btn");
-    if (btn) btn.href = `mailto:${email}`;
-
     // ── Hero scan animation ──
     (function () {
       const scanEl  = document.getElementById('heroScanLine');
@@ -1254,5 +1250,6 @@
     startAuto();
   </script>
   <script src="../script.js"></script>
+  <script src="../mail.js"></script>
 </body>
 </html>

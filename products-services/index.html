@@ -5,10 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <meta
     name="description"
-    content="nanoFACTORYの3事業：作業解析AIエージェント「nanoSTEP / VF3.0」、AI自動検査SI「nanoSI」、AI監視カメラ「nanoGUARD」をご紹介します。"
+    content="nanoFACTORYの3事業：作業解析AIエージェント「nanoSTEP / VF3.0」、AI自動検査SI「nanoI」、AI監視カメラ「nanoGUARD」をご紹介します。"
   />
   <title>製品・サービス | nanoFACTORY</title>
-  <link rel="stylesheet" href="../styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Orbitron:wght@400;500&family=JetBrains+Mono:wght@400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="../site.css" />
+  <link rel="stylesheet" href="../pages.css" />
+  <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" sizes="512x512" />
 </head>
 <body>
   <header class="site-header">
@@ -24,19 +29,23 @@
       </button>
       <nav id="site-nav" class="nav">
         <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
+        <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link nav__link--products" href="../nanostep-lp/">作業認識AI</a>
         <a class="nav__link nav__link--products" href="../nanosi-lp/">AI検査</a>
         <a class="nav__link nav__link--products" href="../nanoguard-lp/">AI監視カメラ</a>
         <a class="nav__link nav__link--products" href="../sanicam-lp/hand.html">手指衛生</a>
+        <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link" href="../news/">ニュース・事例</a>
         <a class="nav__link" href="../blog/">ブログ</a>
         <a class="nav__link" href="../company/">会社情報</a>
+        <a class="nav__link nav__link--contact" href="../index.html#cta">CONTACT</a>
       </nav>
     </div>
   </header>
 
   <main class="section">
     <div class="container">
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Products &amp; Services</div>
       <h1>製品・サービス</h1>
       <p class="lead-text">
         nanoFACTORYは3つの事業で、製造現場の課題をまとめて解決します。
@@ -47,7 +56,7 @@
         <a class="product-card" href="../nanostep-lp/">
           <div class="product-card__media">
             <!-- TODO: AR×実習生 or ロボット×フィジカルAI 写真に差し替え予定 -->
-            <img src="../assets/products-services-card-nanostep-work-management.png" alt="nanoSTEP 作業解析AIエージェント VF3.0" loading="lazy" />
+            <img src="../assets/opt/nanostep-hand-recognition.jpg" alt="nanoSTEP 作業解析AIエージェント VF3.0 の画面" loading="lazy" />
           </div>
           <div class="product-card__body">
             <span class="product-card__label">作業解析AIエージェント "VF3.0"</span>
@@ -62,11 +71,11 @@
 
         <a class="product-card" href="../nanosi-lp/">
           <div class="product-card__media">
-            <img src="../assets/products-services-card-nanosi-system.png" alt="nanoSI AI自動検査システムインテグレーション" loading="lazy" />
+            <img src="../assets/opt/nanosi-gear-detection.jpg" alt="nanoI AI外観検査の判定画面" loading="lazy" />
           </div>
           <div class="product-card__body">
             <span class="product-card__label">AI自動検査 システムインテグレーション</span>
-            <h2>nanoSI</h2>
+            <h2>nanoI</h2>
             <p>
               AI内製開発力を持つSIベンダー。<br />
               高額・非効率なコンポーネントをnanoFACTORY製AIに置き換え、確実に動く検査システムを構築します。
@@ -77,7 +86,7 @@
 
         <a class="product-card" href="../nanoguard-lp/">
           <div class="product-card__media">
-            <img src="../assets/products-services-card-nanoguard-visual.png" alt="nanoGUARD AI監視・ルール順守カメラ" loading="lazy" />
+            <img src="../assets/opt/nanoguard-detection.jpg" alt="nanoGUARD AI監視・ルール順守カメラの検知画面" loading="lazy" />
           </div>
           <div class="product-card__body">
             <span class="product-card__label">AI監視・ルール順守カメラシステム</span>
@@ -94,12 +103,35 @@
     </div>
   </main>
 
-  <footer class="site-footer">
+  <footer id="about" class="site-footer">
     <div class="container">
-      <p>&copy; nanoFACTORY Co.</p>
+      <div class="footer-grid">
+        <div>
+          <h3>About</h3>
+          <p>nanoFACTORY の技術の根底はロボット開発・フィジカルAI。製造業の現場で数々の課題を解決してきた経験から磨き上げたソフトウェアの販売と、AIエンジニアが現場に直接入り込む<strong>FDE(Forward Deployed Engineer)</strong>サービスが、私たちの事業です。</p>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>〒107-0062 東京都港区南青山５-11-14 H&amp;M南青山イースト308</p>
+          <p>Email: <span data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=" data-m-text></span></p>
+        </div>
+        <div>
+          <h3>Links</h3>
+          <ul class="footer-links">
+            <li><a href="../index.html#hero">Home</a></li>
+            <li><a href="../solutions/">ソリューション</a></li>
+            <li><a href="../products-services/">製品・サービス</a></li>
+            <li><a href="../news/">ニュース</a></li>
+            <li><a href="../blog/">ブログ</a></li>
+            <li><a href="../company/">会社情報</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright"><span>&copy; <span id="year"></span> nanoFACTORY Co. All rights reserved.</span><span>nano-factory.net</span></div>
     </div>
   </footer>
 
   <script src="../script.js"></script>
+  <script src="../mail.js"></script>
 </body>
 </html>

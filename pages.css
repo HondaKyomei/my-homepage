@@ -1,0 +1,169 @@
+/* =========================================================
+   nanoFACTORY pages.css — サブページ共通スタイル（design-matte-2026）
+   site.css のトークン／ヘッダー／フッター／.label/.eyes/.sec/.more/.btn-block
+   を前提に、各サブページ固有クラスのみを定義する。
+   対象: company/ news/ solutions/ products-services/
+   ========================================================= */
+
+/* ---------- 汎用セクション ---------- */
+.section{padding-block:clamp(72px,10vw,128px)}
+.text-center{text-align:center}
+.text-center .label{justify-content:center}
+.text-center .lead-text{margin-inline:auto}
+
+/* ---------- LP系ヒーロー（サブページ導入部） ---------- */
+.lp-hero{background:var(--deep);color:var(--ink)}
+.lp-hero .container{padding-block:clamp(96px,14vw,168px) clamp(56px,8vw,88px)}
+.lp-hero__inner{max-width:52em}
+.lp-h1{font-weight:500;font-size:clamp(28px,4.2vw,48px);line-height:1.5;letter-spacing:.05em;margin-top:22px;max-width:18em;text-wrap:balance}
+.lp-lead{margin-top:26px;max-width:42em;color:rgba(255,255,255,.72);font-size:15px;line-height:1.9}
+.lp-btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px}
+
+/* ---------- LPセクション（白/サーフェス = paper/raised へマップ） ---------- */
+.lp-section{padding-block:clamp(72px,10vw,128px)}
+.lp-section--white{background:var(--paper)}
+.lp-section--surface,.lp-section--tinted{background:var(--raised);border-block:1px solid var(--line)}
+.lp-section h2{margin-top:14px;font-weight:500;font-size:clamp(24px,3vw,36px);line-height:1.5;letter-spacing:.05em;text-wrap:balance}
+.lead-text{color:var(--ink-2);max-width:44em;margin-top:16px;font-size:14.5px;line-height:1.9}
+
+/* main.section 直下の見出し（products-services 一覧） */
+main.section h1{font-weight:500;font-size:clamp(28px,4vw,44px);line-height:1.5;letter-spacing:.05em}
+main.section .lead-text{margin-top:20px}
+
+/* ---------- ボタン（矩形・1px枠。primary=ink塗り、hover=accent） ---------- */
+.cta-buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+.cta-button{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;font-family:var(--jp);font-size:13.5px;letter-spacing:.06em;text-decoration:none;border:1px solid var(--ink);background:var(--ink);color:var(--deep);transition:background .3s,border-color .3s,color .3s}
+.cta-button:hover{background:var(--accent);border-color:var(--accent);color:var(--deep)}
+.cta-button--outline{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.cta-button--outline:hover{background:rgba(255,255,255,.05);border-color:var(--ink);color:var(--ink)}
+
+/* ---------- 末尾CTAセクション（各ページ共通の問い合わせブロック） ---------- */
+.cta-section{background:var(--deep);color:var(--ink)}
+.cta-section .container{padding-block:clamp(72px,10vw,112px)}
+.cta-section h2{font-weight:500;font-size:clamp(24px,3vw,34px);line-height:1.5;letter-spacing:.05em;max-width:22em}
+.cta-section .lead-text{margin-top:18px;color:var(--ink-2);max-width:38em}
+
+/* ---------- flow-steps（導入フロー・番号マーカー） ---------- */
+.flow-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px}
+.flow-step{background:var(--paper);padding:32px 26px}
+.flow-step__num{font-family:var(--orb);font-weight:400;font-size:16px;letter-spacing:.15em;color:var(--cyan)}
+.flow-step h3{margin-top:14px;font-weight:500;font-size:16px;line-height:1.65;letter-spacing:.03em}
+.flow-step p{margin-top:12px;font-size:13.5px;color:var(--ink-2);line-height:1.85}
+
+/* ---------- feature-grid（コンプラ強化・特長カード） ---------- */
+.feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px}
+.feature-card{background:var(--paper);padding:32px 28px}
+.feature-card__num{font-family:var(--orb);font-weight:400;font-size:13px;letter-spacing:.2em;color:var(--cyan)}
+.feature-card h3{margin-top:12px;font-weight:500;font-size:17px;line-height:1.6;letter-spacing:.03em}
+.feature-card p{margin-top:12px;font-size:13.5px;color:var(--ink-2);line-height:1.85}
+
+.solution-cta{margin-top:48px}
+
+/* ---------- case-study / video（solutions 医療機関セクション） ---------- */
+.case-study{margin-top:56px;padding-top:40px;border-top:1px solid var(--line)}
+.case-study__title{font-weight:500;font-size:19px;line-height:1.6;letter-spacing:.03em}
+.case-study__desc{margin-top:14px;color:var(--ink-2);font-size:14px;line-height:1.9;max-width:44em}
+.video-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:32px}
+.video-item video{width:100%;display:block;background:var(--deep);filter:var(--img-filter)}
+.video-caption{margin-top:10px;font-size:12.5px;color:var(--ink-3);letter-spacing:.04em}
+
+/* ---------- company ページ ---------- */
+.company-lead{max-width:46em}
+.company-summary{display:grid;grid-template-columns:1.1fr .9fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:32px}
+.company-summary__card,.company-profile{background:var(--paper);padding:clamp(24px,3vw,40px)}
+.company-summary__card h3,.company-profile h3{font-weight:500;font-size:16px;line-height:1.6;letter-spacing:.03em;margin:0 0 16px}
+.company-summary__card p{color:var(--ink-2);font-size:14px;line-height:1.9}
+.company-summary__card p + p{margin-top:14px}
+.company-profile ul{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.company-profile li{color:var(--ink-2);font-size:13.5px;line-height:1.85;padding:12px 0;border-bottom:1px solid var(--line)}
+.company-profile li:first-child{padding-top:0}
+.company-profile li:last-child{border-bottom:0;padding-bottom:0}
+.company-profile strong{color:var(--ink);font-weight:500}
+.company-tech-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:32px}
+.company-tech-card{background:var(--paper)}
+.company-tech-card img{width:100%;height:200px;object-fit:cover;filter:var(--img-filter);display:block}
+.company-tech-card__body{padding:24px}
+.company-tech-card__label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--cyan);text-transform:uppercase;margin-bottom:10px}
+.company-tech-card h3{font-weight:500;font-size:15px;line-height:1.6;margin:0 0 10px}
+.company-tech-card p{color:var(--ink-2);font-size:13px;line-height:1.85;margin:0}
+
+/* ---------- news: case-list / case-card ---------- */
+.case-list{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:24px}
+.case-card{position:relative;display:block;text-decoration:none;color:inherit;background:var(--paper);padding:clamp(24px,4vw,40px);transition:background .3s}
+.case-card:hover{background:var(--raised)}
+.case-card::after{content:"→";position:absolute;top:clamp(24px,4vw,40px);right:clamp(24px,4vw,40px);font-family:var(--en);font-size:18px;color:var(--ink-3);transition:transform .3s,color .3s}
+.case-card:hover::after{transform:translateX(6px);color:var(--accent)}
+.case-card__meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-right:36px}
+.case-card__date{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-3)}
+.case-card__kicker{font-family:var(--en);font-size:11px;letter-spacing:.1em;color:var(--cyan);text-transform:uppercase}
+.case-card__title{margin-top:14px;font-weight:500;font-size:18px;line-height:1.65;letter-spacing:.03em;max-width:34em;padding-right:36px}
+
+.nanostep-story{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:24px;align-items:center}
+.nanostep-story--reverse .nanostep-story__media{order:2}
+.nanostep-story__media{position:relative;background:var(--img-bg);aspect-ratio:4/3;overflow:hidden}
+.nanostep-story__media img{width:100%;height:100%;object-fit:cover;filter:var(--img-filter)}
+.nanostep-story__media.ss--images{aspect-ratio:4/3}
+.nanostep-story__fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--ink-3);font-size:12.5px;text-align:center;background:var(--img-bg)}
+.nanostep-story__fallback-icon{font-size:26px;filter:grayscale(1) opacity(.7)}
+.nanostep-story__body p{color:var(--ink-2);font-size:13.5px;line-height:1.9}
+.nanostep-story__body p + p{margin-top:12px}
+.nanostep-story__body strong{color:var(--ink);font-weight:500}
+.nanostep-story__highlight{display:block;margin-top:16px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--cyan)}
+
+.case-pager{display:flex;justify-content:flex-start;gap:6px;margin-top:40px;flex-wrap:wrap}
+.case-pager:empty{display:none}
+.case-pager__btn{min-width:38px;padding:9px 13px;border:1px solid var(--line-strong);background:transparent;color:var(--ink-2);font-family:var(--en);font-size:12px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+.case-pager__btn:hover:not(:disabled){border-color:var(--ink);color:var(--ink)}
+.case-pager__btn.is-active{background:var(--ink);border-color:var(--ink);color:var(--deep)}
+.case-pager__btn:disabled{opacity:.35;cursor:default}
+
+/* ---------- products-services: product-card-grid ---------- */
+.product-card-grid{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px}
+.product-card{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);text-decoration:none;color:inherit;background:var(--paper);transition:background .3s}
+.product-card:hover{background:var(--raised)}
+.product-card__media{aspect-ratio:16/10;overflow:hidden;background:var(--img-bg)}
+.product-card__media img{width:100%;height:100%;object-fit:cover;filter:var(--img-filter);transition:transform 1s cubic-bezier(.2,.6,.2,1)}
+.product-card:hover .product-card__media img{transform:scale(1.03)}
+.product-card__body{padding:clamp(24px,3vw,44px);align-self:center}
+.product-card__label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--cyan);text-transform:uppercase}
+.product-card__body h2{margin-top:12px;font-family:var(--orb);font-weight:500;font-size:26px;letter-spacing:.03em;color:var(--ink)}
+.product-card__body p{margin-top:16px;color:var(--ink-2);font-size:14px;line-height:1.9}
+.product-card__cta{display:inline-flex;align-items:center;gap:10px;margin-top:20px;font-size:13px;letter-spacing:.06em;color:var(--ink)}
+.product-card__cta::after{content:"→";transition:transform .3s}
+.product-card:hover .product-card__cta::after{transform:translateX(6px)}
+
+/* ---------- bear-detection-ai.html 固有 ---------- */
+.product{padding-block:clamp(96px,13vw,152px) clamp(64px,9vw,96px);background:var(--deep);color:var(--ink)}
+.product-inner{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,64px);align-items:center}
+.product-media{aspect-ratio:4/3}
+.product-media img{width:100%;height:100%;object-fit:cover;filter:var(--img-filter)}
+.product-text h1{margin-top:18px;font-weight:500;font-size:clamp(28px,4vw,42px);line-height:1.5;letter-spacing:.05em;color:var(--ink)}
+.product-text > p{margin-top:20px;color:rgba(255,255,255,.72);font-size:14.5px;line-height:1.9}
+.product-text ul{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:10px}
+.product-text li{position:relative;padding-left:20px;color:var(--ink-2);font-size:13.5px;line-height:1.8}
+.product-text li::before{content:"";position:absolute;left:0;top:.75em;width:6px;height:1px;background:var(--accent)}
+
+.problem{background:var(--raised);border-block:1px solid var(--line)}
+.problem-inner{max-width:44em}
+.problem-inner h2{font-weight:500;font-size:clamp(24px,3vw,32px);line-height:1.5;letter-spacing:.05em}
+.problem-inner p{margin-top:16px;color:var(--ink-2);font-size:14px;line-height:1.9}
+.problem-inner p + p{margin-top:16px}
+
+.effect{padding-block:clamp(72px,10vw,112px)}
+.effect > .container > h2{font-weight:500;font-size:clamp(24px,3vw,32px);line-height:1.5;letter-spacing:.05em}
+.effect-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px}
+.effect-item{background:var(--paper);padding:32px 28px}
+.effect-item h3{font-weight:500;font-size:16px;line-height:1.6;letter-spacing:.03em}
+.effect-item p{margin-top:12px;color:var(--ink-2);font-size:13.5px;line-height:1.85}
+
+/* ---------- レスポンシブ（〜960px：2カラム系を1カラムへ） ---------- */
+@media (max-width:960px){
+  .product-inner,.nanostep-story,.company-summary,.product-card{grid-template-columns:minmax(0,1fr)}
+  .company-tech-grid,.effect-grid,.feature-grid,.flow-steps{grid-template-columns:minmax(0,1fr)}
+  .nanostep-story--reverse .nanostep-story__media{order:0}
+  .lp-hero .container{padding-block:clamp(72px,16vw,120px) 48px}
+}
+@media (max-width:560px){
+  .case-card::after{display:none}
+  .case-card__title,.case-card__meta{padding-right:0}
+}

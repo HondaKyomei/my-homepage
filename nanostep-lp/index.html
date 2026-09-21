@@ -1718,7 +1718,7 @@
         オンラインでのヒアリングも承っております。
       </p>
       <div class="cta-buttons">
-        <a class="cta-button" id="nanostep-mail-btn" href="#">メールで相談する</a>
+        <a class="cta-button" id="nanostep-mail-btn" href="#" data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=">メールで相談する</a>
         <a class="cta-button cta-button--outline" href="../products-services/">事業一覧に戻る</a>
       </div>
     </div>
@@ -1731,10 +1731,6 @@
   </footer>
 
   <script>
-    const email = "contact@nano-factory.jp";
-    const btn = document.getElementById("nanostep-mail-btn");
-    if (btn) btn.href = `mailto:${email}`;
-
     // ── ハブオービット: center → 各 sat への枝ラインを動的描画(モバイル/デスクトップ両対応) ──
     (function () {
       const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -1884,5 +1880,6 @@
     })();
   </script>
   <script src="../script.js"></script>
+  <script src="../mail.js"></script>
 </body>
 </html>

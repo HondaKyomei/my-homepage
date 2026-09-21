@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>ソリューション | 課題別AI活用事例 | nanoFACTORY</title>
   <meta name="description" content="製造業の人手不足・コンプライアンス強化、医療機関の手指衛生教育など、業種・課題別のAI活用ソリューションをご紹介します。" />
-  <link rel="stylesheet" href="../styles.css" />
-  <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" />
-  <style>html, body { scroll-snap-type: none !important; }</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Orbitron:wght@400;500&family=JetBrains+Mono:wght@400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="../site.css" />
+  <link rel="stylesheet" href="../pages.css" />
+  <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" sizes="512x512" />
 </head>
 <body>
 
@@ -24,21 +27,24 @@
       </button>
       <nav id="site-nav" class="nav">
         <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
+        <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link nav__link--products" href="../nanostep-lp/">作業認識AI</a>
         <a class="nav__link nav__link--products" href="../nanosi-lp/">AI検査</a>
         <a class="nav__link nav__link--products" href="../nanoguard-lp/">AI監視カメラ</a>
         <a class="nav__link nav__link--products" href="../sanicam-lp/hand.html">手指衛生</a>
+        <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link" href="../news/">ニュース・事例</a>
         <a class="nav__link" href="../blog/">ブログ</a>
         <a class="nav__link" href="../company/">会社情報</a>
+        <a class="nav__link nav__link--contact" href="../index.html#cta">CONTACT</a>
       </nav>
     </div>
   </header>
 
   <!-- Hero -->
-  <section class="lp-hero lp-hero--solutions">
+  <section class="lp-hero">
     <div class="lp-hero__inner container">
-      <div class="lp-kicker">Solutions — 課題から探す</div>
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Solutions<span class="jp">— 課題から探す</span></div>
       <h1 class="lp-h1">あなたの現場の課題に、<br>nanoFACTORYはどう応えるか</h1>
       <p class="lp-lead">
         製品の機能説明ではなく、「どんな現場の課題が、どう解決されるか」をストーリーでご紹介します。<br>
@@ -55,7 +61,7 @@
   <!-- Solution 1: 製造業 - 人手不足・技術継承 -->
   <section id="manufacturing-ojt" class="lp-section lp-section--white">
     <div class="container">
-      <div class="lp-kicker">製造業 | 人手不足・技術継承</div>
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Manufacturing<span class="jp">— 人手不足・技術継承</span></div>
       <h2>ベテランのノウハウをAIに継承し、<br>新人でも標準品質を出せる現場へ</h2>
       <p class="lead-text">
         少子化・早期離職が加速する製造現場では、ベテランに頼ったOJTはもはや持続できません。
@@ -63,22 +69,22 @@
       </p>
       <div class="flow-steps">
         <div class="flow-step">
-          <div class="flow-step__icon">📄</div>
+          <div class="flow-step__num">01</div>
           <h3>手順書・動画を<br>AIでデジタル化</h3>
           <p>AI OCRと動画解析（VSS）が既存の紙・PDF手順書や現場動画を自動的に構造化データへ変換します。</p>
         </div>
         <div class="flow-step">
-          <div class="flow-step__icon">📱</div>
+          <div class="flow-step__num">02</div>
           <h3>アプリで<br>一元管理</h3>
           <p>デジタル化された手順書・動画をアプリで集約。工程ごとに呼び出せ、多品種・多拠点対応も容易になります。</p>
         </div>
         <div class="flow-step">
-          <div class="flow-step__icon">🤖</div>
+          <div class="flow-step__num">03</div>
           <h3>AIカメラで<br>無人OJT</h3>
           <p>作業解析AIが現場カメラ映像をリアルタイム評価。手順の抜け・順序ミスを即座に検知・フィードバックします。</p>
         </div>
         <div class="flow-step">
-          <div class="flow-step__icon">📊</div>
+          <div class="flow-step__num">04</div>
           <h3>常時データ化で<br>品質管理徹底</h3>
           <p>作業時間・手順遵守率・頻出ミスが自動蓄積。標準化と継続的品質改善のサイクルが回り始めます。</p>
         </div>
@@ -92,7 +98,7 @@
   <!-- Solution 2: 製造業 - コンプライアンス強化 -->
   <section id="manufacturing-compliance" class="lp-section lp-section--surface">
     <div class="container">
-      <div class="lp-kicker">製造業 | コンプライアンス・衛生管理</div>
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Manufacturing<span class="jp">— コンプライアンス・衛生管理</span></div>
       <h2>人材の流動化が進む現場でも、<br>AIカメラが24時間ルールを守らせる</h2>
       <p class="lead-text">
         外国人労働者・派遣・パートタイムが増える製造現場では、衛生管理ルールやスマホ禁止などのコンプライアンスを
@@ -129,7 +135,7 @@
   <!-- Solution 3: 医療機関 - 手指衛生教育 -->
   <section id="medical-hygiene" class="lp-section lp-section--white">
     <div class="container">
-      <div class="lp-kicker">医療機関 | 手指衛生教育</div>
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Medical<span class="jp">— 手指衛生教育</span></div>
       <h2>WHO手洗い手順をゲーム感覚で習得。<br>得点化で衛生習慣が定着する</h2>
       <p class="lead-text">
         医療従事者の手指衛生は感染防止の基本でありながら、教育・定着が難しい課題です。
@@ -137,17 +143,17 @@
       </p>
       <div class="flow-steps">
         <div class="flow-step">
-          <div class="flow-step__icon">📖</div>
+          <div class="flow-step__num">01</div>
           <h3>教材で<br>自習</h3>
           <p>WHO準拠の手洗い6ステップを教材動画で予習。いつでも繰り返し確認できます。</p>
         </div>
         <div class="flow-step">
-          <div class="flow-step__icon">📷</div>
+          <div class="flow-step__num">02</div>
           <h3>AIカメラで<br>採点</h3>
           <p>実際に手洗いをするとAIカメラがリアルタイムで各ステップを評価。即座にフィードバックが得られます。</p>
         </div>
         <div class="flow-step">
-          <div class="flow-step__icon">🏆</div>
+          <div class="flow-step__num">03</div>
           <h3>スコアで<br>習慣定着</h3>
           <p>点数が記録されるので、正しい手順を覚えるモチベーションになります。チーム・拠点間での競争も可能です。</p>
         </div>
@@ -184,31 +190,50 @@
   </section>
 
   <!-- CTA -->
-  <section class="section cta-section">
+  <section class="cta-section">
     <div class="container">
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Contact</div>
       <h2>現場の課題をnanoFACTORYに相談する</h2>
       <p class="lead-text">
         どのソリューションが合うかわからない場合も、まずはお気軽にご相談ください。<br>
         現場の状況をお聞きして、最適な構成をご提案します。
       </p>
       <div class="cta-buttons">
-        <a class="cta-button" id="solutions-mail-btn" href="#">メールで相談する</a>
+        <a class="cta-button" id="solutions-mail-btn" href="#" data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=">メールで相談する</a>
         <a class="cta-button cta-button--outline" href="../products-services/">製品・サービス一覧を見る</a>
       </div>
     </div>
   </section>
 
-  <footer class="site-footer">
+  <footer id="about" class="site-footer">
     <div class="container">
-      <p>&copy; nanoFACTORY Co.</p>
+      <div class="footer-grid">
+        <div>
+          <h3>About</h3>
+          <p>nanoFACTORY の技術の根底はロボット開発・フィジカルAI。製造業の現場で数々の課題を解決してきた経験から磨き上げたソフトウェアの販売と、AIエンジニアが現場に直接入り込む<strong>FDE(Forward Deployed Engineer)</strong>サービスが、私たちの事業です。</p>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>〒107-0062 東京都港区南青山５-11-14 H&amp;M南青山イースト308</p>
+          <p>Email: <span data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=" data-m-text></span></p>
+        </div>
+        <div>
+          <h3>Links</h3>
+          <ul class="footer-links">
+            <li><a href="../index.html#hero">Home</a></li>
+            <li><a href="../solutions/">ソリューション</a></li>
+            <li><a href="../products-services/">製品・サービス</a></li>
+            <li><a href="../news/">ニュース</a></li>
+            <li><a href="../blog/">ブログ</a></li>
+            <li><a href="../company/">会社情報</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright"><span>&copy; <span id="year"></span> nanoFACTORY Co. All rights reserved.</span><span>nano-factory.net</span></div>
     </div>
   </footer>
 
-  <script>
-    const email = "contact@nano-factory.jp";
-    const btn = document.getElementById("solutions-mail-btn");
-    if (btn) btn.href = `mailto:${email}`;
-  </script>
   <script src="../script.js"></script>
+  <script src="../mail.js"></script>
 </body>
 </html>
