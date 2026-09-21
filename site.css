@@ -106,7 +106,7 @@ body::before{content:"";position:fixed;inset:0;z-index:70;pointer-events:none;op
 @keyframes blink{50%{opacity:.25}}
 .hero .container{position:relative;padding-block:clamp(88px,12vw,150px) clamp(40px,6vw,64px)}
 .hero__en{font-family:var(--orb);font-weight:400;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.7);display:flex;align-items:center}
-.hero__title{font-weight:500;font-size:clamp(30px,4.8vw,56px);line-height:1.45;letter-spacing:.06em;margin-top:28px;max-width:16em;text-wrap:balance}
+.hero__title{font-weight:500;font-size:clamp(30px,3.7vw,48px);line-height:1.5;letter-spacing:.06em;margin-top:28px;text-wrap:balance}
 .hero__title .soft{color:var(--ink-2)}
 .hero__body{margin-top:32px;max-width:36em;display:grid;gap:14px}
 .hero__body p{color:rgba(255,255,255,.72);font-size:15px}
@@ -272,10 +272,12 @@ a.sol__tag:hover{border-color:var(--accent)}
 @media (max-width:560px){
   .br-sp{display:inline}
   .hero__body--pc{display:none}
-  .hero__body--sp{display:block;margin-top:36px;font-size:15px;line-height:2;color:rgba(255,255,255,.78)}
-  .hero .container{padding-block:96px 44px}
-  .hero__title{margin-top:24px;line-height:1.55}
-  .hero-tabs{margin-top:64px}
+  .hero__body--sp{display:block;font-size:15px;line-height:2;color:rgba(255,255,255,.78)}
+  /* スマホではHeroを1画面いっぱいに：見出し・本文・業種タブを縦に配分 */
+  .hero .container{min-height:calc(100svh - var(--header-h));display:flex;flex-direction:column;padding-block:104px 36px}
+  .hero__title{margin-top:28px;font-size:28px;line-height:1.6}
+  .hero__body--sp{margin-top:auto;padding-top:48px}
+  .hero-tabs{margin-top:56px}
   .hero-media .ss-stage{width:100%;opacity:.4}
   .hero-media__ui{top:46px;width:110px}
   .hero-media__ui .ss-label{display:none}
