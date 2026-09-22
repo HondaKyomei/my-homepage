@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>FDEサービス | 現場に入り込み、動くシステムまで作り切る | nanoFACTORY</title>
+  <meta name="description" content="nanoFACTORYのFDE(Forward Deployed Engineer)サービス。AIエンジニアが現場に入り込み、課題の整理から実装・納品までを一貫して担当します。AIを開発に使い倒すことで、従来のSIより柔軟に、速く、小さな予算で課題を解決します。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Orbitron:wght@400;500&family=JetBrains+Mono:wght@400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="../site.css" />
+  <link rel="stylesheet" href="../pages.css" />
+  <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" sizes="512x512" />
+  <style>
+    /* ---------- FDEページ固有（モック段階のためページ内に記述） ---------- */
+    .fde-hero{position:relative;overflow:hidden}
+    .fde-hero .container{position:relative}
+    .fde-hero-media{position:absolute;top:0;right:0;bottom:0;width:min(58%,900px);margin:0;
+      -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.5) 30%,#000 62%);mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.5) 30%,#000 62%)}
+    .fde-hero-media img{width:100%;height:100%;object-fit:cover;object-position:60% 40%;filter:saturate(.6) brightness(.62) contrast(1.05)}
+    .fde-hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(20,21,23,.9),transparent 45%)}
+    .fde-hero-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(40px,6vw,72px)}
+    .fde-hero .lp-hero__inner{max-width:40em}
+    .fde-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+    .fde-stat{background:rgba(20,21,23,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:20px 22px}
+    .fde-stat b{display:block;font-family:var(--orb);font-weight:400;font-size:22px;letter-spacing:.06em;color:var(--ink)}
+    .fde-stat span{display:block;margin-top:4px;font-size:12.5px;color:var(--ink-2);line-height:1.7}
+
+    /* 比較表 */
+    .fde-compare{width:100%;border-collapse:collapse;margin-top:40px;font-size:13.5px;line-height:1.8}
+    .fde-compare th,.fde-compare td{border:1px solid var(--line);padding:16px 18px;text-align:left;vertical-align:top}
+    .fde-compare thead th{font-weight:500;font-size:13px;letter-spacing:.06em;color:var(--ink-2);background:var(--deep)}
+    .fde-compare tbody th{font-weight:500;color:var(--ink);width:16%;white-space:nowrap}
+    .fde-compare td{color:var(--ink-2)}
+    .fde-compare .is-us{background:rgba(214,145,60,.08);color:var(--ink)}
+    .fde-compare thead .is-us{color:var(--accent);border-color:rgba(214,145,60,.45)}
+    .fde-compare-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+    /* 事例 */
+    .fde-case{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px}
+    .fde-case + .fde-case{margin-top:32px}
+    .fde-case__head{grid-column:1 / -1;background:var(--paper);padding:clamp(24px,3.4vw,44px) clamp(24px,3.4vw,44px) clamp(20px,2.6vw,32px)}
+    .fde-case__head h3{margin-top:14px}
+    .fde-case__body > dl:first-child{margin-top:0}
+    .fde-case__shot{grid-column:1 / -1;margin:0;background:var(--deep);padding:clamp(16px,2.4vw,28px) clamp(16px,2.4vw,28px) 14px}
+    .fde-case__shot img{margin:0 auto;max-height:500px;width:auto;max-width:100%;filter:saturate(.85) brightness(.92)}
+    .fde-case__shot--wide img{max-height:none;width:100%}
+    .fde-case__shot figcaption{margin-top:12px;text-align:center;font-size:12px;color:var(--ink-3);letter-spacing:.04em}
+    .fde-case__body,.fde-case__visual{background:var(--paper);padding:clamp(24px,3.4vw,44px)}
+    .fde-case__visual{background:var(--deep);display:flex;flex-direction:column;justify-content:center;gap:18px}
+    .fde-case__meta{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+    .fde-case__no{font-family:var(--orb);font-size:13px;letter-spacing:.2em;color:var(--accent)}
+    .fde-case__kicker{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--cyan)}
+    .fde-case h3{margin-top:14px;font-weight:500;font-size:clamp(18px,2vw,22px);line-height:1.6;letter-spacing:.03em}
+    .fde-case dl{margin:22px 0 0;display:grid;grid-template-columns:5.5em 1fr;gap:0}
+    .fde-case dt,.fde-case dd{margin:0;padding:12px 0;border-top:1px solid var(--line);font-size:13.5px;line-height:1.85}
+    .fde-case dt{color:var(--ink-3);font-size:12.5px;letter-spacing:.06em}
+    .fde-case dd{color:var(--ink-2)}
+    .fde-case dd strong{color:var(--ink);font-weight:500}
+    .fde-case dd ul{margin:0;padding-left:1.1em}
+    .fde-tags{display:flex;flex-wrap:wrap;gap:8px}
+    .fde-tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-2);border:1px solid var(--line-strong);padding:4px 10px}
+    .fde-terms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+    .fde-term{display:flex;align-items:baseline;gap:10px;border:1px solid rgba(214,145,60,.45);background:rgba(214,145,60,.08);padding:14px 18px}
+    .fde-terms .fde-term{flex-direction:column;gap:4px;padding:12px 14px}
+    .fde-term b{font-family:var(--orb);font-weight:400;font-size:26px;color:var(--ink);letter-spacing:.04em}
+    .fde-term span{font-size:12.5px;color:var(--ink-2)}
+    .fde-diagram{width:100%;height:auto;display:block}
+    .fde-diagram text{font-family:var(--jp);fill:var(--ink-2);font-size:12px}
+    .fde-diagram .t-strong{fill:var(--ink);font-size:13px}
+    .fde-diagram .t-mono{font-family:var(--mono);font-size:10.5px;fill:var(--cyan);letter-spacing:.08em}
+    .fde-diagram .t-ng{fill:#D98A7A;font-size:12px}
+
+    /* 向いているご相談 */
+    .fde-fit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px}
+    .fde-fit li{list-style:none;background:var(--paper);padding:22px 26px 22px 54px;position:relative;font-size:14px;line-height:1.8;color:var(--ink)}
+    .fde-fit li::before{content:"";position:absolute;left:26px;top:31px;width:12px;height:6px;border-left:1.5px solid var(--accent);border-bottom:1.5px solid var(--accent);transform:rotate(-45deg)}
+    .fde-fit li small{display:block;color:var(--ink-2);font-size:12.5px;margin-top:4px}
+    .fde-fit{padding:0}
+
+    /* 費用 */
+    .fde-why{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .fde-price{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px}
+    .fde-price > div{background:var(--paper);padding:28px 26px}
+    .fde-price h3{font-weight:500;font-size:15.5px;line-height:1.6}
+    .fde-price p{margin-top:10px;font-size:13.5px;color:var(--ink-2);line-height:1.85}
+
+    /* FAQ */
+    .fde-faq{margin-top:36px;border-top:1px solid var(--line)}
+    .fde-faq details{border-bottom:1px solid var(--line)}
+    .fde-faq summary{cursor:pointer;list-style:none;padding:22px 40px 22px 0;position:relative;font-size:15px;font-weight:500;line-height:1.7}
+    .fde-faq summary::-webkit-details-marker{display:none}
+    .fde-faq summary::after{content:"+";position:absolute;right:6px;top:18px;font-family:var(--en);font-size:22px;color:var(--ink-3);transition:transform .3s}
+    .fde-faq details[open] summary::after{transform:rotate(45deg)}
+    .fde-faq details p{padding:0 0 22px;color:var(--ink-2);font-size:14px;line-height:1.9;max-width:48em}
+
+    /* CTA */
+    .fde-cta-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:start;margin-top:8px}
+    .fde-cta-btns{display:grid;gap:10px}
+    .fde-next{margin-top:28px;border:1px solid var(--line);padding:22px 24px}
+    .fde-next h3{font-size:13px;font-weight:500;letter-spacing:.08em;color:var(--ink-2)}
+    .fde-next ol{margin:12px 0 0;padding-left:1.3em;color:var(--ink-2);font-size:13.5px;line-height:1.95}
+    .fde-next ol b{color:var(--ink);font-weight:500}
+    .fde-copy{display:inline-flex;align-items:center;gap:8px;margin-top:6px;background:none;border:1px solid var(--line-strong);color:var(--ink-2);font-family:var(--jp);font-size:12px;padding:6px 12px;cursor:pointer}
+    .fde-copy:hover{border-color:var(--ink);color:var(--ink)}
+
+    /* モック用：要確認マーカー（公開前に消す） */
+    .tbd{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:#1B1D20;background:#E8C35A;padding:1px 7px;margin-left:6px;vertical-align:middle;line-height:1.7}
+
+    /* スマホ下部の固定相談ボタン */
+    .fde-sticky{display:none}
+    @media (max-width:960px){
+      .fde-hero-grid,.fde-case,.fde-cta-grid,.fde-stats{grid-template-columns:minmax(0,1fr)}
+      .fde-hero-media{position:relative;width:100%;height:auto;aspect-ratio:4/3;-webkit-mask-image:linear-gradient(to bottom,#000 60%,transparent);mask-image:linear-gradient(to bottom,#000 60%,transparent)}
+      .fde-hero-media img{filter:saturate(.65) brightness(.7)}
+      .fde-hero .container{margin-top:-18vw}
+      .fde-hero.lp-hero .container{padding-top:0}
+      .fde-fit,.fde-price,.fde-why{grid-template-columns:minmax(0,1fr)}
+      .fde-sticky{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:50;justify-content:center;padding:15px;background:var(--ink);color:var(--deep);text-decoration:none;font-size:14px;letter-spacing:.06em;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+      body{padding-bottom:76px}
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-wrapper">
+        <a href="../index.html">
+          <img src="../assets/site-logo-nanofactory.png" alt="nanoFACTORY" class="logo-img" />
+        </a>
+      </div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle__bar"></span>
+        <span class="sr-only">メニューを開閉</span>
+      </button>
+      <nav id="site-nav" class="nav">
+        <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
+        <a class="nav__link" href="../fde/" aria-current="page">FDE</a>
+        <span class="nav__sep" aria-hidden="true"></span>
+        <a class="nav__link nav__link--products" href="../nanostep-lp/">作業認識AI</a>
+        <a class="nav__link nav__link--products" href="../nanosi-lp/">AI検査</a>
+        <a class="nav__link nav__link--products" href="../nanoguard-lp/">AI監視カメラ</a>
+        <span class="nav__sep" aria-hidden="true"></span>
+        <a class="nav__link" href="../news/">ニュース・事例</a>
+        <a class="nav__link" href="../blog/">ブログ</a>
+        <a class="nav__link" href="../company/">会社情報</a>
+        <a class="nav__link nav__link--contact" href="#contact">CONTACT</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ① ヒーロー：一言で「何をしてくれるのか」 -->
+  <section class="lp-hero fde-hero">
+    <figure class="fde-hero-media" aria-hidden="true"><img src="../assets/opt/fde-hero-field.jpg?v=1" alt="" /></figure>
+    <div class="container">
+      <div class="fde-hero-grid">
+        <div class="lp-hero__inner">
+          <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>FDE<span class="jp">— Forward Deployed Engineer</span></div>
+          <h1 class="lp-h1">提案で終わらせない。<br>現場に入り込み、<br>動くシステムまで作り切る。</h1>
+          <p class="lp-lead">
+            nanoFACTORYのAIエンジニアが、お客様の現場に直接入ります。課題の整理から機器の選定、実装、現場での立ち上げまでを一つのチームで担当します。<br>
+            開発そのものにもAIを使い倒すことで、従来のSIより<strong style="color:var(--ink);font-weight:500">柔軟に、速く、小さな予算で</strong>、課題解決に直結するシステムをお届けします。
+          </p>
+          <div class="lp-btns">
+            <a class="cta-button" href="#contact">現場の課題を相談する</a>
+            <a class="cta-button cta-button--outline" href="#cases">実績を見る</a>
+          </div>
+        </div>
+        <div class="fde-stats" aria-label="FDEの実績">
+          <div class="fde-stat"><b>1〜3<small style="font-size:14px"> ヶ月</small></b><span>ご相談から納品までの実績期間（下記の事例2件）</span></div>
+          <div class="fde-stat"><b>相談 → 実装</b><span>要件整理と開発を同じエンジニアが担当。伝言ゲームが起きません</span></div>
+          <div class="fde-stat"><b>予算起点</b><span>ご予算を先に伺い、その範囲で実現できる機器・構成を選びます</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② 何が違うのか：比較表 -->
+  <section class="lp-section lp-section--white">
+    <div class="container">
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Difference<span class="jp">— 何が違うのか</span></div>
+      <h2>コンサルでも、SIerでもない、<br>「作れる人が、現場に入る」という選択肢</h2>
+      <p class="lead-text">課題の分析だけで終わる、要件定義と見積もりに何ヶ月もかかる、仕様書どおりに作ったのに現場で使われない——。FDEは、そうした「課題と実装の距離」をなくすためのサービスです。</p>
+      <div class="fde-compare-wrap">
+        <table class="fde-compare">
+          <thead>
+            <tr><th></th><th>コンサルティング</th><th>従来のSI・受託開発</th><th class="is-us">nanoFACTORY FDE</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>関わり方</th><td>課題分析・提言</td><td>仕様書を受けて開発</td><td class="is-us">現場に入り、課題の整理から実装・立ち上げまで</td></tr>
+            <tr><th>成果物</th><td>報告書・計画</td><td>仕様どおりのシステム</td><td class="is-us">現場で実際に動き、使われるシステム</td></tr>
+            <tr><th>途中の変更</th><td>—</td><td>変更は追加見積もり</td><td class="is-us">動くものを見ながら短いサイクルで調整</td></tr>
+            <tr><th>スピード</th><td>数ヶ月〜</td><td>要件定義だけで数ヶ月</td><td class="is-us">実績では1〜3ヶ月で納品</td></tr>
+            <tr><th>予算の決め方</th><td>工数ベース</td><td>仕様から積み上げ</td><td class="is-us">ご予算から、実現できる構成を逆算</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ なぜ速く・小さくできるのか -->
+  <section class="lp-section lp-section--surface">
+    <div class="container">
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Why<span class="jp">— なぜ速く、小さな予算でできるのか</span></div>
+      <h2>AIを、納品物だけでなく<br>「作り方」にも使っています</h2>
+      <div class="feature-grid fde-why">
+        <div class="feature-card">
+          <div class="feature-card__num">01</div>
+          <h3>AIで開発そのものを速くする</h3>
+          <p>設計・実装・テストにAIを組み込み、「作る→現場で見てもらう→直す」を短い周期で回します。仕様を固め切ってから作る方式より、手戻りが小さく済みます。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__num">02</div>
+          <h3>ご予算から構成を決める</h3>
+          <p>高価な専用機ありきではなく、ご予算と必要な性能から、カメラ・エッジデバイス・ソフト構成を選定します。「この予算なら、ここまでできる」を最初にお示しします。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__num">03</div>
+          <h3>AI・ロボット・現場が分かる人が直接入る</h3>
+          <p>ロボット開発と製造現場での実装経験を持つエンジニアが、そのまま現場に入ります。営業・SE・開発の間の引き継ぎがないため、判断が速く、話がずれません。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ 事例 -->
+  <section id="cases" class="lp-section lp-section--white">
+    <div class="container">
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Cases<span class="jp">— FDEの実績</span></div>
+      <h2>制約の厳しい現場ほど、<br>FDEの強みが生きます</h2>
+
+      <!-- CASE 01 -->
+      <article class="fde-case">
+        <header class="fde-case__head">
+          <div class="fde-case__meta"><span class="fde-case__no">CASE 01</span><span class="fde-case__kicker">MANUFACTURING / 製造業 A社</span></div>
+          <h3>外部と一切通信できない工場で、<br>AIによる監視業務を自動化</h3>
+        </header>
+        <figure class="fde-case__shot"><img src="../assets/opt/fde-case-monitoring.jpg?v=1" alt="AI監視画面。要確認の映像とイベント件数のグラフが表示されている" loading="lazy" /><figcaption>AIによる監視・通知画面の例</figcaption></figure>
+        <div class="fde-case__body">
+          <dl>
+            <dt>課題</dt><dd>人の目に頼っている監視業務を、AIで自動化したい。</dd>
+            <dt>制約</dt><dd>社内ルールにより<strong>外部ネットワークへの接続は一切不可</strong>。クラウドAIは使えない。予算にも上限がある。</dd>
+            <dt>やったこと</dt><dd><ul>
+              <li>ご予算と必要な処理性能から<strong>エッジデバイスを選定</strong></li>
+              <li>そのデバイス1台の中だけで完結する<strong>エッジAIシステム</strong>を設計・実装</li>
+              <li>現場への設置・調整から運用の立ち上げまで対応</li>
+            </ul></dd>
+            <dt>結果</dt><dd><strong>11台のカメラ</strong>を<strong>24時間AIが監視</strong>し、問題があれば管理PCへ通知。社外に映像やデータを一切出さないまま、<strong>1年以上安定して稼働</strong>しています。</dd>
+          </dl>
+        </div>
+        <div class="fde-case__visual">
+          <div class="fde-terms"><div class="fde-term"><b>約3</b><span>ヶ月で<br>実装・提供</span></div><div class="fde-term"><b>11</b><span>台のカメラを<br>24時間監視</span></div><div class="fde-term"><b>1年+</b><span>稼働中</span></div></div>
+          <svg class="fde-diagram" viewBox="0 0 420 230" role="img" aria-label="工場内で完結するエッジAI構成図。インターネットとの接続はない">
+            <rect x="8" y="30" width="300" height="190" fill="none" stroke="rgba(255,255,255,.2)" stroke-dasharray="4 4"/>
+            <text x="20" y="52" class="t-mono">FACTORY — CLOSED NETWORK</text>
+            <rect x="28" y="92" width="72" height="54" fill="#212428" stroke="rgba(255,255,255,.25)"/>
+            <text x="64" y="116" text-anchor="middle" class="t-strong">カメラ×11</text>
+            <text x="64" y="134" text-anchor="middle">24時間</text>
+            <line x1="100" y1="119" x2="130" y2="119" stroke="#62B6C6" stroke-width="1.5"/>
+            <rect x="130" y="84" width="86" height="70" fill="rgba(214,145,60,.1)" stroke="#D6913C"/>
+            <text x="173" y="112" text-anchor="middle" class="t-strong">エッジ</text>
+            <text x="173" y="130" text-anchor="middle" class="t-strong">デバイス</text>
+            <text x="173" y="146" text-anchor="middle">AI処理</text>
+            <line x1="216" y1="119" x2="236" y2="119" stroke="#62B6C6" stroke-width="1.5"/>
+            <rect x="236" y="92" width="66" height="54" fill="#212428" stroke="rgba(255,255,255,.25)"/>
+            <text x="269" y="116" text-anchor="middle" class="t-strong">管理PC</text>
+            <text x="269" y="134" text-anchor="middle">異常を通知</text>
+            <text x="158" y="198" text-anchor="middle">予算に合わせて選定した1台で完結</text>
+            <line x1="308" y1="119" x2="352" y2="119" stroke="#D98A7A" stroke-dasharray="3 3"/>
+            <line x1="322" y1="109" x2="338" y2="129" stroke="#D98A7A" stroke-width="2"/>
+            <line x1="338" y1="109" x2="322" y2="129" stroke="#D98A7A" stroke-width="2"/>
+            <text x="360" y="112" class="t-ng">社外</text>
+            <text x="360" y="130" class="t-ng">通信なし</text>
+          </svg>
+          <div class="fde-tags"><span class="fde-tag">EDGE AI</span><span class="fde-tag">閉域・オフライン</span><span class="fde-tag">機器選定</span><span class="fde-tag">監視自動化</span></div>
+        </div>
+      </article>
+
+      <!-- CASE 02 -->
+      <article class="fde-case">
+        <header class="fde-case__head">
+          <div class="fde-case__meta"><span class="fde-case__no">CASE 02</span><span class="fde-case__kicker">ENTERTAINMENT / ライブバー運営 B社</span></div>
+          <h3>著作権の制約がある中で、<br>専用アプリと店舗モニタリングを同時に構築</h3>
+        </header>
+        <figure class="fde-case__shot fde-case__shot--wide"><img src="../assets/opt/fde-case-lyric-app.jpg?v=2" alt="タブレットとスマートフォンに表示された専用アプリ。演奏中の曲の歌詞が同期表示されている" loading="lazy" /><figcaption>専用アプリ：演奏側のタブレットとお客様のスマートフォンで歌詞を同期表示</figcaption></figure>
+        <div class="fde-case__body">
+          <dl>
+            <dt>課題</dt><dd>生バンドで歌えるライブバーの体験を、店舗専用のシステムで高めたい。あわせて、各店舗のステージの様子を本部から把握したい。</dd>
+            <dt>制約</dt><dd><strong>楽曲・歌詞の著作権</strong>による利用上の制限。店内のお客様の<strong>プライバシーへの配慮</strong>。</dd>
+            <dt>やったこと</dt><dd><ul>
+              <li><strong>専用アプリ</strong>：曲の予約、バンドとお客様の手元で同期する歌詞表示、ステージを盛り上げるリアクション機能</li>
+              <li><strong>リアルタイム配信システム</strong>：楽屋と本社事務所から各店舗のステージを確認。お客様の映り込みにはプライバシー配慮の処理をしたうえで配信</li>
+            </ul></dd>
+            <dt>結果</dt><dd>性質の異なる2つのシステムを、<strong>1ヶ月でまとめて納品</strong>。現在も各店舗で稼働しています。</dd>
+          </dl>
+        </div>
+        <div class="fde-case__visual">
+          <div class="fde-term"><b>1</b><span>ヶ月で2システムを納品</span></div>
+          <svg class="fde-diagram" viewBox="0 0 400 230" role="img" aria-label="店舗のアプリと、プライバシー処理を経由した配信の構成図">
+            <text x="10" y="22" class="t-mono">SYSTEM 1 — 専用アプリ</text>
+            <rect x="10" y="34" width="86" height="46" fill="#212428" stroke="rgba(255,255,255,.25)"/>
+            <text x="53" y="62" text-anchor="middle" class="t-strong">曲予約</text>
+            <rect x="106" y="34" width="120" height="46" fill="rgba(214,145,60,.1)" stroke="#D6913C"/>
+            <text x="166" y="54" text-anchor="middle" class="t-strong">歌詞の同期表示</text>
+            <text x="166" y="71" text-anchor="middle">バンド ⇄ お客様</text>
+            <rect x="236" y="34" width="100" height="46" fill="#212428" stroke="rgba(255,255,255,.25)"/>
+            <text x="286" y="62" text-anchor="middle" class="t-strong">リアクション</text>
+            <text x="10" y="124" class="t-mono">SYSTEM 2 — リアルタイム配信</text>
+            <rect x="10" y="136" width="86" height="54" fill="#212428" stroke="rgba(255,255,255,.25)"/>
+            <text x="53" y="160" text-anchor="middle" class="t-strong">各店舗</text>
+            <text x="53" y="178" text-anchor="middle">ステージ</text>
+            <line x1="96" y1="163" x2="116" y2="163" stroke="#62B6C6" stroke-width="1.5"/>
+            <rect x="116" y="136" width="110" height="54" fill="rgba(214,145,60,.1)" stroke="#D6913C"/>
+            <text x="171" y="160" text-anchor="middle" class="t-strong">プライバシー</text>
+            <text x="171" y="178" text-anchor="middle" class="t-strong">配慮処理</text>
+            <line x1="226" y1="163" x2="246" y2="163" stroke="#62B6C6" stroke-width="1.5"/>
+            <rect x="246" y="136" width="90" height="24" fill="#212428" stroke="rgba(255,255,255,.25)"/>
+            <text x="291" y="153" text-anchor="middle">楽屋</text>
+            <rect x="246" y="166" width="90" height="24" fill="#212428" stroke="rgba(255,255,255,.25)"/>
+            <text x="291" y="183" text-anchor="middle">本社事務所</text>
+            <text x="200" y="218" text-anchor="middle">著作権・プライバシーの制約に合わせて専用設計</text>
+          </svg>
+          <div class="fde-tags"><span class="fde-tag">専用アプリ</span><span class="fde-tag">リアルタイム同期</span><span class="fde-tag">映像配信</span><span class="fde-tag">プライバシー処理</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ⑤ 向いているご相談 -->
+  <section class="lp-section lp-section--surface">
+    <div class="container">
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Fit<span class="jp">— こんなときにご相談ください</span></div>
+      <h2>パッケージでは合わない課題こそ、<br>FDEの出番です</h2>
+      <ul class="fde-fit">
+        <li>既製品を試したが、自社の現場には合わなかった<small>業務フローや設備を変えずに、現場に合わせて作ります</small></li>
+        <li>社外にデータを出せない・ネットにつなげない<small>エッジ完結・オフラインでの構成を得意としています</small></li>
+        <li>予算が限られていて、大規模な開発は難しい<small>ご予算から、実現できる範囲と構成をご提案します</small></li>
+        <li>何から手を付ければよいか分からない<small>課題の整理から一緒に行います。要件が固まっていなくても大丈夫です</small></li>
+        <li>SIerの見積もりが高額・長期で進まない<small>小さく作って現場で確かめながら進めます</small></li>
+        <li>著作権・個人情報など、制約が多い<small>制約を前提に、使える形を設計します</small></li>
+      </ul>
+      <p class="lead-text" style="margin-top:28px">課題がはっきりしていて、既製品で解決できそうな場合は、すぐに試せる<a href="../products-services/" style="color:var(--accent)">パッケージ製品</a>もご用意しています。</p>
+    </div>
+  </section>
+
+  <!-- ⑥ 進め方 -->
+  <section class="lp-section lp-section--white">
+    <div class="container">
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Process<span class="jp">— 進め方</span></div>
+      <h2>ご相談から納品まで</h2>
+      <div class="flow-steps">
+        <div class="flow-step"><div class="flow-step__num">01</div><h3>ご相談</h3><p>オンライン（1時間）で、困っていることと制約（通信・予算・時期）を伺います。</p></div>
+        <div class="flow-step"><div class="flow-step__num">02</div><h3>現場を見る</h3><p>エンジニアが現場に伺い、作業・設備・ルールを実際に確認します。</p></div>
+        <div class="flow-step"><div class="flow-step__num">03</div><h3>範囲とご予算の合意</h3><p>何を・いつまでに・いくらで作るかを、書面で合意してから着手します。</p></div>
+        <div class="flow-step"><div class="flow-step__num">04</div><h3>作りながら確かめる</h3><p>動くものを早い段階でお見せし、現場の声を反映しながら仕上げます。</p></div>
+        <div class="flow-step"><div class="flow-step__num">05</div><h3>納品・立ち上げ</h3><p>現場への設置と運用の立ち上げまで対応します。納品後の保守は別途ご相談ください。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑦ 費用の考え方 -->
+  <section class="lp-section lp-section--surface">
+    <div class="container">
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Budget<span class="jp">— 費用の考え方</span></div>
+      <h2>決まった料金表ではなく、<br>ご予算と課題から個別にお見積もりします</h2>
+      <div class="fde-price">
+        <div><h3>ご予算を先に伺います</h3><p>上限が決まっていれば、その範囲で実現できる構成を最初にご提示します。</p></div>
+        <div><h3>機器は必要な分だけ</h3><p>高価な専用機ありきにせず、必要な性能を満たす機器を選びます。</p></div>
+        <div><h3>着手前に書面で合意</h3><p>範囲と金額を合意してから着手するため、後から費用が膨らみにくい進め方です。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑧ FAQ -->
+  <section class="lp-section lp-section--white">
+    <div class="container">
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>FAQ<span class="jp">— よくあるご質問</span></div>
+      <h2>よくあるご質問</h2>
+      <div class="fde-faq">
+        <details><summary>要件がまだ固まっていなくても相談できますか？</summary><p>はい。課題の整理から一緒に行うのがFDEの前提です。「このあたりが困っている」という段階でご相談ください。</p></details>
+        <details><summary>製造業以外でも対応できますか？</summary><p>はい。CASE 02のようにエンターテインメント業界の実績もあります。AI・映像・アプリ・機器連携が関わる課題であれば、業種を問わずご相談ください。</p></details>
+        <details><summary>社外にデータを出せない環境でも大丈夫ですか？</summary><p>CASE 01のように、外部と一切通信しないエッジAI構成での実績があります。</p></details>
+        <details><summary>納品後の保守はどうなりますか？</summary><p>保守は別途ご相談となります。弊社のパッケージ製品をベースに開発した場合は、そのパッケージの保守プランをご利用いただけます。</p></details>
+        <details><summary>小さな規模からでも頼めますか？</summary><p>ご予算に合わせて範囲を決めるため、小さく始めて広げていく進め方も可能です。</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑨ 問い合わせ -->
+  <section id="contact" class="cta-section">
+    <div class="container">
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Contact</div>
+      <div class="fde-cta-grid">
+        <div>
+          <h2>現場の課題を、<br>そのままお聞かせください</h2>
+          <p class="lead-text">まとまっていなくても構いません。下のボタンを押すと、記入項目入りのメールが開きます。</p>
+          <p class="lead-text" style="margin-top:10px">Email: <span id="fde-addr" data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=" data-m-text></span><br>
+            <button class="fde-copy" type="button" id="fde-copy">アドレスをコピー</button></p>
+        </div>
+        <div>
+          <div class="fde-cta-btns">
+            <a class="btn-block btn-block--primary" href="#" data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=" data-m-query="subject=%E3%80%90FDE%E7%9B%B8%E8%AB%87%E3%80%91%E7%8F%BE%E5%A0%B4%E3%81%AE%E8%AA%B2%E9%A1%8C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6&amp;body=%E4%BC%9A%E7%A4%BE%E5%90%8D%EF%BC%9A%0A%E3%81%94%E6%8B%85%E5%BD%93%E8%80%85%E5%90%8D%EF%BC%9A%0A%E6%A5%AD%E7%A8%AE%EF%BC%9A%0A%E5%9B%B0%E3%81%A3%E3%81%A6%E3%81%84%E3%82%8B%E3%81%93%E3%81%A8%EF%BC%88%E5%88%86%E3%81%8B%E3%82%8B%E7%AF%84%E5%9B%B2%E3%81%A7%EF%BC%89%EF%BC%9A%0A%E5%88%B6%E7%B4%84%EF%BC%88%E7%A4%BE%E5%A4%96%E9%80%9A%E4%BF%A1%E4%B8%8D%E5%8F%AF%E3%83%BB%E4%BA%88%E7%AE%97%E3%83%BB%E6%99%82%E6%9C%9F%E3%81%AA%E3%81%A9%EF%BC%89%EF%BC%9A%0A"><span><small>FDE</small>現場の課題を相談する</span><span aria-hidden="true">→</span></a>
+            <a class="btn-block" href="../products-services/"><span><small>PACKAGE</small>すぐ試せるパッケージ製品を見る</span><span aria-hidden="true">→</span></a>
+          </div>
+          <div class="fde-next">
+            <h3>ご相談いただいた後の流れ</h3>
+            <ol>
+              <li><b>3営業日以内</b>に担当エンジニアからご返信</li>
+              <li>オンライン（1時間）で課題とご予算を伺う</li>
+              <li>必要に応じて現場へ伺い、進め方とお見積もりをご提示</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="about" class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3>About</h3>
+          <p>nanoFACTORY の技術の根底はロボット開発・フィジカルAI。製造業の現場で数々の課題を解決してきた経験から磨き上げたソフトウェアの販売と、AIエンジニアが現場に直接入り込む<strong>FDE(Forward Deployed Engineer)</strong>サービスが、私たちの事業です。</p>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>〒107-0062 東京都港区南青山５-11-14 H&amp;M南青山イースト308</p>
+          <p>Email: <span data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=" data-m-text></span></p>
+        </div>
+        <div>
+          <h3>Links</h3>
+          <ul class="footer-links">
+            <li><a href="../index.html#hero">Home</a></li>
+            <li><a href="../solutions/">ソリューション</a></li>
+            <li><a href="../products-services/">製品・サービス</a></li>
+            <li><a href="../fde/">FDEサービス</a></li>
+            <li><a href="../news/">ニュース</a></li>
+            <li><a href="../blog/">ブログ</a></li>
+            <li><a href="../company/">会社情報</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright"><span>&copy; <span id="year"></span> nanoFACTORY Co. All rights reserved.</span><span>nano-factory.net</span></div>
+    </div>
+  </footer>
+
+  <a class="fde-sticky" href="#contact">現場の課題を相談する</a>
+
+  <script src="../script.js"></script>
+  <script src="../mail.js"></script>
+  <script>
+    (function () {
+      var btn = document.getElementById("fde-copy"), addr = document.getElementById("fde-addr");
+      if (!btn || !addr) return;
+      btn.addEventListener("click", function () {
+        var t = addr.textContent;
+        if (!t || !navigator.clipboard) return;
+        navigator.clipboard.writeText(t).then(function () {
+          btn.textContent = "コピーしました";
+          setTimeout(function () { btn.textContent = "アドレスをコピー"; }, 2000);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

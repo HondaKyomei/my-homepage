@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Orbitron:wght@400;500&family=JetBrains+Mono:wght@400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" />
-  <link rel="stylesheet" href="site.css?v=20260921b" />
+  <link rel="stylesheet" href="site.css?v=20260922a" />
   <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" sizes="512x512" />
 </head>
 <body>
@@ -34,12 +34,12 @@
         <span class="sr-only">メニューを開閉</span>
       </button>
       <nav id="site-nav" class="nav">
-        <a class="nav__link" href="#why-1">nanoFACTORYとは</a>
+        <a class="nav__link" href="#why-1" aria-current="page">nanoFACTORYとは</a>
+        <a class="nav__link" href="fde/">FDE</a>
         <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link nav__link--products" href="nanostep-lp/">作業認識AI</a>
         <a class="nav__link nav__link--products" href="nanosi-lp/">AI検査</a>
         <a class="nav__link nav__link--products" href="nanoguard-lp/">AI監視カメラ</a>
-        <a class="nav__link nav__link--products" href="sanicam-lp/hand.html">手指衛生</a>
         <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link" href="news/">ニュース・事例</a>
         <a class="nav__link" href="blog/">ブログ</a>
@@ -163,7 +163,7 @@
           </figure>
         </div>
         <div class="sol__content">
-          <div class="sol__meta"><span class="sol__num">01</span><a class="sol__tag" href="sanicam-lp/hand.html">SANI-CAM — 衛生管理AIカメラ</a></div>
+          <div class="sol__meta"><span class="sol__num">01</span><a class="sol__tag" href="sanicam-lp/hand.html">SANI-CAM — 衛生管理AIカメラ</a><span class="sol__pick">すぐに試せるパッケージ</span></div>
           <h3 class="sol__title">手指衛生が人任せのまま。<br>教育も難しく、実態も把握できない</h3>
           <p class="sol__quote">「手洗い記録が紙の自己チェックのまま。監査のたびに形骸化を指摘される。6ステップが本当に実施されているか、確認する方法がない。」</p>
           <p class="sol__body">AIカメラがWHO準拠の手洗い6ステップを自動検出・採点・タイムスタンプ付きで記録します。"やった・やらない"が客観データとして残るため、自己申告ベースの管理から脱却できます。感染対策監査・認定取得のエビデンスとしてそのまま提出可能です。</p>
@@ -208,49 +208,66 @@
       <div class="sec-head">
         <div>
           <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Solutions<span class="jp">— 飲食店・食品工場</span></div>
-          <h2>調理手順・厨房監視・品質検査。<br>飲食現場の3つの課題に、<br class="br-sp">AIで答える。</h2>
+          <h2>手洗い・調理手順・厨房監視・品質検査。<br>飲食現場の4つの課題に、<br class="br-sp">AIで答える。</h2>
         </div>
-        <p>アルバイト依存・高離職率・ベテランシフト偏り——どれも「人が変わると品質が変わる」構造の問題です。nanoFACTORYは「手順標準化」「厨房モニタリング」「提供品検査」をデータ化し、誰が担当しても基準が維持される現場をつくります。</p>
+        <p>アルバイト依存・高離職率・ベテランシフト偏り——どれも「人が変わると品質が変わる」構造の問題です。nanoFACTORYは「手洗い」「手順標準化」「厨房モニタリング」「提供品検査」をデータ化し、誰が担当しても基準が維持される現場をつくります。</p>
       </div>
       <article class="sol">
         <div class="sol__vis">
           <figure class="sol__img hud-frame">
-            <img src="assets/opt/homepage-solution-food-ai-cooking-hygiene-steps.jpg" alt="nanoSTEP 調理・衛生手順" decoding="async" />
-            <figcaption class="sol__cap"><span class="sol__cam">CAM-01 · nanoSTEP</span><span class="sol__txt">調理手順をタブレットに表示しながら調理</span></figcaption>
+            <video autoplay loop muted playsinline poster="assets/opt/homepage-product-sanicam-video-poster.jpg">
+              <source src="assets/sanicam-demo-japan.mp4" type="video/mp4">
+            </video>
+            <figcaption class="sol__cap"><span class="sol__cam">CAM-01 · SANI-CAM</span><span class="sol__txt">手洗い6ステップをAIが判定・記録</span></figcaption>
           </figure>
         </div>
         <div class="sol__content">
-          <div class="sol__meta"><span class="sol__num">01</span><a class="sol__tag" href="nanostep-lp/">AI調理・衛生手順管理</a></div>
+          <div class="sol__meta"><span class="sol__num">01</span><a class="sol__tag" href="sanicam-lp/hand.html">SANI-CAM — 衛生管理AIカメラ</a><span class="sol__pick">すぐに試せるパッケージ</span></div>
+          <h3 class="sol__title">手洗いは「やったつもり」。<br>衛生記録も自己申告のまま</h3>
+          <p class="sol__quote">「手洗いのチェック表は毎日埋まっている。でも、本当に正しく洗えているかは誰も見ていない。食中毒が出てからでは遅い。」</p>
+          <p class="sol__body">AIカメラが手洗いの6ステップを自動で判定・採点し、タイムスタンプ付きで記録します。新人や外国人スタッフにも同じ基準で指導でき、HACCPに沿った衛生管理の記録としても活用できます。</p>
+          <a class="more" href="sanicam-lp/hand.html"><span class="more__arrow" aria-hidden="true">→</span><span>SANI-CAMの詳細を見る</span></a>
+        </div>
+      </article>
+      <article class="sol sol--rev">
+        <div class="sol__vis">
+          <figure class="sol__img hud-frame">
+            <img src="assets/opt/homepage-solution-food-ai-cooking-hygiene-steps.jpg" alt="nanoSTEP 調理・衛生手順" decoding="async" />
+            <figcaption class="sol__cap"><span class="sol__cam">CAM-02 · nanoSTEP</span><span class="sol__txt">調理手順をタブレットに表示しながら調理</span></figcaption>
+          </figure>
+        </div>
+        <div class="sol__content">
+          <div class="sol__meta"><span class="sol__num">02</span><a class="sol__tag" href="nanostep-lp/">AI調理・衛生手順管理</a></div>
           <h3 class="sol__title">スタッフが変わっても、<br>教育コストは上がらない仕組みをつくる</h3>
           <p class="sol__quote">「バイトが辞めるたびにゼロから教え直し。人件費より教育コストの方が問題になってきた。」</p>
           <p class="sol__body">調理・仕込み手順をAIが常時監視し、逸脱をその場で通知。新人でも即日一定品質で動けるため、OJTにかかる時間・人件費を大幅に削減できます。HACCP記録の自動生成で、保健所対応も省力化されます。</p>
           <a class="more" href="nanostep-lp/"><span class="more__arrow" aria-hidden="true">→</span><span>このソリューションの詳細を見る</span></a>
         </div>
       </article>
-      <article class="sol sol--rev">
+      <article class="sol">
         <div class="sol__vis">
           <figure class="sol__img hud-frame">
             <img src="assets/opt/homepage-solution-food-vsg-kitchen-monitoring.jpg" alt="バーチャルセキュリティゲート 厨房モニタリング" decoding="async" />
-            <figcaption class="sol__cap"><span class="sol__cam">CAM-02 · VSG</span><span class="sol__txt">作業場の行動をAIカメラで記録</span></figcaption>
+            <figcaption class="sol__cap"><span class="sol__cam">CAM-03 · VSG</span><span class="sol__txt">作業場の行動をAIカメラで記録</span></figcaption>
           </figure>
         </div>
         <div class="sol__content">
-          <div class="sol__meta"><span class="sol__num">02</span><a class="sol__tag" href="virtual-security-gate-lp/index.html">バーチャルセキュリティゲート — 厨房モニタリング</a></div>
+          <div class="sol__meta"><span class="sol__num">03</span><a class="sol__tag" href="virtual-security-gate-lp/index.html">バーチャルセキュリティゲート — 厨房モニタリング</a></div>
           <h3 class="sol__title">厨房の"見えない"が、<br>バイトテロとSNS炎上のリスクになる</h3>
           <p class="sol__quote">「厨房内の行動が外から確認できない。不衛生な行為や悪ふざけがSNSに拡散されたら取り返しがつかない。」</p>
           <p class="sol__body">厨房を24時間AIが記録・監視。不審な行動・ルール違反をリアルタイム検知し、映像ログを自動保存します。「見られている」という抑止効果が問題行動を未然に防ぎ、万が一のときは映像が証拠になります。バックヤードへの不正入室管理も同時に対応できます。</p>
           <a class="more" href="virtual-security-gate-lp/index.html"><span class="more__arrow" aria-hidden="true">→</span><span>VSGの詳細を見る</span></a>
         </div>
       </article>
-      <article class="sol">
+      <article class="sol sol--rev">
         <div class="sol__vis">
           <figure class="sol__img hud-frame">
             <img src="assets/opt/homepage-solution-food-ai-serving-inspection.jpg" alt="nanoI 提供品チェック" decoding="async" />
-            <figcaption class="sol__cap"><span class="sol__cam">CAM-03 · nanoI</span><span class="sol__txt">提供前の料理をカメラで検査</span></figcaption>
+            <figcaption class="sol__cap"><span class="sol__cam">CAM-04 · nanoI</span><span class="sol__txt">提供前の料理をカメラで検査</span></figcaption>
           </figure>
         </div>
         <div class="sol__content">
-          <div class="sol__meta"><span class="sol__num">03</span><a class="sol__tag" href="nanosi-lp/">AI提供品チェック・品質記録</a></div>
+          <div class="sol__meta"><span class="sol__num">04</span><a class="sol__tag" href="nanosi-lp/">AI提供品チェック・品質記録</a></div>
           <h3 class="sol__title">"映え"が評価される時代に、<br>提供する見た目を感覚に任せない</h3>
           <p class="sol__quote">「SNSに投稿される写真で評価が決まる時代。盛り付けのバラつきや異物混入が一枚の写真で炎上につながる。」</p>
           <p class="sol__body">料理のビジュアル・盛り付け量・異物混入をAIカメラが自動検査。基準を下回る品を提供前に検出し、SNS炎上・クレームを構造的に防ぎます。「映えの均一化」はブランド価値の向上にも直結します。セントラルキッチン・食品製造ラインへの導入で、品質記録のデータ化も同時に実現します。</p>
