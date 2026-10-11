@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+  <!-- ============================================================
+       META 差し替え区間（プレースホルダ・コントラクト design-brief §5）
+       量産時は各マーカー区間の中身を差し替える。
+       ============================================================ -->
+
+  <!-- ▼▼ {{TITLE}} ▼▼ 32字以内目安。「 | nanoFACTORY BLOG」サフィックスは維持 -->
+  <title>相次ぐ個人情報流出、監視カメラの映像は大丈夫か｜エッジAIという選択 | nanoFACTORY BLOG</title>
+  <!-- ▲▲ {{TITLE}} ▲▲ -->
+
+  <!-- ▼▼ {{META_DESCRIPTION}} ▼▼ 110字前後 -->
+  <meta name="description" content="2026年は100万件超の個人情報流出がすでに10件。監視カメラの映像も国内外で流出しています。実際の事件4件から、クラウド型カメラで映像が漏れる経路と、映像を外に出さないエッジAIカメラで防げる範囲・残るリスク、導入前の確認項目を解説します。" />
+  <!-- ▲▲ {{META_DESCRIPTION}} ▲▲ -->
+
+  <!-- ▼▼ OGP ▼▼ {{TITLE}} / {{META_DESCRIPTION}} / {{CANONICAL_URL}} / {{OGP_IMAGE}} を反映 -->
+  <link rel="canonical" href="https://nano-factory.net/blog/cloud-camera-leak-edge-ai.html" /><!-- ← {{CANONICAL_URL}} = https://nano-factory.net/blog/{{SLUG}}.html -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="nanoFACTORY BLOG" />
+  <meta property="og:title" content="相次ぐ個人情報流出、監視カメラの映像は大丈夫か｜エッジAIという選択" /><!-- ← {{TITLE}} -->
+  <meta property="og:description" content="2026年は100万件超の個人情報流出がすでに10件。監視カメラの映像も国内外で流出しています。実際の事件4件から、クラウド型カメラで映像が漏れる経路と、映像を外に出さないエッジAIカメラで防げる範囲・残るリスク、導入前の確認項目を解説します。" /><!-- ← {{META_DESCRIPTION}} -->
+  <meta property="og:url" content="https://nano-factory.net/blog/cloud-camera-leak-edge-ai.html" /><!-- ← {{CANONICAL_URL}} -->
+  <meta property="og:image" content="https://picsum.photos/seed/cloud-camera-leak-edge-ai/1200/630" /><!-- ← {{OGP_IMAGE}} -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <!-- ▲▲ OGP ▲▲ -->
+
+  <!-- ▼▼ {{JSON_LD}} ▼▼ Article構造化データ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "相次ぐ個人情報流出、監視カメラの映像は大丈夫か｜エッジAIという選択",
+    "description": "2026年は100万件超の個人情報流出がすでに10件。監視カメラの映像も国内外で流出しています。実際の事件4件から、クラウド型カメラで映像が漏れる経路と、映像を外に出さないエッジAIカメラで防げる範囲・残るリスク、導入前の確認項目を解説します。",
+    "image": "https://picsum.photos/seed/cloud-camera-leak-edge-ai/1200/630",
+    "datePublished": "2026-10-11",
+    "dateModified": "2026-10-11",
+    "author": { "@type": "Organization", "name": "nanoFACTORY", "url": "https://nano-factory.net/" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "nanoFACTORY",
+      "logo": { "@type": "ImageObject", "url": "https://nano-factory.net/assets/site-logo-nanofactory.png" }
+    },
+    "mainEntityOfPage": "https://nano-factory.net/blog/cloud-camera-leak-edge-ai.html"
+  }
+  </script>
+  <!-- ▲▲ {{JSON_LD}} ▲▲ -->
+
+  <!-- Google Fonts（サイト共通） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Orbitron:wght@400;500&family=JetBrains+Mono:wght@400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="../site.css" />
+  <link rel="icon" href="../assets/site-logo-nanofactory.png" type="image/png" sizes="512x512" />
+
+  <style>
+  /* ==========================================================================
+     このページ固有のコンポーネント
+     トークン・ヘッダー・ナビ・フッターは ../site.css（design-matte-2026）に準拠。
+     ここでは記事レイアウト・目次・コールアウト・表・図版のみを定義する。
+     ========================================================================== */
+  html, body{ overflow-x:hidden; }
+  .article-body{ --measure: 70ch; }
+
+  /* ---------- リーディングプログレスバー（控えめ・グロー無し） ---------- */
+  .progress{
+    position:fixed; top:0; left:0; right:0; height:2px; z-index:60;
+    background:var(--accent);
+    transform:scaleX(0); transform-origin:left center;
+    pointer-events:none;
+  }
+
+  /* ---------- 記事ヒーロー ---------- */
+  .article-hero{ padding-block:clamp(40px,6vw,64px) clamp(32px,5vw,48px); border-bottom:1px solid var(--line); }
+  .article-hero .container{ max-width:880px; }
+  .hero-meta{ display:flex; align-items:center; flex-wrap:wrap; gap:8px 16px; margin-bottom:18px; }
+  .cat-tag{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--en); font-size:12px; letter-spacing:.1em; text-transform:uppercase; text-decoration:none;
+    color:var(--ink-2); border:1px solid var(--line-strong); padding:6px 14px;
+  }
+  .cat-tag:hover{ color:var(--ink); border-color:rgba(255,255,255,.4); }
+  .cat-tag::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--accent); }
+  .hero-meta__stat{ font-family:var(--mono); font-weight:400; font-size:11.5px; letter-spacing:.08em; color:var(--ink-3); }
+  .hero-meta__stat b{ color:var(--cyan); font-weight:400; }
+  .article-title{
+    font-weight:500; font-size:clamp(24px,3.8vw,38px); line-height:1.55; color:var(--ink); letter-spacing:.03em;
+    margin-bottom:28px; text-wrap:balance;
+  }
+
+  /* ヒーロー画像（site.css の .hud-frame を流用） */
+  .hero-visual{ aspect-ratio:1200/630; }
+  .hero-visual img{ width:100%; height:100%; object-fit:cover; display:block; filter:var(--img-filter); }
+  .px-fallback{
+    position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center;
+    gap:10px; color:var(--ink-3); font-family:var(--en); font-size:11px; letter-spacing:.3em;
+  }
+  .hero-visual.is-broken img{ display:none; }
+  .hero-visual.is-broken .px-fallback{ display:flex; }
+
+  /* ==========================================================================
+     本文レイアウト（TOC＋本文）
+     ========================================================================== */
+  .article-shell{
+    display:grid; grid-template-columns:minmax(0,1fr) 264px; gap:clamp(28px,4vw,56px);
+    align-items:start; max-width:1120px; margin:0 auto; padding:0 var(--gutter) clamp(56px,8vw,96px);
+  }
+
+  .article-paper{ padding-block:clamp(40px,7vw,64px) 0; }
+  .article-body{ max-width:var(--measure); margin:0 auto; font-family:var(--jp); font-size:16px; line-height:2.0; color:var(--ink); }
+  .article-body > * + *{ margin-top:1.5em; }
+  .article-body p{ color:var(--ink); }
+  .article-body a{ color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px; }
+  .article-body a:hover{ text-decoration-thickness:2px; }
+  .article-body strong{ font-weight:700; }
+  .article-body ul, .article-body ol{ padding-left:1.4em; }
+  .article-body li{ margin-top:.5em; color:var(--ink); }
+  .article-body li::marker{ color:var(--ink-3); font-family:var(--mono); }
+
+  /* 見出し */
+  .article-body{ counter-reset:sec; }
+  .article-body h2{
+    counter-increment:sec;
+    font-weight:500; font-size:1.5rem; line-height:1.6; color:var(--ink);
+    margin-top:2.6em; padding-top:1.1em; border-top:1px solid var(--line);
+    scroll-margin-top:calc(var(--header-h) + 24px);
+  }
+  .article-body h2::before{
+    content:"SEC." counter(sec, decimal-leading-zero);
+    display:block; font-family:var(--mono); font-weight:400; font-size:11px;
+    letter-spacing:.28em; color:var(--ink-3); margin-bottom:.6em;
+  }
+  .article-body h3{
+    font-weight:500; font-size:1.15rem; line-height:1.6; color:var(--ink);
+    margin-top:2em;
+    scroll-margin-top:calc(var(--header-h) + 24px);
+  }
+
+  /* ---------- 追従目次（TOC） ---------- */
+  .toc-wrap{ position:sticky; top:calc(var(--header-h) + 20px); }
+  .toc{ background:var(--raised); border:1px solid var(--line); }
+  .toc__head{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px 12px; border-bottom:1px solid var(--line); }
+  .toc__label{ font-family:var(--en); font-weight:400; font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--ink-3); }
+  .toc__toggle{ display:none; background:none; border:none; color:var(--ink-2); cursor:pointer; font-size:13px; padding:4px; }
+  .toc__toggle::after{ content:"▾"; display:inline-block; transition:transform .3s; }
+  .toc.is-open .toc__toggle::after{ transform:rotate(180deg); }
+  .toc__list{ list-style:none; margin:0; padding:10px 8px 14px; max-height:calc(100vh - var(--header-h) - 140px); overflow-y:auto; }
+  .toc__item a{ display:block; text-decoration:none; color:var(--ink-2); font-size:13.5px; line-height:1.55; padding:7px 10px; transition:color .2s, background .2s; }
+  .toc__item--h3 a{ padding-left:26px; font-size:12.5px; color:var(--ink-3); }
+  .toc__item a:hover{ color:var(--ink); background:rgba(255,255,255,.04); }
+  .toc__item a.is-active{ color:var(--accent); background:rgba(255,255,255,.04); }
+  @media (max-width:960px){
+    .article-shell{ grid-template-columns:minmax(0,1fr); gap:20px; }
+    .toc-wrap{ position:static; order:-1; }
+    .toc__toggle{ display:inline-block; }
+    .toc__list{ display:none; }
+    .toc.is-open .toc__list{ display:block; max-height:50vh; }
+  }
+
+  /* ==========================================================================
+     本文コンポーネント
+     ========================================================================== */
+  /* --- コールアウト --- */
+  .callout{ padding:22px 24px; border:1px solid var(--line); background:var(--raised); }
+  .callout__head{ display:flex; align-items:center; gap:10px; font-weight:500; font-size:14px; margin-bottom:.5em; letter-spacing:.04em; }
+  .callout__icon{ display:inline-flex; align-items:center; justify-content:center; width:1.8em; height:1.8em; background:var(--deep); border:1px solid var(--line); font-size:.9em; line-height:1; flex:none; }
+  .callout p{ font-size:14.5px; line-height:1.9; margin-top:.4em; color:var(--ink-2); }
+  .callout p:first-of-type{ margin-top:0; }
+  .callout--point .callout__head{ color:var(--cyan); }
+  .callout--warn .callout__head{ color:var(--accent); }
+
+  /* --- 比較表 --- */
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); }
+  .compare-table{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:560px; }
+  .compare-table caption{
+    caption-side:top; text-align:left; font-family:var(--mono); font-weight:400;
+    font-size:11px; letter-spacing:.2em; color:var(--ink-3);
+    padding:12px 16px 10px; background:var(--deep); border-bottom:1px solid var(--line);
+  }
+  .compare-table th, .compare-table td{ padding:12px 16px; text-align:left; line-height:1.6; }
+  .compare-table thead th{ background:var(--deep); color:var(--ink); font-weight:500; font-size:13px; border-bottom:1px solid var(--line-strong); }
+  .compare-table thead th:first-child{ color:var(--ink-3); font-weight:400; }
+  .compare-table tbody th{ font-weight:500; color:var(--ink); background:var(--raised); white-space:nowrap; }
+  .compare-table tbody tr + tr th, .compare-table tbody tr + tr td{ border-top:1px solid var(--line); }
+  .compare-table td{ color:var(--ink-2); }
+  .compare-table .is-hl{ background:rgba(214,145,60,.08); color:var(--ink); }
+  .compare-table thead th.is-hl{ background:rgba(214,145,60,.14); color:var(--accent); }
+
+  /* --- ターミナル風コードブロック --- */
+  .term{ border:1px solid var(--line); background:var(--deep); }
+  .term__bar{ display:flex; align-items:center; gap:8px; padding:9px 14px; background:var(--raised); border-bottom:1px solid var(--line); }
+  .term__dot{ width:9px; height:9px; border-radius:50%; flex:none; opacity:.7; }
+  .term__dot--r{ background:#c96a5a; } .term__dot--y{ background:#c9a35a; } .term__dot--g{ background:#5ec98a; }
+  .term__title{ margin-left:8px; font-family:var(--mono); font-size:11.5px; color:var(--ink-3); letter-spacing:.04em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .term__body{ margin:0; padding:16px 18px; background:var(--deep); overflow-x:auto; }
+  .term__body code{ font-family:var(--mono); font-size:13px; line-height:1.8; color:var(--ink-2); white-space:pre; }
+  .term__body .t-cmd{ color:var(--cyan); }
+  .term__body .t-out{ color:var(--ink-2); }
+  .term__body .t-ok{ color:var(--accent); }
+  .term__body .t-comment{ color:var(--ink-3); }
+
+  /* --- YouTube埋め込み --- */
+  .video{ margin:0; }
+  .video__box{
+    position:relative; width:100%; aspect-ratio:16/9;
+    border:1px solid var(--line); overflow:hidden; background:var(--deep);
+  }
+  .video__box iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video__facade{
+    position:absolute; inset:0; width:100%; height:100%; padding:0; border:0; cursor:pointer;
+    background-size:cover; background-position:center; background-color:var(--deep); filter:var(--img-filter);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .video__facade::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.45)); }
+  .video__play{
+    position:relative; z-index:1; width:64px; height:46px; border-radius:2px;
+    background:rgba(20,21,23,.8); border:1px solid var(--line-strong);
+    display:flex; align-items:center; justify-content:center; transition:border-color .2s ease;
+  }
+  .video__play::before{ content:""; width:0; height:0; margin-left:4px; border-style:solid; border-width:10px 0 10px 17px; border-color:transparent transparent transparent var(--ink); }
+  .video__facade:hover .video__play{ border-color:var(--accent); }
+  .video__label{
+    position:absolute; z-index:1; left:12px; bottom:10px; color:var(--ink); font-size:11px;
+    font-family:var(--mono); letter-spacing:.06em; opacity:.85; display:flex; align-items:center; gap:.4em;
+  }
+
+  /* --- インラインSVGチャート --- */
+  .chart{ margin:0; }
+  .chart__box{ background:var(--deep); border:1px solid var(--line); padding:8px; overflow-x:auto; }
+  .chart__box svg{ display:block; width:100%; height:auto; min-width:520px; }
+  .fig{ margin:0; }
+  .fig .hud-frame{ aspect-ratio:16/9; }
+  .fig .hud-frame.is-broken img{ display:none; }
+  .fig .hud-frame.is-broken .px-fallback{ display:flex; }
+  .video figcaption, .chart figcaption, .fig figcaption{
+    display:flex; align-items:baseline; gap:10px; margin-top:12px; font-size:13px; color:var(--ink-3); line-height:1.7;
+  }
+  .video figcaption .fig__no, .chart figcaption .fig__no, .fig figcaption .fig__no{
+    font-family:var(--mono); font-weight:400; font-size:11px; letter-spacing:.16em; color:var(--ink-2); flex:none;
+  }
+
+  /* --- セクション区切り --- */
+  .cyber-divider{ display:flex; justify-content:center; padding:.6em 0; }
+  .cyber-divider i{ width:4px; height:4px; border-radius:50%; background:var(--accent); }
+
+  /* --- CTAバナー --- */
+  .cta-banner{ border:1px solid var(--line); background:var(--deep); padding:28px 26px; }
+  .cta-banner__kicker{ font-family:var(--en); font-weight:400; font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-3); }
+  .cta-banner__title{ color:var(--ink); font-size:1.2rem; font-weight:500; line-height:1.6; margin-top:.6em; }
+  .cta-banner__text{ color:var(--ink-2); font-size:14.5px; line-height:1.9; margin-top:.6em; max-width:38em; }
+  .article-body .cta-banner__title{ color:var(--ink); }
+  .article-body .cta-banner__text{ color:var(--ink-2); }
+  .cta-banner__btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:20px; }
+  .btn{ display:inline-block; text-decoration:none; font-size:13.5px; letter-spacing:.04em; padding:12px 24px; transition:background .25s ease, border-color .25s ease, color .25s ease; }
+  .article-body .btn--primary{ background:var(--ink); color:var(--deep); border:1px solid var(--ink); }
+  .article-body .btn--primary:hover{ background:var(--accent); border-color:var(--accent); color:var(--deep); }
+  .article-body .btn--ghost{ color:var(--ink); border:1px solid var(--line-strong); }
+  .article-body .btn--ghost:hover{ border-color:rgba(255,255,255,.4); background:rgba(255,255,255,.04); }
+
+  /* ---------- 登場アニメ（非テキストブロックのみ・控えめ） ---------- */
+  .reveal{ opacity:0; transform:translateY(12px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.is-in{ opacity:1; transform:none; }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{ animation:none!important; transition:none!important; }
+    .reveal{ opacity:1; transform:none; }
+  }
+  </style>
+</head>
+
+<body>
+
+  <!-- リーディングプログレスバー -->
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ヘッダー -->
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-wrapper">
+        <a href="../index.html"><img src="../assets/site-logo-nanofactory.png" alt="nanoFACTORY" class="logo-img" /></a>
+      </div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="menu-toggle__bar"></span>
+        <span class="sr-only">メニューを開閉</span>
+      </button>
+      <nav id="site-nav" class="nav">
+        <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
+        <a class="nav__link" href="../fde/">FDE</a>
+        <span class="nav__sep" aria-hidden="true"></span>
+        <a class="nav__link nav__link--products" href="../nanostep-lp/">作業認識AI</a>
+        <a class="nav__link nav__link--products" href="../nanosi-lp/">AI検査</a>
+        <a class="nav__link nav__link--products" href="../nanoguard-lp/">AI監視カメラ</a>
+        <span class="nav__sep" aria-hidden="true"></span>
+        <a class="nav__link" href="../news/">ニュース・事例</a>
+        <a class="nav__link" href="./" aria-current="page">ブログ</a>
+        <a class="nav__link" href="../company/">会社情報</a>
+        <a class="nav__link nav__link--contact" href="../index.html#cta">CONTACT</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================================================
+         記事ヒーロー
+         ============================================================ -->
+    <section class="article-hero">
+      <div class="container">
+        <div class="hero-meta">
+          <!-- カテゴリタグ：{{CATEGORY_LABEL}} -->
+          <a class="cat-tag" href="/blog/?cat=nanoguard">AI監視カメラ</a><!-- ← href の cat= に {{CATEGORY_SLUG}} -->
+          <span class="hero-meta__stat">READ&nbsp;<b>10</b>&nbsp;MIN</span><!-- ← {{READ_TIME}} -->
+          <span class="hero-meta__stat">
+            公開 <time datetime="2026-10-11">2026-10-11</time><!-- ← {{PUBLISH_DATE}} -->
+            ／ 更新 <time datetime="2026-10-11">2026-10-11</time><!-- ← {{UPDATE_DATE}} -->
+          </span>
+        </div>
+
+        <!-- ▼▼ {{TITLE}}（見出し側） ▼▼ -->
+        <h1 class="article-title">相次ぐ個人情報流出、監視カメラの映像は大丈夫か｜エッジAIという選択</h1>
+        <!-- ▲▲ {{TITLE}} ▲▲ -->
+
+        <!-- ヒーロー画像：{{HERO_IMAGE}}（無い場合 picsum の seed に {{SLUG}}） -->
+        <figure class="hero-visual hud-frame reveal">
+          <img src="https://picsum.photos/seed/cloud-camera-leak-edge-ai/1200/630"
+               alt="工場の天井に設置された監視カメラのイメージ"
+               onerror="this.closest('.hud-frame').classList.add('is-broken')" />
+          <div class="px-fallback">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+              <rect x="4" y="8" width="36" height="28" rx="1" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+              <circle cx="16" cy="19" r="4" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+              <path d="M8 32 L20 24 L28 30 L36 22" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+            </svg>
+            <span>NO IMAGE</span>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         本文シェル：白ペーパー＋追従TOC
+         ============================================================ -->
+    <div class="article-shell">
+
+      <!-- 白ペーパー（可読性レイヤー） -->
+      <article class="article-paper">
+        <!-- ▼▼ {{BODY}} ▼▼ 本文はここから。h2/h3 の id はJSが自動付与（手書き不要） -->
+        <div class="article-body" id="article-body">
+
+          <p>「うちの防犯カメラの映像って、どこに保存されているんだろう」</p>
+
+          <p>焼肉きんぐのアプリで約1,079万件、タイムズカーで約660万件。大規模な個人情報流出が続くなか、工場や店舗からこうした相談が増えています。監視カメラの映像も例外ではなく、2025年には国内の保育園や食品工場の映像約500件が海外サイトで誰でも見られる状態でした。</p>
+
+          <p>この記事では、実際の流出事件をもとにクラウド型カメラで映像が漏れる経路を整理し、映像を外に出さないエッジAIカメラで何が防げて何が残るかを解説します。</p>
+
+          <h2>2026年、100万件超の個人情報流出がすでに10件</h2>
+
+          <p>上場企業とその子会社による100万件以上の漏えいは、2026年10月5日時点で10件。2025年通年の6件をすでに超えています（東京商工リサーチ調べ）。</p>
+
+          <div class="table-wrap">
+            <table class="compare-table">
+              <caption>TABLE 01 — 2026年に公表された主な大規模流出</caption>
+              <thead>
+                <tr>
+                  <th>公表時期</th>
+                  <th>企業・サービス</th>
+                  <th>件数</th>
+                  <th>主な原因</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>2026年</th>
+                  <td>KDDI（ISP向けメールシステム）</td>
+                  <td>1,223万1,954件</td>
+                  <td>不正アクセス</td>
+                </tr>
+                <tr>
+                  <th>2026年10月5日</th>
+                  <td>物語コーポレーション（焼肉きんぐ公式アプリ）</td>
+                  <td>1,078万8,963件</td>
+                  <td>不正アクセス</td>
+                </tr>
+                <tr>
+                  <th>2026年9月28日</th>
+                  <td>タイムズモビリティ（タイムズカー）</td>
+                  <td>約660万件（アカウント数）</td>
+                  <td>Webシステムへの不正アクセス。運転免許証画像も対象</td>
+                </tr>
+                <tr>
+                  <th>2026年4月・8月</th>
+                  <td>イエローハット</td>
+                  <td>317万9,454件／最大180万1,499件</td>
+                  <td>不正アクセス（8月は予約システム）</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>1,000万件以上の事故も3件起きており、2025年までの集計期間全体の件数にすでに並びました。件数は各社の公表値で、「流出のおそれ」を含みます。</p>
+
+          <p>出典：<a href="https://www.tsr-net.co.jp/data/detail/1203305_1527.html" target="_blank" rel="noopener">東京商工リサーチ「上場企業『個人情報漏えい』、過去最悪ペース」（2026年10月7日）</a></p>
+
+          <p>10月に入ってからも、大和証券の委託先、ローソン、JR東日本とビューカードなどの公表が続き、政府は関係省庁による対策会議を開くと報じられています。ニュース映像で流れを確認しておくと、状況がつかみやすいはずです。</p>
+
+          <figure class="video reveal">
+            <div class="video__box">
+              <button class="video__facade" type="button" data-vid="pEae9VZAESs"
+                      style="background-image:url('https://i.ytimg.com/vi/pEae9VZAESs/hqdefault.jpg')"
+                      aria-label="焼肉きんぐ、タイムズカーなど 情報漏えい相次ぐ背景に生成AIか（2026年10月6日）（YouTubeで再生）">
+                <span class="video__play" aria-hidden="true"></span>
+                <span class="video__label">YouTube</span>
+              </button>
+            </div>
+            <figcaption>焼肉きんぐ、タイムズカーなど情報漏えいが相次ぐ背景に生成AIか（2026年10月6日）</figcaption>
+          </figure>
+
+          <figure class="video reveal">
+            <div class="video__box">
+              <button class="video__facade" type="button" data-vid="7cvYdI5l9LA"
+                      style="background-image:url('https://i.ytimg.com/vi/7cvYdI5l9LA/hqdefault.jpg')"
+                      aria-label="不正アクセス 政府まもなく対策会議 大量の情報漏えい相次ぐ（2026年10月8日）（YouTubeで再生）">
+                <span class="video__play" aria-hidden="true"></span>
+                <span class="video__label">YouTube</span>
+              </button>
+            </div>
+            <figcaption>不正アクセス 政府まもなく対策会議 大量の情報漏えい相次ぐ（2026年10月8日）</figcaption>
+          </figure>
+
+          <aside class="callout callout--point">
+            <div class="callout__head"><span class="callout__icon" aria-hidden="true">💡</span><span>ポイント</span></div>
+            <p>報道で目立つのは名簿やメールアドレスですが、タイムズカーの件では<strong>運転免許証の画像</strong>も対象に含まれていました。テキストより画像・映像のほうが、顔や住所など一度に漏れる情報が多くなります。</p>
+          </aside>
+
+          <h2>監視カメラの映像も、実際に流出している</h2>
+
+          <p>顧客データだけでなく、監視カメラの映像そのものが外部に見られていた事件も国内外で起きています。原因の種類が違う4件を挙げます。</p>
+
+          <h3>国内：保育園や食品工場の映像約500件が海外サイトに（2025年11月）</h3>
+
+          <p>読売新聞とトレンドマイクロの共同調査で、国内のネットワークカメラのライブ映像約500件が海外サイトで公開されていたことが分かりました。保育園の園児の顔がはっきり映る映像や、食品工場の内部の映像も含まれていました。海外の7サイトで見つかった約2万7,000件のうち、日本に関連するものは約1,300件とされています。</p>
+
+          <p>原因として挙げられたのは、公開範囲の設定ミス、IDとパスワードが初期設定のまま、古いカメラでセキュリティ更新が止まっている、の3つです。高度なハッキングではなく、設定の不備で丸見えになっていました。</p>
+
+          <figure class="video reveal">
+            <div class="video__box">
+              <button class="video__facade" type="button" data-vid="vf8rlxhlgbg"
+                      style="background-image:url('https://i.ytimg.com/vi/vf8rlxhlgbg/hqdefault.jpg')"
+                      aria-label="保育園や工場の防犯カメラ映像、500件が海外サイト流出…設定に不備（YouTubeで再生）">
+                <span class="video__play" aria-hidden="true"></span>
+                <span class="video__label">YouTube</span>
+              </button>
+            </div>
+            <figcaption>保育園や工場の防犯カメラ映像、500件が海外サイト流出…設定に不備「犯罪に悪用される恐れも」</figcaption>
+          </figure>
+
+          <p>参考：<a href="https://news.yahoo.co.jp/expert/articles/8f1e3d434d4ecccb9f6509e97fec1a4b12824bd4" target="_blank" rel="noopener">森井昌克「防犯カメラが“覗かれる日常”に」（Yahoo!ニュース エキスパート、2025年11月10日）</a>／<a href="https://mezamashi.media/articles/-/218902" target="_blank" rel="noopener">めざましmedia「防犯カメラ映像約1300件が海外に流出？」（2025年11月5日）</a></p>
+
+          <h3>米Verkada：クラウド事業者が侵入され15万台超のカメラにアクセス（2021年3月）</h3>
+
+          <p>クラウド型の業務用カメラを提供するVerkadaでは、攻撃者が管理者権限を得て、顧客の<strong>15万台を超えるライブカメラ</strong>にアクセスしました。米連邦取引委員会（FTC）は、精神科病院や女性向けクリニックの映像も見られていたと指摘しています。利用者側の設定がどれだけ正しくても、預け先のクラウドが破られれば映像は見られてしまう、という例です。</p>
+
+          <p>出典：<a href="https://www.ftc.gov/news-events/news/press-releases/2024/08/ftc-takes-action-against-security-camera-firm-verkada-over-charges-it-failed-secure-videos-other" target="_blank" rel="noopener">FTC プレスリリース（2024年8月30日・英語）</a></p>
+
+          <h3>米Ring：事業者の従業員が利用者の映像を閲覧（2023年5月に和解）</h3>
+
+          <p>Amazon傘下のRingについて、FTCは従業員や委託先が利用者の映像を自由に閲覧・ダウンロードできる状態だったと認定しました。1人の従業員が女性利用者の寝室や浴室を映した映像を数千本見ていたとされ、Ringは580万ドルを支払うことで和解しています（Ringは違法性を否定）。外部からの攻撃ではなく、<strong>預け先の内部の人間</strong>が見ていたケースです。</p>
+
+          <p>出典：<a href="https://www.ftc.gov/news-events/news/press-releases/2023/05/ftc-says-ring-employees-illegally-surveilled-customers-failed-stop-hackers-taking-control-users" target="_blank" rel="noopener">FTC プレスリリース（2023年5月31日・英語）</a></p>
+
+          <h3>米Wyze：システム障害で他人の映像が約1万3,000人に表示（2024年2月）</h3>
+
+          <p>家庭用カメラのWyzeでは、クラウド側の障害から復旧する際にデバイスとユーザーの紐付けが崩れ、約1万3,000人のアプリに他人のカメラのサムネイルが表示されました。実際にタップして見た人は1,504人です。攻撃も不正もなく、<strong>クラウドの不具合だけで</strong>映像が他人に渡りました。</p>
+
+          <p>出典：<a href="https://gigazine.net/news/20240220-wyze-allowed-access/" target="_blank" rel="noopener">GIGAZINE（2024年2月20日）</a></p>
+
+          <aside class="callout callout--warn">
+            <div class="callout__head"><span class="callout__icon" aria-hidden="true">⚠️</span><span>注意</span></div>
+            <p>4件のうち、利用者側の設定で防げたのは国内の1件だけです。残る3件は、カメラを買った側が何もミスをしていなくても起きています。</p>
+          </aside>
+
+          <div class="cyber-divider" aria-hidden="true">
+            <svg viewBox="0 0 340 14" fill="none">
+              <path d="M0 7 H150 M190 7 H340" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+              <circle cx="170" cy="7" r="2.5" fill="#D6913C"/>
+            </svg>
+          </div>
+
+          <h2>クラウド型カメラで映像が漏れる4つの経路</h2>
+
+          <p>前章の事件を経路ごとに分けると、クラウド型カメラの弱点がどこにあるかが見えてきます。</p>
+
+          <div class="table-wrap">
+            <table class="compare-table">
+              <caption>TABLE 02 — 映像が漏れる経路と、利用者側で防げるか</caption>
+              <thead>
+                <tr>
+                  <th>経路</th>
+                  <th>実例</th>
+                  <th>利用者側で防げるか</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>カメラ・録画機の設定不備</th>
+                  <td>国内の保育園・工場映像（2025年）</td>
+                  <td>防げる（初期パスワード変更、公開設定の確認、更新）</td>
+                </tr>
+                <tr>
+                  <th>クラウド事業者への侵入</th>
+                  <td>Verkada（2021年）</td>
+                  <td>防げない</td>
+                </tr>
+                <tr>
+                  <th>事業者内部の不正閲覧</th>
+                  <td>Ring（2023年和解）</td>
+                  <td>防げない</td>
+                </tr>
+                <tr>
+                  <th>クラウド側の不具合</th>
+                  <td>Wyze（2024年）</td>
+                  <td>防げない</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>下の3つに共通するのは、<strong>映像が自社の外にあること</strong>です。クラウド事業者がどれだけ対策をしていても、映像を預けている限り、相手のセキュリティ水準と社員のモラルに自社の映像の安全を委ねることになります。</p>
+
+          <p>工場の場合、映るのは従業員の顔だけではありません。製造ラインのレイアウト、設備の型番、作業手順、取引先から預かった製品まで映り込みます。個人情報の問題であると同時に、技術情報の流出でもあります。</p>
+
+          <aside class="callout callout--point">
+            <div class="callout__head"><span class="callout__icon" aria-hidden="true">💡</span><span>ポイント</span></div>
+            <p>クラウド型が悪いわけではありません。複数拠点をスマホで見られる手軽さは本物です。問題は、<strong>何の映像を外に預けているか</strong>を把握しないまま使っていることです。</p>
+          </aside>
+
+          <h2>エッジ処理のローカルAIカメラなら、映像は工場の外に出ない</h2>
+
+          <p>エッジAIは、カメラやその横に置いた小型コンピューター（エッジ端末）の上でAIの処理を行う方式です。転倒の検知や立入禁止エリアへの侵入判定を現場の機器だけで完結させるので、映像をクラウドに送る必要がありません。</p>
+
+          <p>外に出すとしても「何時何分にエリアAで転倒を検知」といった判定結果だけにできます。映像そのものは構内の機器に残り、インターネットの向こうには置かれません。前章の表でいえば、クラウド事業者への侵入・内部の不正閲覧・クラウドの不具合という3つの経路が、構成上なくなります。</p>
+
+          <div class="table-wrap">
+            <table class="compare-table">
+              <caption>TABLE 03 — クラウド型カメラとエッジAIカメラの比較</caption>
+              <thead>
+                <tr>
+                  <th>観点</th>
+                  <th>クラウド型カメラ</th>
+                  <th class="is-hl">エッジAIカメラ（ローカル処理）</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>映像の保存場所</th>
+                  <td>事業者のクラウド</td>
+                  <td class="is-hl">構内のエッジ端末・録画機</td>
+                </tr>
+                <tr>
+                  <th>AI処理の場所</th>
+                  <td>クラウド上のサーバー</td>
+                  <td class="is-hl">カメラまたはエッジ端末</td>
+                </tr>
+                <tr>
+                  <th>外部に出るデータ</th>
+                  <td>映像そのもの</td>
+                  <td class="is-hl">なし、または判定結果のみ</td>
+                </tr>
+                <tr>
+                  <th>ネット回線が止まったとき</th>
+                  <td>録画・検知が止まることがある</td>
+                  <td class="is-hl">現場で検知・記録を続けられる</td>
+                </tr>
+                <tr>
+                  <th>月々の通信量・クラウド保存料</th>
+                  <td>台数と保存期間に比例して増える</td>
+                  <td class="is-hl">映像を送らないぶん小さい</td>
+                </tr>
+                <tr>
+                  <th>遠隔からの閲覧</th>
+                  <td>得意</td>
+                  <td class="is-hl">VPNなど別の仕組みが必要</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>遅延が小さいことも利点です。映像をクラウドに送って結果を待つ往復がないため、転倒検知のように数秒の差が意味を持つ用途では、現場で判定したほうがアラームが早く鳴ります。</p>
+
+          <h2>エッジ型でも設定の不備には注意する</h2>
+
+          <p>映像が外に出ないとはいえ、エッジ型カメラにも守るべき点は残ります。国内の500件流出は、クラウドではなく<strong>ネットに直接つながったカメラの設定不備</strong>が原因でした。ローカル運用でも、同じミスをすれば同じことが起きます。</p>
+
+          <p>エッジ型で残るリスクは、主に次の4つです。</p>
+
+          <ul>
+            <li>録画機やエッジ端末の管理画面を、ポート開放でインターネットに公開してしまう</li>
+            <li>初期パスワードのまま運用する</li>
+            <li>保守用のリモート接続が、常時つながりっぱなしになっている</li>
+            <li>端末やストレージそのものの盗難・持ち出し</li>
+          </ul>
+
+          <p>どれも「外から入れる口を作らない」「機器を物理的に管理する」で対処できます。クラウド型の3経路のように、利用者の手が届かない場所で起きるリスクではない点が大きな違いです。</p>
+
+          <aside class="callout callout--warn">
+            <div class="callout__head"><span class="callout__icon" aria-hidden="true">⚠️</span><span>注意</span></div>
+            <p>「ローカル処理」をうたう製品でも、サムネイルや通知画像だけはクラウドに送っている場合があります。カタログの「ローカル」という言葉だけで判断せず、<strong>どのデータがどこへ送られるか</strong>を必ず確認してください。</p>
+          </aside>
+
+          <h2>導入前にベンダーへ確認する5項目</h2>
+
+          <p>クラウド型かエッジ型かを問わず、監視カメラを選ぶときは次の5点を見積もりの段階で質問しておくと、後から「映像が外に出ていた」と気づく事態を避けられます。</p>
+
+          <div class="table-wrap">
+            <table class="compare-table">
+              <caption>TABLE 04 — ベンダーへの確認項目</caption>
+              <thead>
+                <tr>
+                  <th>確認項目</th>
+                  <th>聞き方の例</th>
+                  <th>望ましい回答</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>映像の保存場所</th>
+                  <td>録画データは物理的にどこにありますか</td>
+                  <td>構内の機器のみ</td>
+                </tr>
+                <tr>
+                  <th>外部への送信内容</th>
+                  <td>インターネットに送られるデータを全部挙げてください</td>
+                  <td>なし、または判定結果・死活監視のみ</td>
+                </tr>
+                <tr>
+                  <th>AI処理の場所</th>
+                  <td>検知のAIはどの機器で動いていますか</td>
+                  <td>カメラまたは構内のエッジ端末</td>
+                </tr>
+                <tr>
+                  <th>管理画面の公開範囲</th>
+                  <td>管理画面は社外から開けますか</td>
+                  <td>構内LANからのみ</td>
+                </tr>
+                <tr>
+                  <th>保守時の接続方法</th>
+                  <td>リモート保守はどうつなぎますか</td>
+                  <td>必要なときだけ接続し、終わったら切る</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>費用は台数・検知したい内容・既存カメラを流用できるかで大きく変わります。エッジ型はクラウドの月額保存料がかからない代わりに、端末の初期費用が乗る構成が一般的です。正式な金額は、現場の条件を伺ったうえで個別にお見積りします。</p>
+
+          <aside class="callout callout--point">
+            <div class="callout__head"><span class="callout__icon" aria-hidden="true">💡</span><span>ポイント</span></div>
+            <p>「外部への送信内容を全部挙げてください」に即答できるかどうかで、ベンダーが自社製品のデータの流れを把握しているかが分かります。5項目のうち、いちばん差が出る質問です。</p>
+          </aside>
+
+          <h2>よくある質問</h2>
+
+          <h3>Q. いま使っているクラウドカメラは、すぐ外したほうがいいですか？</h3>
+          <p>すぐ外す必要はありません。まず、何を映しているカメラかを棚卸ししてください。駐車場や外周など映っても困らない場所はクラウド型のままにして、製造ライン・事務所・更衣室付近など社外に出したくない映像を撮っているものから、エッジ型への置き換えを検討するのが現実的です。</p>
+
+          <h3>Q. エッジ型だとスマホから映像を見られなくなりますか？</h3>
+          <p>映像をクラウドに置かないため、そのままでは社外から見られません。社外から見る必要がある場合は、VPNで構内LANに入って閲覧する構成にします。異常の通知だけなら、映像を含まない判定結果をスマホに送る形にすれば外に映像を出さずに済みます。</p>
+
+          <h3>Q. 既存の防犯カメラにAIを後付けできますか？</h3>
+          <p>RTSPなどの標準的な方式で映像を取り出せるネットワークカメラであれば、エッジ端末を追加してAI処理を載せられる場合が多いです。カメラの型番と設置状況によって可否が変わるので、型番が分かれば事前に確認できます。</p>
+
+          <h2>まとめ</h2>
+
+          <p>この記事では、2026年に相次いでいる個人情報流出の状況と、国内外の監視カメラ映像の流出事件4件をもとに、クラウド型カメラで映像が漏れる経路と、エッジ処理のローカルAIカメラで防げる範囲・残るリスクを解説しました。クラウド事業者への侵入、内部の不正閲覧、クラウドの不具合の3経路は、映像を外に出さないエッジ構成にすることでなくせます。一方で、初期パスワードや管理画面の公開といった設定の不備は、エッジ型でも利用者自身が塞ぐ必要があります。</p>
+
+          <p>まずは社内のカメラを一覧にして、それぞれの映像がどこに保存されているかを確かめるところから始めてみてください。</p>
+
+          <div class="cta-banner reveal">
+            <span class="cta-banner__kicker">CONTACT</span>
+            <p class="cta-banner__title">映像を外に出さないAI監視カメラを検討したい方へ</p>
+            <p class="cta-banner__text">nanoGUARDは、ネット不要で転倒検知や立入禁止エリアの監視ができるAI監視カメラです。既存カメラを使えるかどうかの確認だけでもご相談いただけます。</p>
+            <div class="cta-banner__btns">
+              <a class="btn btn--primary" href="https://nano-factory.net/company/">お問い合わせ</a>
+              <a class="btn btn--ghost" href="https://nano-factory.net/nanoguard-lp/">nanoGUARDを見る</a>
+            </div>
+          </div>
+
+        </div>
+        <!-- ▲▲ {{BODY}} ▲▲ -->
+      </article>
+
+      <!-- 追従目次（JSが #article-body の h2/h3 から自動生成） -->
+      <aside class="toc-wrap">
+        <nav class="toc" id="toc" aria-label="目次">
+          <div class="toc__head">
+            <span class="toc__label">CONTENTS</span>
+            <button class="toc__toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-list">目次</button>
+          </div>
+          <ol class="toc__list" id="toc-list"></ol>
+        </nav>
+      </aside>
+    </div>
+
+  </main>
+
+  <!-- ============================================================
+       フッター（既存HPトーン）
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3>About</h3>
+          <p>nanoFACTORY の技術の根底はロボット開発・フィジカルAI。製造業の現場で数々の課題を解決してきた経験から磨き上げたソフトウェアの販売と、AIエンジニアが現場に直接入り込む<strong>FDE(Forward Deployed Engineer)</strong>サービスが、私たちの事業です。</p>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>〒107-0062 東京都港区南青山５-11-14 H&amp;M南青山イースト308</p>
+          <p>Email: <span data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=" data-m-text></span></p>
+        </div>
+        <div>
+          <h3>Links</h3>
+          <ul class="footer-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../solutions/">ソリューション</a></li>
+            <li><a href="../products-services/">製品・サービス</a></li>
+            <li><a href="../news/">ニュース</a></li>
+            <li><a href="./">ブログ</a></li>
+            <li><a href="../company/">会社情報</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright"><span>&copy; <span id="year"></span> nanoFACTORY Co. All rights reserved.</span><span>nano-factory.net</span></div>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+
+  <script>
+  (function(){
+    'use strict';
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- フッター年号 ---------- */
+    var y = document.getElementById('year');
+    if (y) y.textContent = new Date().getFullYear();
+
+    /* ---------- 目次：h2/h3走査 → id自動付与 → TOC自動生成 ---------- */
+    var body = document.getElementById('article-body');
+    var tocList = document.getElementById('toc-list');
+    var heads = [];
+    if (body && tocList) {
+      heads = Array.prototype.slice.call(body.querySelectorAll('h2, h3'));
+      var frag = document.createDocumentFragment();
+      heads.forEach(function(h, i){
+        if (!h.id) h.id = 'sec-' + (i + 1);
+        var li = document.createElement('li');
+        li.className = 'toc__item toc__item--' + h.tagName.toLowerCase();
+        var a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent;
+        li.appendChild(a);
+        frag.appendChild(li);
+      });
+      tocList.appendChild(frag);
+    }
+
+    /* ---------- 目次：モバイル折りたたみ ---------- */
+    var toc = document.getElementById('toc');
+    var tocToggle = document.getElementById('toc-toggle');
+    if (toc && tocToggle) {
+      tocToggle.addEventListener('click', function(){
+        var open = toc.classList.toggle('is-open');
+        tocToggle.setAttribute('aria-expanded', String(open));
+      });
+      // モバイルで目次リンクをタップしたら閉じる
+      toc.addEventListener('click', function(e){
+        if (e.target.tagName === 'A' && toc.classList.contains('is-open')) {
+          toc.classList.remove('is-open');
+          tocToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    /* ---------- 目次：現在地ハイライト（IntersectionObserver） ---------- */
+    if (heads.length && 'IntersectionObserver' in window) {
+      var linkMap = {};
+      tocList.querySelectorAll('a').forEach(function(a){
+        linkMap[decodeURIComponent(a.hash.slice(1))] = a;
+      });
+      var activeId = null;
+      var setActive = function(id){
+        if (id === activeId) return;
+        if (activeId && linkMap[activeId]) linkMap[activeId].classList.remove('is-active');
+        if (linkMap[id]) { linkMap[id].classList.add('is-active'); activeId = id; }
+      };
+      var spy = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting) setActive(en.target.id);
+        });
+      }, { rootMargin: '-72px 0px -62% 0px', threshold: 0 });
+      heads.forEach(function(h){ spy.observe(h); });
+      setActive(heads[0].id);
+    }
+
+    /* ---------- 登場アニメ（reveal：非テキストブロックのみ） ---------- */
+    var revealEls = document.querySelectorAll('.reveal');
+    if (reduced || !('IntersectionObserver' in window)) {
+      revealEls.forEach(function(el){ el.classList.add('is-in'); });
+    } else {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+      revealEls.forEach(function(el){ io.observe(el); });
+    }
+
+    /* ---------- スクロール連動：プログレスバーのみ（transformのみ操作） ---------- */
+    var bar = document.getElementById('progress');
+    function updateProgress(){
+      if (!bar) return;
+      var doc = document.documentElement;
+      var max = doc.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+      bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+    }
+    var ticking = false;
+    function onFrame(){
+      ticking = false;
+      updateProgress();
+    }
+    function requestTick(){
+      if (!ticking) { ticking = true; window.requestAnimationFrame(onFrame); }
+    }
+    window.addEventListener('scroll', requestTick, { passive: true });
+    window.addEventListener('resize', requestTick, { passive: true });
+    onFrame();
+  })();
+  
+  // 動画ファサード：file://ではYouTubeを新タブで開き、http(s)ではその場で埋め込み再生する
+  document.querySelectorAll('.video__facade').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.getAttribute('data-vid');
+      if (location.protocol === 'file:') {
+        window.open('https://youtu.be/' + id, '_blank', 'noopener');
+        return;
+      }
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?rel=0&autoplay=1';
+      f.title = btn.getAttribute('aria-label') || 'YouTube';
+      f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+      f.setAttribute('allowfullscreen','');
+      btn.replaceWith(f);
+    });
+  });
+</script>
+  <script src="../mail.js"></script>
+</body>
+</html>
