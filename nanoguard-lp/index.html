@@ -3,25 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>nanoGUARD | 流出リスクゼロのAI監視カメラ | nanoFACTORY</title>
-  <meta name="description" content="映像を外に出さない、流出リスクゼロのAI監視カメラ。進入検知・接触検知・転倒検出・人数カウントを標準搭載し、それ以外の検知はPoCで現場専用に開発します。" />
+  <title>AI監視カメラ nanoGUARD｜エッジAIで映像・個人情報の流出リスクゼロ｜nanoFACTORY</title>
+  <meta name="description" content="nanoGUARDは、映像をインターネットに送らずカメラのそばのエッジAIで処理するAI監視カメラです。クラウド型カメラで起きている映像・個人情報流出のリスクをなくし、進入検知・接触検知・転倒検出・人数カウントで現場を24時間無人で監視します。" />
+  <link rel="canonical" href="https://nano-factory.net/nanoguard-lp/" />
+  <meta property="og:type" content="product" />
+  <meta property="og:site_name" content="nanoFACTORY" />
+  <meta property="og:title" content="AI監視カメラ nanoGUARD｜エッジAIで映像・個人情報の流出リスクゼロ｜nanoFACTORY" />
+  <meta property="og:description" content="nanoGUARDは、映像をインターネットに送らずカメラのそばのエッジAIで処理するAI監視カメラです。クラウド型カメラで起きている映像・個人情報流出のリスクをなくし、進入検知・接触検知・転倒検出・人数カウントで現場を24時間無人で監視します。" />
+  <meta property="og:url" content="https://nano-factory.net/nanoguard-lp/" />
+  <meta property="og:image" content="https://nano-factory.net/assets/opt/nanoguard-cloud-vs-edge.webp" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "nanoGUARD",
+    "category": "AI監視カメラ（エッジAI）",
+    "description": "nanoGUARDは、映像をインターネットに送らずカメラのそばのエッジAIで処理するAI監視カメラです。クラウド型カメラで起きている映像・個人情報流出のリスクをなくし、進入検知・接触検知・転倒検出・人数カウントで現場を24時間無人で監視します。",
+    "url": "https://nano-factory.net/nanoguard-lp/",
+    "image": "https://nano-factory.net/assets/opt/nanoguard-cloud-vs-edge.webp",
+    "brand": { "@type": "Brand", "name": "nanoGUARD" },
+    "manufacturer": { "@type": "Organization", "name": "株式会社nanoFACTORY", "url": "https://nano-factory.net/" }
+  }
+  </script>
   <link rel="stylesheet" href="../styles.css" />
   <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" />
   <style>
     html, body { scroll-snap-type: none !important; }
 
-    /* Hero centre-align */
-    .lp-hero--guard .lp-hero__inner {
-      max-width: 860px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center;
+    /* Hero：エッジAI端末の写真を大きく敷き、左にコピーを重ねる */
+    .lp-hero--guard { overflow: hidden; }
+    .lp-hero--guard .lp-hero__inner { max-width: 1088px; width: 100%; margin: 0 auto; padding-left: 0; padding-right: 0; }
+    .hero-copy { position: relative; z-index: 2; max-width: 640px; }
+    .hero-photo {
+      position: absolute; z-index: 1; margin: 0;
+      top: 0; bottom: 0; right: 0; width: 72%;
     }
-    .lp-hero--guard .hero-tags,
-    .lp-hero--guard .lp-btns {
-      justify-content: center;
+    .hero-photo img {
+      display: block; width: 100%; height: 100%;
+      object-fit: cover; object-position: 62% 62%;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 38%), linear-gradient(0deg, transparent 0%, #000 22%);
+              mask-image: linear-gradient(90deg, transparent 0%, #000 38%), linear-gradient(0deg, transparent 0%, #000 22%);
+      -webkit-mask-composite: source-in;
+              mask-composite: intersect;
     }
-    .lp-hero--guard .lp-lead { margin-left: auto; margin-right: auto; }
+    .hero-photo figcaption {
+      position: absolute; right: 4%; bottom: 9%;
+      font-size: 0.74rem; font-weight: 800; letter-spacing: 0.08em; color: rgba(255,255,255,0.55);
+    }
+    .lp-hero--guard .lp-h1 { text-shadow: 0 2px 24px rgba(3,8,15,0.85); }
+    @media (max-width: 900px) {
+      .lp-hero--guard { align-items: flex-end; min-height: 0 !important; padding-top: 80vw; padding-bottom: 3rem; }
+      .hero-photo { width: 118%; right: -9%; bottom: auto; top: 0; height: auto; }
+      .hero-photo img {
+        height: auto;
+        -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 58%, transparent 100%);
+                mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 58%, transparent 100%);
+      }
+      .hero-photo figcaption { display: none; }
+      .lp-hero--guard .lp-hero__inner { text-align: center; }
+      .hero-copy { margin: 0 auto; }
+      .lp-hero--guard .lp-btns { justify-content: center; }
+    }
 
     /* ── Frosted glass card base ── */
     .glass {
@@ -337,51 +380,45 @@
     }
 
     /* ── 流出リスクゼロ ── */
-    .risk-flows {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-top: 2rem;
+    /* クラウド vs エッジ 比較図 */
+    .cvse {
+      margin: 2.25rem 0 0;
+      border-radius: 22px;
+      padding: 1.2rem 1.2rem 1rem;
+      background: radial-gradient(80% 120% at 25% 40%, rgba(239,68,68,0.10) 0%, transparent 60%),
+                  radial-gradient(70% 120% at 78% 50%, rgba(16,185,129,0.12) 0%, transparent 60%),
+                  #070d1c;
+      border: 1px solid #1e293b;
+      box-shadow: 0 24px 60px rgba(15,23,42,0.18);
     }
-    .risk-flow {
-      border-radius: 18px;
-      padding: 1.6rem 1.5rem 1.4rem;
-      border: 1px solid #e5e7eb;
-      background: #fff;
+    .cvse__stage { position: relative; }
+    .cvse__stage img { display: block; width: 100%; height: auto; }
+    .cvse__head, .cvse__pin { position: absolute; white-space: nowrap; font-weight: 800; line-height: 1.2; }
+    .cvse__head {
+      top: 1%; padding: 0.42rem 0.95rem; border-radius: 999px;
+      font-size: clamp(0.72rem, 1.25vw, 0.95rem); letter-spacing: 0.04em; color: #fff;
     }
-    .risk-flow--cloud { border-color: #fecaca; background: #fff7f7; }
-    .risk-flow--edge  { border-color: #a7f3d0; background: #f2fdf8; }
-    .risk-flow__label {
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      margin-bottom: 1rem;
+    .cvse__head small { display: block; font-size: 0.72em; font-weight: 700; opacity: 0.85; margin-top: 0.15rem; letter-spacing: 0.02em; }
+    .cvse__head--bad  { left: 1%; background: rgba(185,28,28,0.88); border: 1px solid #f87171; }
+    .cvse__head--good { left: 52%; background: rgba(4,120,87,0.9); border: 1px solid #34d399; }
+    .cvse__pin {
+      transform: translateX(-50%);
+      padding: 0.28rem 0.7rem; border-radius: 8px;
+      font-size: clamp(0.62rem, 1vw, 0.8rem); color: #fff;
+      background: rgba(7,13,28,0.82); backdrop-filter: blur(4px);
     }
-    .risk-flow--cloud .risk-flow__label { color: #b91c1c; }
-    .risk-flow--edge  .risk-flow__label { color: #047857; }
-    .risk-chain {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
+    .cvse__sp { display: none; }
+    .cvse__img { position: relative; }
+    .cvse__img img { display: block; width: 100%; height: auto; }
+    .cvse__label {
+      display: inline-block; padding: 0.4rem 0.9rem; border-radius: 999px; margin-bottom: 0.4rem;
+      font-size: 0.9rem; font-weight: 800; color: #fff; line-height: 1.25;
     }
-    .risk-node {
-      padding: 0.55rem 0.8rem;
-      border-radius: 10px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #0f172a;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-    }
-    .risk-node--bad  { border-color: #f87171; color: #b91c1c; background: #fff; }
-    .risk-node--good { border-color: #34d399; color: #047857; background: #fff; }
-    .risk-arrow { color: #94a3b8; font-weight: 800; }
-    .risk-flow ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.45rem; }
-    .risk-flow li { font-size: 0.86rem; color: #374151; line-height: 1.6; padding-left: 1.4em; position: relative; }
-    .risk-flow--cloud li::before { content: "✗"; position: absolute; left: 0; color: #ef4444; font-weight: 900; }
-    .risk-flow--edge  li::before { content: "✓"; position: absolute; left: 0; color: #059669; font-weight: 900; }
+    .cvse__label small { display: block; font-size: 0.72em; font-weight: 700; opacity: 0.85; }
+    .cvse__label--bad  { background: rgba(185,28,28,0.88); border: 1px solid #f87171; }
+    .cvse__label--good { background: rgba(4,120,87,0.9); border: 1px solid #34d399; }
+    .cvse__pin--bad  { border: 1px solid rgba(248,113,113,0.8); color: #fecaca; }
+    .cvse__pin--good { border: 1px solid rgba(52,211,153,0.8); color: #a7f3d0; }
 
     .news-strip {
       display: grid;
@@ -402,6 +439,18 @@
     .risk-more a { font-weight: 800; color: #2a5fff; text-decoration: none; }
     .risk-more a::after { content: " →"; }
     .risk-note { font-size: 0.74rem; color: #64748b; line-height: 1.7; }
+
+    /* ── 標準機能 見出し・ほかのモデル導線 ── */
+    .std-title {
+      font-size: clamp(1.5rem, 2.5vw + 0.5rem, 2.2rem); font-weight: 800;
+      line-height: 1.3; margin: 0.4rem 0 2rem; color: #f5f5f8;
+    }
+    .more-models {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1rem 1.5rem;
+      margin: 0 0 3rem; text-align: center;
+    }
+    .more-models p { margin: 0; color: rgba(255,255,255,0.85); font-size: 1rem; font-weight: 700; }
+    .more-models strong { color: #56ccf2; }
 
     /* ── CASEスライド（課題 × 標準機能） ── */
     .case-show { margin-bottom: 3rem; }
@@ -468,37 +517,60 @@
     @keyframes stAlert { 0%,47% { opacity: 0; } 50%,90% { opacity: 1; } 93%,100% { opacity: 0; } }
     @keyframes boxIn   { 0%,47% { opacity: 0; transform: scale(1.18); } 52%,90% { opacity: 1; transform: scale(1); } 94%,100% { opacity: 0; } }
 
+    /* 人物ピクトグラム：腰・膝・肩の関節で動かす（各関節は親gの原点で回転） */
+    .pp line { stroke: #fff; stroke-width: 6.5; stroke-linecap: round; }
+    .pp .torso { stroke-width: 9; }
+    .pp .head { fill: #fff; stroke: none; }
+    .pp .far { opacity: 0.5; }
+    .pp .thigh, .pp .shin, .pp .arm { transform-origin: 0 0; }
+    .case-slide.is-active .walking .thigh { animation: thigh 0.84s linear infinite; }
+    .case-slide.is-active .walking .shin  { animation: shin 0.84s linear infinite; }
+    .case-slide.is-active .walking .arm   { animation: armSwing 0.84s ease-in-out infinite; }
+    .case-slide.is-active .walking .far .thigh,
+    .case-slide.is-active .walking .far .shin,
+    .case-slide.is-active .walking .far.arm { animation-delay: -0.42s; }
+    .case-slide.is-active .walking .bob { animation: bob 0.42s ease-in-out infinite; }
+    @keyframes thigh    { 0% { transform: rotate(20deg); } 50% { transform: rotate(-22deg); } 100% { transform: rotate(20deg); } }
+    @keyframes shin     { 0% { transform: rotate(14deg); } 16% { transform: rotate(38deg); } 40% { transform: rotate(8deg); } 50%,80% { transform: rotate(0deg); } 100% { transform: rotate(14deg); } }
+    @keyframes armSwing { 0% { transform: rotate(-28deg); } 50% { transform: rotate(28deg); } 100% { transform: rotate(-28deg); } }
+    @keyframes bob      { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1.6px); } }
+
     /* CASE 01 進入検知：人が禁止エリアへ歩いて入る */
     .zone { stroke: rgba(255,255,255,0.45); stroke-width: 2; stroke-dasharray: 7 5; fill: rgba(255,255,255,0.04); }
     .zone-label { fill: rgba(255,255,255,0.6); font: 800 12px/1 sans-serif; }
-    .case-slide.is-active .walker1 { animation: walkIn 5.2s ease-in-out infinite; }
+    .case-slide.is-active .walker1 { animation: walkIn 5.2s linear infinite; }
     .case-slide.is-active .zone { animation: zoneAlert 5.2s infinite; }
     @keyframes walkIn {
-      0%   { transform: translate(55px, 0); opacity: 0; }
+      0%   { transform: translate(70px, 0); opacity: 0; }
       6%   { opacity: 1; }
-      48%  { transform: translate(235px, 0); }
-      90%  { transform: translate(235px, 0); opacity: 1; }
-      100% { transform: translate(235px, 0); opacity: 0; }
+      50%  { transform: translate(196px, 0); }
+      90%  { transform: translate(292px, 0); opacity: 1; }
+      96%,100% { transform: translate(306px, 0); opacity: 0; }
     }
     @keyframes zoneAlert {
       0%,47%  { stroke: rgba(255,255,255,0.45); fill: rgba(255,255,255,0.04); }
       50%,90% { stroke: #f97316; fill: rgba(249,115,22,0.16); }
       93%,100%{ stroke: rgba(255,255,255,0.45); fill: rgba(255,255,255,0.04); }
     }
-    .case-slide.is-active .walker1 .legs { animation: stride 0.55s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: top center; }
-    @keyframes stride { from { transform: skewX(14deg); } to { transform: skewX(-14deg); } }
 
-    /* CASE 02 接触検知：手が口元へ */
-    .case-slide.is-active .forearm { animation: reach 5.2s ease-in-out infinite; }
-    .forearm { transform-box: view-box; transform-origin: 222px 134px; transform: rotate(-148deg); }
+    /* CASE 02 接触検知：稼働中の機械に手を伸ばす */
+    .machine { stroke: rgba(255,255,255,0.75); stroke-width: 2; fill: rgba(86,204,242,0.07); }
+    .machine-part { stroke: rgba(255,255,255,0.55); stroke-width: 1.6; fill: rgba(255,255,255,0.05); }
+    .chuck line { stroke: rgba(255,255,255,0.85); stroke-width: 3; }
+    .case-slide.is-active .chuck { animation: spin 0.9s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .chuck { transform-origin: 0 0; }
+    .run-lamp { fill: #34d399; stroke: none; }
+    .case-slide.is-active .run-lamp { animation: recBlink 1s steps(2) infinite; }
+    .case-slide.is-active .reach-arm { animation: reach 5.2s ease-in-out infinite; }
     @keyframes reach {
-      0%,12%  { transform: rotate(-148deg); }
-      46%,88% { transform: rotate(0deg); }
-      100%    { transform: rotate(-148deg); }
+      0%,14%  { transform: rotate(6deg); }
+      46%,88% { transform: rotate(-84deg); }
+      100%    { transform: rotate(6deg); }
     }
 
     /* CASE 03 転倒検出：立っている人が倒れる */
-    .faller { transform-box: view-box; transform-origin: 160px 170px; }
+    .faller { transform-box: view-box; transform-origin: 160px 172px; }
     .case-slide.is-active .faller { animation: fall 5.2s ease-in infinite; }
     @keyframes fall {
       0%,30%  { transform: rotate(0deg); }
@@ -519,7 +591,6 @@
       92%  { opacity: 1; }
       100% { transform: translate(310px, 0); opacity: 0; }
     }
-    .case-slide.is-active .walker-c .legs { animation: stride 0.5s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: top center; }
     .counter-pill {
       position: absolute; right: 0.85rem; bottom: 0.8rem; z-index: 2;
       padding: 0.35rem 0.8rem; border-radius: 8px;
@@ -630,7 +701,10 @@
     @media (max-width: 900px) {
       .case-slide { grid-template-columns: 1fr; gap: 1.5rem; }
       .case-tabs { grid-template-columns: repeat(2, 1fr); }
-      .risk-flows { grid-template-columns: 1fr; }
+        .cvse { padding: 1rem 0.75rem 0.75rem; }
+      .cvse__stage { display: none; }
+      .cvse__sp { display: flex; flex-direction: column; gap: 1.5rem; }
+      .cvse__sp .cvse__pin { font-size: 0.72rem; }
       .news-strip { grid-template-columns: 1fr; }
       .flow-steps { grid-template-columns: 1fr 1fr; }
       .flow-card:not(:last-child)::after { display: none; }
@@ -688,20 +762,19 @@
       <div class="hero-hud-data hero-hud-data--tr"><span></span><span></span><span></span></div>
     </div>
 
+    <figure class="hero-photo">
+        <img src="../assets/opt/nanoguard-hero-edge-unit.jpg" width="1400" height="1050" fetchpriority="high" alt="nanoGUARDのエッジAI端末。カメラ映像を構内でAI処理し、インターネットに送らない" />
+        <figcaption>映像を外に出さない エッジAI端末</figcaption>
+      </figure>
+
     <div class="lp-hero__inner container">
-      <div class="lp-kicker">nanoGUARD — AI監視カメラ</div>
-      <h1 class="lp-h1"><span class="scan-word">安全</span>・<span class="scan-word">衛生</span>・<span class="scan-word">品質管理</span><span class="h1-sub"><em>流出リスクゼロ</em>のAI監視カメラ</span></h1>
-      <p class="hero-sublead">映像はカメラのそばのエッジ端末でAI処理し、インターネットには送りません。<br>情報流出が相次ぐいま、現場の映像を外に出さずに安全と衛生を守ります。</p>
-      <div class="hero-tags">
-        <span class="hero-tag">映像を外に出さない</span>
-        <span class="hero-tag">ネット不要</span>
-        <span class="hero-tag">進入・接触・転倒・人数を標準搭載</span>
-        <span class="hero-tag">専用AIをPoC開発</span>
-        <span class="hero-tag">ISO対応</span>
-      </div>
+      <div class="hero-copy">
+      <div class="lp-kicker">nanoGUARD — エッジAI監視カメラ</div>
+      <h1 class="lp-h1"><span style="white-space:nowrap">現場のリスクを</span><wbr><span class="scan-word" style="white-space:nowrap">24時間無人で監視</span><span class="h1-sub">完全エッジ処理で<em>データ流出ゼロ</em></span></h1>
       <div class="lp-btns">
         <a class="cta-button" href="#cases">標準機能を見る</a>
         <a class="cta-button cta-button--outline" href="#contact">お問い合わせ</a>
+      </div>
       </div>
     </div>
   </section>
@@ -709,37 +782,40 @@
   <!-- 流出リスクゼロ -->
   <section id="norisk" class="lp-section lp-section--white">
     <div class="container">
-      <div class="lp-kicker">流出リスクゼロの理由</div>
+      <div class="lp-kicker">エッジAIで流出リスクゼロ</div>
       <h2>映像は、現場から一歩も外に出ません</h2>
-      <p class="lead-text">クラウド型カメラは映像をインターネットの向こうに預けるため、利用者がどれだけ気をつけても、事業者側への侵入や内部の不正閲覧、システム障害による取り違えは防げません。nanoGUARDはAI処理も録画も構内で完結させるので、こうした流出経路がそもそもありません。</p>
+      <p class="lead-text">従業員の顔や作業の様子が映る監視カメラの映像は、それ自体が個人情報です。クラウド型カメラは映像をインターネットの向こうに預けるため、利用者がどれだけ気をつけても、事業者側への侵入や内部の不正閲覧、システム障害による取り違えは防げません。nanoGUARDはエッジAIで解析も録画も構内で完結させるので、映像や個人情報が流出する経路がそもそもありません。</p>
 
-      <div class="risk-flows">
-        <div class="risk-flow risk-flow--cloud">
-          <div class="risk-flow__label">一般的なクラウド型カメラ</div>
-          <div class="risk-chain">
-            <span class="risk-node">カメラ</span><span class="risk-arrow">→</span>
-            <span class="risk-node risk-node--bad">インターネット</span><span class="risk-arrow">→</span>
-            <span class="risk-node risk-node--bad">事業者のクラウド</span>
-          </div>
-          <ul>
-            <li>クラウド事業者が侵入されると映像が見られる</li>
-            <li>事業者の従業員・委託先が映像を閲覧できる</li>
-            <li>システム障害で他人の映像と取り違えが起きる</li>
-          </ul>
+      <figure class="cvse">
+        <div class="cvse__stage">
+          <span class="cvse__head cvse__head--bad">一般的なクラウド型カメラ<small>映像をネットの向こうに預ける</small></span>
+          <span class="cvse__head cvse__head--good">nanoGUARD<small>AI処理も録画も構内で完結</small></span>
+          <img src="../assets/opt/nanoguard-cloud-vs-edge.webp" width="1800" height="600" loading="lazy" alt="クラウド型監視カメラとエッジAI監視カメラの比較。左：映像がインターネット経由でクラウドに送られ、侵入による映像・個人情報流出のリスクがある。右：nanoGUARDは工場内のエッジAI端末で映像を処理し、インターネットと接続しない。" />
+          <span class="cvse__pin cvse__pin--bad" style="left:23%;top:76%">映像をインターネットへ送信</span>
+          <span class="cvse__pin cvse__pin--bad" style="left:39%;top:88%">事業者サーバーへの侵入・不正閲覧</span>
+          <span class="cvse__pin cvse__pin--good" style="left:58%;top:83%">外部回線とつながない</span>
+          <span class="cvse__pin cvse__pin--good" style="left:74%;top:85%">構内のエッジ端末でAI処理・録画</span>
         </div>
-        <div class="risk-flow risk-flow--edge">
-          <div class="risk-flow__label">nanoGUARD（エッジ処理）</div>
-          <div class="risk-chain">
-            <span class="risk-node">カメラ</span><span class="risk-arrow">→</span>
-            <span class="risk-node risk-node--good">構内のエッジ端末（AI処理・録画）</span>
+        <!-- スマホ：左右を分割して上下に並べる -->
+        <div class="cvse__sp">
+          <div class="cvse__half">
+            <span class="cvse__label cvse__label--bad">一般的なクラウド型カメラ<small>映像をネットの向こうに預ける</small></span>
+            <div class="cvse__img">
+              <img src="../assets/opt/nanoguard-cloud-side.webp" width="930" height="600" loading="lazy" alt="クラウド型監視カメラ：映像がインターネット経由でクラウドに送られ、侵入による映像・個人情報流出のリスクがある" />
+              <span class="cvse__pin cvse__pin--bad" style="left:30%;top:72%">映像をネットへ送信</span>
+              <span class="cvse__pin cvse__pin--bad" style="left:66%;top:90%">サーバーへの侵入・不正閲覧</span>
+            </div>
           </div>
-          <ul>
-            <li>映像をインターネットに送信しない</li>
-            <li>社外の第三者が映像にアクセスする経路がない</li>
-            <li>回線が止まっても検知と記録を続けられる</li>
-          </ul>
+          <div class="cvse__half">
+            <span class="cvse__label cvse__label--good">nanoGUARD<small>AI処理も録画も構内で完結</small></span>
+            <div class="cvse__img">
+              <img src="../assets/opt/nanoguard-edge-side.webp" width="892" height="600" loading="lazy" alt="nanoGUARD：工場内のエッジAI端末で映像を処理し、インターネットと接続しない" />
+              <span class="cvse__pin cvse__pin--good" style="left:24%;top:72%">外部回線とつながない</span>
+              <span class="cvse__pin cvse__pin--good" style="left:62%;top:90%">エッジ端末でAI処理・録画</span>
+            </div>
+          </div>
         </div>
-      </div>
+      </figure>
 
       <div class="news-strip">
         <div class="news-fact">
@@ -770,9 +846,7 @@
   <section id="cases" class="problem-section">
     <div class="problem-section__bg"></div>
     <div class="container">
-      <div class="lp-kicker">こんな現場に ／ 標準機能</div>
-      <h2 style="color:#f5f5f8;margin-bottom:0.5rem;">見えていない問題を、4つの標準機能で検知する</h2>
-      <p class="lead-text">進入検知・接触検知・転倒検出・人数カウントは、導入したその日から使える標準機能です。製造・食品・医療・物流と、業種を問わず共通する課題に対応します。</p>
+      <h2 class="std-title">AI監視 標準機能</h2>
 
       <div class="case-show" id="caseShow">
 
@@ -781,16 +855,14 @@
           <div class="cam">
             <div class="cam__hud"><span class="cam__case"><span class="cam__rec">REC</span><b>CASE 01</b>進入検知</span><span class="cam__edge">エッジ処理・外部送信なし</span></div>
             <svg class="scene" viewBox="0 0 320 200" aria-hidden="true">
-              <line class="floor" x1="0" y1="170" x2="320" y2="170"/>
+              <line class="floor" x1="0" y1="174" x2="320" y2="174"/>
               <rect class="zone" x="190" y="72" width="118" height="98" rx="4"/>
               <text class="zone-label" x="249" y="64" text-anchor="middle">立入禁止エリア</text>
               <g class="walker1">
-                <circle cx="0" cy="103" r="9"/><line x1="0" y1="112" x2="0" y2="140"/>
-                <line x1="0" y1="118" x2="-11" y2="134"/><line x1="0" y1="118" x2="11" y2="134"/>
-                <g class="legs"><line x1="0" y1="140" x2="-9" y2="170"/><line x1="0" y1="140" x2="9" y2="170"/></g>
+                <g class="walking"><g class="bob"><g class="pp"><g transform="translate(0,114)"><g class="arm far"><line x1="0" y1="0" x2="0" y2="24"/></g></g><g class="far"><g transform="translate(0,139)"><g class="thigh"><line x1="0" y1="0" x2="0" y2="16"/><g transform="translate(0,16)"><g class="shin"><line x1="0" y1="0" x2="0" y2="15"/></g></g></g></g></g><line class="torso" x1="0" y1="113" x2="0" y2="139"/><circle class="head" cx="0" cy="100" r="8.5"/><g transform="translate(0,139)"><g class="thigh"><line x1="0" y1="0" x2="0" y2="16"/><g transform="translate(0,16)"><g class="shin"><line x1="0" y1="0" x2="0" y2="15"/></g></g></g></g><g transform="translate(0,114)"><g class="arm"><line x1="0" y1="0" x2="0" y2="24"/></g></g></g></g></g>
+                <rect class="bbox" x="-17" y="88" width="34" height="88" rx="3"/>
+                <text class="bbox-tag" x="-17" y="83">PERSON</text>
               </g>
-              <rect class="bbox" x="219" y="88" width="32" height="86" rx="3"/>
-              <text class="bbox-tag" x="219" y="83">PERSON</text>
             </svg>
             <div class="cam__status"><span class="st st-ok">● 監視中</span><span class="st st-alert">⚠ 立入禁止エリアへの侵入を検知</span></div>
           </div>
@@ -808,28 +880,30 @@
           <div class="cam">
             <div class="cam__hud"><span class="cam__case"><span class="cam__rec">REC</span><b>CASE 02</b>接触検知</span><span class="cam__edge">エッジ処理・外部送信なし</span></div>
             <svg class="scene" viewBox="0 0 320 200" aria-hidden="true">
-              <circle cx="160" cy="60" r="28"/>
-              <circle cx="150" cy="54" r="2.4" fill="#fff" stroke="none"/><circle cx="170" cy="54" r="2.4" fill="#fff" stroke="none"/>
-              <path d="M150 72 Q160 78 170 72"/>
-              <line x1="160" y1="88" x2="160" y2="96"/>
-              <path d="M112 138 Q116 100 160 96 Q204 100 208 138"/>
-              <line x1="116" y1="112" x2="106" y2="160"/>
-              <line x1="204" y1="110" x2="222" y2="134"/>
-              <g class="forearm">
-                <line x1="222" y1="134" x2="180" y2="80"/>
-                <circle cx="177" cy="76" r="8" fill="rgba(255,255,255,0.15)"/>
+              <line class="floor" x1="0" y1="174" x2="320" y2="174"/>
+              <rect class="machine-part" x="186" y="46" width="60" height="14" rx="3"/>
+              <rect class="machine" x="174" y="60" width="132" height="114" rx="6"/>
+              <rect class="machine-part" x="262" y="74" width="32" height="50" rx="3"/>
+              <circle class="run-lamp" cx="270" cy="84" r="3.2"/>
+              <circle class="machine-part" cx="284" cy="100" r="4.5"/><circle class="machine-part" cx="270" cy="112" r="4.5"/>
+              <g transform="translate(210,117)">
+                <circle class="machine-part" r="21"/>
+                <g class="chuck"><line x1="0" y1="0" x2="0" y2="-16"/><line x1="0" y1="0" x2="13.9" y2="8"/><line x1="0" y1="0" x2="-13.9" y2="8"/></g>
               </g>
-              <rect class="bbox" x="124" y="24" width="76" height="68" rx="3"/>
-              <text class="bbox-tag" x="124" y="19">FACE TOUCH</text>
+              <rect class="zone" x="166" y="78" width="78" height="68" rx="4"/>
+              <text class="zone-label" x="205" y="162" text-anchor="middle">接触禁止エリア</text>
+              <g transform="translate(140,0)"><g class="pp"><g transform="translate(0,114)"><g class="arm far"><line x1="0" y1="0" x2="0" y2="24"/></g></g><g class="far"><g transform="translate(0,139)"><g class="thigh" style="transform:rotate(8deg)"><line x1="0" y1="0" x2="0" y2="16"/><g transform="translate(0,16)"><g class="shin"><line x1="0" y1="0" x2="0" y2="15"/></g></g></g></g></g><line class="torso" x1="0" y1="113" x2="0" y2="139"/><circle class="head" cx="0" cy="100" r="8.5"/><g transform="translate(0,139)"><g class="thigh" style="transform:rotate(-8deg)"><line x1="0" y1="0" x2="0" y2="16"/><g transform="translate(0,16)"><g class="shin"><line x1="0" y1="0" x2="0" y2="15"/></g></g></g></g><g transform="translate(0,114)"><g class="arm reach-arm"><line x1="0" y1="0" x2="0" y2="26"/><circle class="head" cx="0" cy="30" r="4.5"/></g></g></g></g>
+              <rect class="bbox" x="160" y="98" width="36" height="36" rx="3"/>
+              <text class="bbox-tag" x="162" y="93">TOUCH</text>
             </svg>
-            <div class="cam__status"><span class="st st-ok">● 監視中</span><span class="st st-alert">⚠ 顔・口元への接触を検知</span></div>
+            <div class="cam__status"><span class="st st-ok">● 監視中</span><span class="st st-alert">⚠ 稼働中の設備への接触を検知</span></div>
           </div>
           <div class="case-text">
             <div class="case-no">CASE <b>02</b><span>/ 04</span></div>
             <div class="case-feature"><span class="badge-std">標準機能</span>接触検知</div>
-            <h3>無意識の顔触りが、<br>異物混入・感染のリスクになる</h3>
-            <p class="case-solve">顔・口・鼻への手の接触を骨格AIが検知。<strong>回数をログに残し</strong>、注意だけでは直らない癖を衛生教育につなげます。</p>
-            <div class="case-scenes"><span>食品工場の盛付・包装</span><span>調理場</span><span>医療・介護</span></div>
+            <h3>稼働中の機械や設備に、<br>うっかり手を触れてしまう</h3>
+            <p class="case-solve">骨格AIが手の位置を追い、<strong>指定した機械・設備に触れた瞬間を検知</strong>。警告と同時に映像付きで記録し、埋もれがちなヒヤリハットを安全教育につなげます。</p>
+            <div class="case-scenes"><span>稼働中の工作機械・プレス</span><span>ロボット・搬送設備の周辺</span><span>触れてはいけない製品・薬品</span></div>
           </div>
         </div>
 
@@ -839,12 +913,8 @@
             <div class="cam__hud"><span class="cam__case"><span class="cam__rec">REC</span><b>CASE 03</b>転倒検出</span><span class="cam__edge">エッジ処理・外部送信なし</span></div>
             <svg class="scene" viewBox="0 0 320 200" aria-hidden="true">
               <line class="floor" x1="0" y1="174" x2="320" y2="174"/>
-              <g class="faller">
-                <circle cx="160" cy="103" r="9"/><line x1="160" y1="112" x2="160" y2="140"/>
-                <line x1="160" y1="118" x2="149" y2="134"/><line x1="160" y1="118" x2="171" y2="134"/>
-                <line x1="160" y1="140" x2="151" y2="170"/><line x1="160" y1="140" x2="169" y2="170"/>
-              </g>
-              <rect class="bbox-calm calm-box" x="144" y="88" width="32" height="86" rx="3"/>
+              <g class="faller"><g transform="translate(160,0)"><g class="pp"><g transform="translate(0,114)"><g class="arm far"><line x1="0" y1="0" x2="0" y2="24"/></g></g><g class="far"><g transform="translate(0,139)"><g class="thigh"><line x1="0" y1="0" x2="0" y2="16"/><g transform="translate(0,16)"><g class="shin"><line x1="0" y1="0" x2="0" y2="15"/></g></g></g></g></g><line class="torso" x1="0" y1="113" x2="0" y2="139"/><circle class="head" cx="0" cy="100" r="8.5"/><g transform="translate(0,139)"><g class="thigh"><line x1="0" y1="0" x2="0" y2="16"/><g transform="translate(0,16)"><g class="shin"><line x1="0" y1="0" x2="0" y2="15"/></g></g></g></g><g transform="translate(0,114)"><g class="arm"><line x1="0" y1="0" x2="0" y2="24"/></g></g></g></g></g>
+              <rect class="bbox-calm calm-box" x="143" y="88" width="34" height="88" rx="3"/>
               <rect class="bbox" x="80" y="150" width="96" height="30" rx="3"/>
               <text class="bbox-tag" x="80" y="145">FALL</text>
             </svg>
@@ -864,23 +934,17 @@
           <div class="cam">
             <div class="cam__hud"><span class="cam__case"><span class="cam__rec">REC</span><b>CASE 04</b>人数カウント</span><span class="cam__edge">エッジ処理・外部送信なし</span></div>
             <svg class="scene" viewBox="0 0 320 200" aria-hidden="true">
-              <line class="floor" x1="0" y1="170" x2="320" y2="170"/>
+              <line class="floor" x1="0" y1="174" x2="320" y2="174"/>
               <line class="count-line" id="countLine" x1="160" y1="62" x2="160" y2="182"/>
               <text class="zone-label" x="160" y="54" text-anchor="middle">カウントライン</text>
               <g class="walker-c">
-                <circle cx="0" cy="103" r="9"/><line x1="0" y1="112" x2="0" y2="140"/>
-                <line x1="0" y1="118" x2="-11" y2="134"/><line x1="0" y1="118" x2="11" y2="134"/>
-                <g class="legs"><line x1="0" y1="140" x2="-9" y2="170"/><line x1="0" y1="140" x2="9" y2="170"/></g>
+                <g class="walking"><g class="bob"><g class="pp"><g transform="translate(0,114)"><g class="arm far"><line x1="0" y1="0" x2="0" y2="24"/></g></g><g class="far"><g transform="translate(0,139)"><g class="thigh"><line x1="0" y1="0" x2="0" y2="16"/><g transform="translate(0,16)"><g class="shin"><line x1="0" y1="0" x2="0" y2="15"/></g></g></g></g></g><line class="torso" x1="0" y1="113" x2="0" y2="139"/><circle class="head" cx="0" cy="100" r="8.5"/><g transform="translate(0,139)"><g class="thigh"><line x1="0" y1="0" x2="0" y2="16"/><g transform="translate(0,16)"><g class="shin"><line x1="0" y1="0" x2="0" y2="15"/></g></g></g></g><g transform="translate(0,114)"><g class="arm"><line x1="0" y1="0" x2="0" y2="24"/></g></g></g></g></g>
               </g>
               <g class="walker-c" style="animation-delay:-1.7s">
-                <circle cx="0" cy="103" r="9"/><line x1="0" y1="112" x2="0" y2="140"/>
-                <line x1="0" y1="118" x2="-11" y2="134"/><line x1="0" y1="118" x2="11" y2="134"/>
-                <g class="legs"><line x1="0" y1="140" x2="-9" y2="170"/><line x1="0" y1="140" x2="9" y2="170"/></g>
+                <g class="walking"><g class="bob"><g class="pp"><g transform="translate(0,114)"><g class="arm far"><line x1="0" y1="0" x2="0" y2="24"/></g></g><g class="far"><g transform="translate(0,139)"><g class="thigh"><line x1="0" y1="0" x2="0" y2="16"/><g transform="translate(0,16)"><g class="shin"><line x1="0" y1="0" x2="0" y2="15"/></g></g></g></g></g><line class="torso" x1="0" y1="113" x2="0" y2="139"/><circle class="head" cx="0" cy="100" r="8.5"/><g transform="translate(0,139)"><g class="thigh"><line x1="0" y1="0" x2="0" y2="16"/><g transform="translate(0,16)"><g class="shin"><line x1="0" y1="0" x2="0" y2="15"/></g></g></g></g><g transform="translate(0,114)"><g class="arm"><line x1="0" y1="0" x2="0" y2="24"/></g></g></g></g></g>
               </g>
               <g class="walker-c" style="animation-delay:-3.4s">
-                <circle cx="0" cy="103" r="9"/><line x1="0" y1="112" x2="0" y2="140"/>
-                <line x1="0" y1="118" x2="-11" y2="134"/><line x1="0" y1="118" x2="11" y2="134"/>
-                <g class="legs"><line x1="0" y1="140" x2="-9" y2="170"/><line x1="0" y1="140" x2="9" y2="170"/></g>
+                <g class="walking"><g class="bob"><g class="pp"><g transform="translate(0,114)"><g class="arm far"><line x1="0" y1="0" x2="0" y2="24"/></g></g><g class="far"><g transform="translate(0,139)"><g class="thigh"><line x1="0" y1="0" x2="0" y2="16"/><g transform="translate(0,16)"><g class="shin"><line x1="0" y1="0" x2="0" y2="15"/></g></g></g></g></g><line class="torso" x1="0" y1="113" x2="0" y2="139"/><circle class="head" cx="0" cy="100" r="8.5"/><g transform="translate(0,139)"><g class="thigh"><line x1="0" y1="0" x2="0" y2="16"/><g transform="translate(0,16)"><g class="shin"><line x1="0" y1="0" x2="0" y2="15"/></g></g></g></g><g transform="translate(0,114)"><g class="arm"><line x1="0" y1="0" x2="0" y2="24"/></g></g></g></g></g>
               </g>
             </svg>
             <div class="cam__status"><span class="st st-ok">● カウント中</span></div>
@@ -901,6 +965,11 @@
           <button class="case-tab" data-goto="2" role="tab"><small>CASE 03</small><span>転倒検出</span><i class="case-tab__bar"></i></button>
           <button class="case-tab" data-goto="3" role="tab"><small>CASE 04</small><span>人数カウント</span><i class="case-tab__bar"></i></button>
         </div>
+      </div>
+
+      <div class="more-models">
+        <p>このほかの監視項目も、<strong>既存のAIモデル</strong>で対応できる場合があります。</p>
+        <a class="cta-button" href="#contact">監視したい内容を相談する</a>
       </div>
 
       <p style="text-align:center;color:rgba(245,245,248,0.5);font-size:0.8rem;margin-bottom:1rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;">こんな現場でご活用いただいています</p>
@@ -1030,9 +1099,9 @@
             <td class="ba-after">侵入した瞬間にアラームで通知</td>
           </tr>
           <tr>
-            <td>顔への接触リスク</td>
-            <td class="ba-before">把握できない。注意しても繰り返す</td>
-            <td class="ba-after">検知とログで回数を見える化し、行動改善へ</td>
+            <td>稼働中の設備への接触</td>
+            <td class="ba-before">ヒヤリハットが報告されず埋もれる</td>
+            <td class="ba-after">触れた瞬間に検知し、映像と回数を記録</td>
           </tr>
           <tr>
             <td>転倒・体調不良の発見</td>
