@@ -691,6 +691,26 @@
       content: "›"; position: absolute; right: -0.85rem; top: 50%; transform: translateY(-50%);
       font-size: 1.6rem; font-weight: 900; color: #94a3b8; z-index: 1;
     }
+    /* ── 参考価格 ── */
+    .price-wrap { margin-top: 1.75rem; }
+    .price-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .price-table th, .price-table td { padding: 1rem 1.1rem; border-bottom: 1px solid #e2e8f0; text-align: left; vertical-align: top; line-height: 1.6; }
+    .price-table thead th { font-size: 0.82rem; font-weight: 800; color: #0f172a; border-bottom: 2px solid #0f172a; }
+    .price-table tbody th { font-weight: 700; color: #475569; white-space: nowrap; width: 18%; }
+    .price-table td { color: #334155; }
+    .price-table td b { font-size: 1.2rem; font-weight: 900; color: #0f172a; }
+    .price-table td.per b { color: #2a5fff; font-size: 1.6rem; letter-spacing: 0.01em; }
+    .price-table td.per { vertical-align: middle; }
+    .price-table tbody th { color: #0f172a; font-weight: 800; }
+    .price-init { margin: 1rem 0 0; font-size: 0.9rem; color: #334155; }
+    .price-init b { color: #0f172a; }
+    @media (max-width: 700px) {
+      .price-table thead { display: none; }
+      .price-table tr { display: block; padding: 0.9rem 0; border-bottom: 1px solid #e2e8f0; }
+      .price-table th, .price-table td { display: block; border: none; padding: 0.15rem 0; width: auto; }
+      .price-table tbody th { font-size: 1rem; margin-bottom: 0.3rem; }
+      .price-table td::before { content: attr(data-label) "：　"; color: #64748b; font-size: 0.82rem; }
+    }
     .flow-note { font-size: 0.82rem; color: #64748b; margin-top: 1.25rem; }
 
     @media (prefers-reduced-motion: reduce) {
@@ -985,9 +1005,8 @@
   <!-- 専用開発の実績 -->
   <section id="custom" class="lp-section lp-section--surface">
     <div class="container">
-      <div class="lp-kicker">PoCによる専用開発</div>
-      <h2>標準機能にない検知は、現場専用に開発します</h2>
-      <p class="lead-text">「この場面を見張りたい」という課題を伺い、PoC（実証実験）で現場の映像を使って専用のAIを開発します。これまでに開発した例です。</p>
+      <h2>開発実績</h2>
+      <p class="lead-text">標準機能にない検知は、現場の映像を使ったPoC（実証実験）で専用のAIを開発します。</p>
       <div class="showcase-grid">
 
         <a class="showcase-card" href="../virtual-security-gate-lp/bear.html">
@@ -995,31 +1014,27 @@
             <img src="../assets/nanoguard-showcase-bear-detection.png" alt="門に設置したカメラでクマを検知" loading="lazy" />
           </div>
           <div class="showcase-card__body">
-            <span class="made-label">開発実績</span>
             <h3>クマを門で監視する</h3>
             <p>門に設置したカメラでクマの接近を検知し、現場に警告します。山間部の工場・施設や農地で、作業者の安全を守ります。</p>
             <span class="showcase-card__cta">詳しく見る</span>
           </div>
         </a>
 
-        <a class="showcase-card" href="../virtual-security-gate-lp/index.html">
+        <div class="showcase-card">
           <div class="showcase-card__media">
-            <img src="../assets/nanoguard-showcase-vsg.png" alt="出入口の手指消毒の監視" loading="lazy" />
+            <img src="../assets/opt/nanoguard-dev-gate-link.jpg" alt="出入口のカメラ映像で、消毒をせずに入出した人を要確認動画として記録している画面" loading="lazy" />
           </div>
           <div class="showcase-card__body">
-            <span class="made-label">開発実績</span>
             <h3>手指消毒をせずに入出する人がいないか監視する</h3>
             <p>出入口にカメラで仮想のゲートを設け、消毒をせずに通過した人を検知して音声で注意します。入退室の記録も残ります。</p>
-            <span class="showcase-card__cta">詳しく見る</span>
           </div>
-        </a>
+        </div>
 
         <a class="showcase-card" href="../sanicam-lp/hand.html">
           <div class="showcase-card__media">
-            <img src="../assets/nanoguard-showcase-sanicam.png" alt="手洗いの手順をAIが採点" loading="lazy" />
+            <img src="../assets/opt/case-keio-sanicam-sink.jpg" alt="慶應義塾大学病院の手洗い場に設置した手洗い採点AIのカメラとタブレット" loading="lazy" style="object-position:45% 55%" />
           </div>
           <div class="showcase-card__body">
-            <span class="made-label">開発実績</span>
             <h3>手洗いの手順を採点・記録する</h3>
             <p>WHO準拠の手洗い6ステップをAIが採点し、記録します。慶應義塾大学病院様で手指衛生AIの実証を行いました。</p>
             <span class="showcase-card__cta">詳しく見る</span>
@@ -1070,12 +1085,34 @@
           <p>通知先や検知ルールを調整しながら運用します。記録はそのままISO・HACCPの証跡になります。</p>
         </div>
       </div>
-      <p class="flow-note">費用はカメラの台数・設置環境・開発の内容によって変わるため、個別にお見積りします。</p>
+    </div>
+  </section>
+
+  <!-- 参考価格 -->
+  <section id="price" class="lp-section lp-section--surface">
+    <div class="container">
+      <h2>参考価格</h2>
+      <p class="lead-text">標準機能で導入する場合の目安です。nanoGUARDのエッジ端末1台にIPカメラを3台まで、ローカルサーバー1台なら20台まで接続できます（IPカメラは含みません）。別途、設置・設定の初期費用がかかります。</p>
+      <div class="price-wrap">
+        <table class="price-table">
+          <thead>
+            <tr><th scope="col">プラン</th><th scope="col">IPカメラ接続数</th><th scope="col">価格（税込）</th><th scope="col">IPカメラ1台あたり</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">月額・エッジ1台</th><td data-label="IPカメラ接続">3台まで接続可能</td><td data-label="価格"><b>¥29,000〜</b>／月</td><td class="per" data-label="カメラ1台あたり"><b>約¥9,700</b>／月</td></tr>
+            <tr><th scope="row">月額・エッジ3台</th><td data-label="IPカメラ接続">9台まで接続可能</td><td data-label="価格"><b>¥79,000〜</b>／月</td><td class="per" data-label="カメラ1台あたり"><b>約¥8,800</b>／月</td></tr>
+            <tr><th scope="row">月額・ローカルサーバー1台</th><td data-label="IPカメラ接続">20台まで接続可能</td><td data-label="価格"><b>¥120,000〜</b>／月</td><td class="per" data-label="カメラ1台あたり"><b>約¥6,000</b>／月</td></tr>
+          </tbody>
+        </table>
+        <p class="price-init"><b>初期費用</b>　別途お見積り（設置場所・台数・ネットワーク環境により変わります）</p>
+        <p class="price-init"><b>買い取り</b>　別途ご相談ください</p>
+      </div>
+      <p class="flow-note">※ 標準機能以外の検知をPoCで開発する場合は、内容に応じて個別にお見積りします。</p>
     </div>
   </section>
 
   <!-- Before/After -->
-  <section class="lp-section lp-section--surface">
+  <section class="lp-section lp-section--white">
     <div class="container">
       <div class="lp-kicker">導入効果</div>
       <h2>導入前と導入後、何が変わるか</h2>
@@ -1124,7 +1161,7 @@
   </section>
 
   <!-- ISO・内部監査 -->
-  <section class="lp-section lp-section--white">
+  <section class="lp-section lp-section--surface">
     <div class="container">
       <div class="lp-kicker">ISO対応・内部監査</div>
       <h2>記録を「作る」から、記録が「自動で生まれる」へ</h2>
