@@ -179,6 +179,7 @@
     .hero-hud--bl { bottom: 24px; left: 24px; border-bottom: 1.5px solid #56ccf2; border-left: 1.5px solid #56ccf2; animation-delay: 2.5s; }
     .hero-hud--br { bottom: 24px; right: 24px; border-bottom: 1.5px solid #56ccf2; border-right: 1.5px solid #56ccf2; animation-delay: 3.75s; }
     @keyframes hudPulse { 0%,100% { opacity: 0.22; } 50% { opacity: 0.65; } }
+    @media (max-width: 768px) { .hero-hud, .hero-hud-data { display: none; } }
 
     /* HUD data bars */
     .hero-hud-data {
