@@ -743,6 +743,9 @@
       .iso-flow { display: none; }
       .ba-table thead th:nth-child(2),
       .ba-table tbody td:nth-child(2) { display: none; }
+      /* 2列表示：項目名が1〜2文字ずつ折れないよう左列を広げ、余白を詰める */
+      .ba-table thead th:first-child { width: 38%; }
+      .ba-table thead th, .ba-table tbody td { padding: 0.85rem 0.9rem; }
       .flow-steps { grid-template-columns: 1fr; }
       .cam__edge { display: none; }
     }
@@ -1161,7 +1164,7 @@
             <td class="ba-after">通過人数を自動でカウント</td>
           </tr>
           <tr>
-            <td>ISO・HACCP 記録</td>
+            <td>ISO・HACCP <span style="white-space:nowrap">記録</span></td>
             <td class="ba-before">手作業で作成、監査前に書類集め</td>
             <td class="ba-after">日々の運用が自動的に監査証跡になる</td>
           </tr>
@@ -1326,5 +1329,6 @@
   </script>
   <script src="../script.js"></script>
   <script src="../mail.js"></script>
+  <script type="module" src="/assets/js/linebreak-ja.js?v=20261012"></script>
 </body>
 </html>

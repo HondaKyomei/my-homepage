@@ -118,6 +118,11 @@
       .fde-fit,.fde-price,.fde-why{grid-template-columns:minmax(0,1fr)}
       .fde-sticky{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:50;justify-content:center;padding:15px;background:var(--ink);color:var(--deep);text-decoration:none;font-size:14px;letter-spacing:.06em;box-shadow:0 8px 24px rgba(0,0,0,.4)}
       body{padding-bottom:76px}
+      /* 比較表は1文字ずつ折れないよう最小幅を持たせ、横スクロールで読む */
+      .fde-compare{min-width:760px}
+      .fde-compare thead th{white-space:nowrap}
+      .fde-terms .fde-term{padding:12px 10px}
+      .fde-term span{font-size:12px}
     }
   </style>
 </head>
@@ -180,7 +185,7 @@
     <div class="container">
       <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>Difference<span class="jp">— 何が違うのか</span></div>
       <h2>コンサルでも、SIerでもない、<br>「作れる人が、現場に入る」という選択肢</h2>
-      <p class="lead-text">課題の分析だけで終わる、要件定義と見積もりに何ヶ月もかかる、仕様書どおりに作ったのに現場で使われない——。FDEは、そうした「課題と実装の距離」をなくすためのサービスです。</p>
+      <p class="lead-text">課題の分析だけで終わる、要件定義と見積もりに何ヶ月もかかる、仕様書どおりに作ったのに現場で使われない——。FDEは、そうした「課題と実装の距離」を<span style="white-space:nowrap">なくす</span>ためのサービスです。</p>
       <div class="fde-compare-wrap">
         <table class="fde-compare">
           <thead>
@@ -424,7 +429,7 @@
         </div>
         <div>
           <h3>Contact</h3>
-          <p>〒107-0062 東京都港区南青山５-11-14 H&amp;M南青山イースト308</p>
+          <p>〒107-0062 東京都港区南青山５-11-14 <span style="white-space:nowrap">H&amp;M南青山イースト308</span></p>
           <p>Email: <span data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=" data-m-text></span></p>
         </div>
         <div>
@@ -462,5 +467,6 @@
       });
     })();
   </script>
+  <script type="module" src="/assets/js/linebreak-ja.js?v=20261012"></script>
 </body>
 </html>

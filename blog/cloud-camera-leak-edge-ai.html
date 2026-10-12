@@ -174,7 +174,7 @@
 
   /* --- 比較表 --- */
   .table-wrap{ overflow-x:auto; border:1px solid var(--line); }
-  .compare-table{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:560px; }
+  .compare-table{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:640px; }
   .compare-table caption{
     caption-side:top; text-align:left; font-family:var(--mono); font-weight:400;
     font-size:11px; letter-spacing:.2em; color:var(--ink-3);
@@ -373,19 +373,19 @@
               <tbody>
                 <tr>
                   <th>2026年</th>
-                  <td>KDDI（ISP向けメールシステム）</td>
+                  <td>KDDI（ISP向け<span style="white-space:nowrap">メールシステム</span>）</td>
                   <td>1,223万1,954件</td>
                   <td>不正アクセス</td>
                 </tr>
                 <tr>
                   <th>2026年10月5日</th>
-                  <td>物語コーポレーション（焼肉きんぐ公式アプリ）</td>
+                  <td><span style="white-space:nowrap">物語コーポレーション</span>（焼肉きんぐ公式アプリ）</td>
                   <td>1,078万8,963件</td>
                   <td>不正アクセス</td>
                 </tr>
                 <tr>
                   <th>2026年9月28日</th>
-                  <td>タイムズモビリティ（タイムズカー）</td>
+                  <td><span style="white-space:nowrap">タイムズモビリティ</span>（タイムズカー）</td>
                   <td>約660万件（アカウント数）</td>
                   <td>Webシステムへの不正アクセス。運転免許証画像も対象</td>
                 </tr>
@@ -436,7 +436,7 @@
 
           <h2>監視カメラの映像も、実際に流出している</h2>
 
-          <p>顧客データだけでなく、監視カメラの映像そのものが外部に見られていた事件も国内外で起きています。原因の種類が違う4件を挙げます。</p>
+          <p>顧客データだけでなく、監視カメラの映像<span style="white-space:nowrap">そのもの</span>が外部に見られていた事件も国内外で起きています。原因の種類が違う4件を挙げます。</p>
 
           <h3>国内：保育園や食品工場の映像約500件が海外サイトに（2025年11月）</h3>
 
@@ -540,7 +540,7 @@
 
           <p>エッジAIは、カメラやその横に置いた小型コンピューター（エッジ端末）の上でAIの処理を行う方式です。転倒の検知や立入禁止エリアへの侵入判定を現場の機器だけで完結させるので、映像をクラウドに送る必要がありません。</p>
 
-          <p>外に出すとしても「何時何分にエリアAで転倒を検知」といった判定結果だけにできます。映像そのものは構内の機器に残り、インターネットの向こうには置かれません。前章の表でいえば、クラウド事業者への侵入・内部の不正閲覧・クラウドの不具合という3つの経路が、構成上なくなります。</p>
+          <p>外に出すとしても「何時何分にエリアAで転倒を検知」といった判定結果だけにできます。映像<span style="white-space:nowrap">そのもの</span>は構内の機器に残り、インターネットの向こうには置かれません。前章の表でいえば、クラウド事業者への侵入・内部の不正閲覧・クラウドの不具合という3つの経路が、構成上なくなります。</p>
 
           <div class="table-wrap">
             <table class="compare-table">
@@ -598,7 +598,7 @@
           <ul>
             <li>録画機やエッジ端末の管理画面を、ポート開放でインターネットに公開してしまう</li>
             <li>初期パスワードのまま運用する</li>
-            <li>保守用のリモート接続が、常時つながりっぱなしになっている</li>
+            <li>保守用のリモート接続が、常時<span style="white-space:nowrap">つながりっぱなし</span>になっている</li>
             <li>端末やストレージそのものの盗難・持ち出し</li>
           </ul>
 
@@ -717,7 +717,7 @@
         </div>
         <div>
           <h3>Contact</h3>
-          <p>〒107-0062 東京都港区南青山５-11-14 H&amp;M南青山イースト308</p>
+          <p>〒107-0062 東京都港区南青山５-11-14 <span style="white-space:nowrap">H&amp;M南青山イースト308</span></p>
           <p>Email: <span data-m="cGoueXJvdGNhZi1vbmFuQHRjYXRub2M=" data-m-text></span></p>
         </div>
         <div>
@@ -858,5 +858,6 @@
   });
 </script>
   <script src="../mail.js"></script>
+  <script type="module" src="/assets/js/linebreak-ja.js?v=20261012"></script>
 </body>
 </html>
