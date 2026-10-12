@@ -52,6 +52,13 @@
       font-size: 0.74rem; font-weight: 800; letter-spacing: 0.08em; color: rgba(255,255,255,0.55);
     }
     .lp-hero--guard .lp-h1 { text-shadow: 0 2px 24px rgba(3,8,15,0.85); }
+    /* スキャン線(z-index:10)は見出しの上・ボタンの後ろを通す。
+       .lp-hero__inner と .hero-copy の重なり文脈を外し、子ごとに z-index を振る。枠線ボタンは透けないよう背景色で塗る */
+    .lp-hero--guard .lp-hero__inner, .lp-hero--guard .hero-copy { z-index: auto; }
+    .lp-hero--guard .hero-copy > * { position: relative; z-index: 2; }
+    .lp-hero--guard .hero-copy > .lp-btns { z-index: 11; }
+    .lp-hero--guard .cta-button--outline { background: #03080f; }
+    .lp-hero--guard .cta-button--outline:hover { background: #0e131a; }
     @media (max-width: 900px) {
       .lp-hero--guard { align-items: flex-end; min-height: 0 !important; padding-top: 80vw; padding-bottom: 3rem; }
       .hero-photo { width: 118%; right: -9%; bottom: auto; top: 0; height: auto; }
