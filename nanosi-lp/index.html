@@ -727,6 +727,18 @@
         var ch = c[0] >= 48 ? 3 : c[0] >= 26 ? 2 : c[0] >= 4 ? 1 : 0;
         chapters.forEach(function (li, k) { li.classList.toggle("is-now", k === ch); });
       }
+      /* 字幕の高さを、いちばん長い字幕に合わせて固定する（行数が変わっても下の要素が動かないように） */
+      function lockHeight() {
+        var keepTag = tag.textContent, keepTxt = txt.textContent, h = 0;
+        cap.style.minHeight = "";
+        cues.forEach(function (c) { tag.textContent = c[1]; txt.textContent = c[3]; h = Math.max(h, Math.ceil(cap.getBoundingClientRect().height) + 1); });
+        tag.textContent = keepTag; txt.textContent = keepTxt;
+        cap.style.minHeight = h + "px";
+      }
+      lockHeight();
+      window.addEventListener("resize", lockHeight);
+      window.addEventListener("load", lockHeight);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(lockHeight);
       v.addEventListener("timeupdate", function () {
         var t = v.currentTime, i = 0;
         for (var k = 0; k < cues.length; k++) if (t >= cues[k][0]) i = k;
