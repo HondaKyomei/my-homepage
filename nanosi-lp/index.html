@@ -31,15 +31,11 @@
     .ni-hero-media{position:absolute;top:0;right:0;bottom:0;width:min(58%,900px);margin:0;
       -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.5) 30%,#000 62%);mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.5) 30%,#000 62%)}
     .ni-hero-media video{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 45%;filter:brightness(.78) contrast(1.05)}
-    /* PC：12→0 の枠の真上に、コンテナの端より内側で置く。左右と上下をぼかして背景になじませる（高さは下のJSで実績の枠の上端に合わせる） */
+    /* PC：FDEのヒーローと同じく、右側に全高で敷いて左へ溶かす */
     @media (min-width:961px){
-      .ni-hero-media{--col:calc((min(100vw, var(--wrap)) - 2 * var(--gutter)) / 3);
-        right:calc(max(0px, (100vw - var(--wrap)) / 2) + var(--gutter) + 18px);width:var(--col);top:clamp(72px,7vw,104px);bottom:auto;height:var(--ni-media-h,480px);
-        -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 3%,#000 97%,transparent 100%);
-        mask-image:linear-gradient(90deg,transparent 0,#000 3%,#000 97%,transparent 100%);
-        }
-      .ni-hero-media::after{display:none}
-      .ni-hero-media video{object-position:50% 38%;transform:scale(1.12);filter:brightness(.82) contrast(1.05)}
+      .ni-hero-media{-webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.75) 22%,#000 42%);mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.75) 22%,#000 42%)}
+      .ni-hero .ni-hero-media::after{background:linear-gradient(to top,rgba(20,21,23,.7),transparent 30%)}
+      .ni-hero-media video{filter:saturate(.8) brightness(.86) contrast(1.05)}
       .ni-hero-media figcaption{display:none}
     }
     .ni-hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(20,21,23,.9),transparent 45%)}
@@ -379,7 +375,29 @@
 
   <!-- ヒーロー：何のソフトで、どこで使われていて、どう届くか -->
   <section class="lp-hero ni-hero">
-    <figure class="ni-hero-media"><video muted loop playsinline autoplay preload="auto" poster="../assets/opt/nanoi-hero-inspect-poster.jpg" aria-label="カメラで製品を囲んで撮像し、検査している様子（CG）"><source src="../assets/nanoi-hero-inspect.mp4" type="video/mp4"></video><figcaption>nanoI · INSPECTION (CG)</figcaption></figure>
+    <figure class="ni-hero-media"><video id="ni-hero-video" muted loop playsinline autoplay preload="auto" poster="../assets/opt/nanoi-hero-drill-poster.jpg" aria-label="ドリルをカメラで囲んで撮像・検査し、ケースに梱包する様子（CG）"><source src="../assets/nanoi-hero-drill.mp4" type="video/mp4"></video><figcaption>nanoI · INSPECTION (CG)</figcaption></figure>
+    <script>
+      /* スマホでは、横長の動画から中央を縦に切り抜いた版を流す */
+      (function () {
+        var v = document.getElementById("ni-hero-video"), mq = window.matchMedia && window.matchMedia("(max-width:960px)");
+        if (!v || !mq) return;
+        var pc = { src: "../assets/nanoi-hero-drill.mp4", poster: "../assets/opt/nanoi-hero-drill-poster.jpg" },
+            sp = { src: "../assets/nanoi-hero-drill-sp.mp4", poster: "../assets/opt/nanoi-hero-drill-sp-poster.jpg" };
+        function pick() {
+          var s = mq.matches ? sp : pc;
+          if (v.getAttribute("src") === s.src) return;
+          v.poster = s.poster; v.src = s.src; v.load();
+          var p = v.play(); if (p && p.catch) p.catch(function () {});
+        }
+        if (mq.matches) pick();
+        if (mq.addEventListener) mq.addEventListener("change", pick); else if (mq.addListener) mq.addListener(pick);
+        /* 最後の白フェード〜ロゴ（58.25秒〜）は出さず、その手前で先頭に戻す */
+        var END = 57.9;
+        function check() { if (v.currentTime >= END) { v.currentTime = 0; } }
+        if (v.requestVideoFrameCallback) { (function tick() { check(); v.requestVideoFrameCallback(tick); })(); }
+        else v.addEventListener("timeupdate", check);
+      })();
+    </script>
     <div class="container">
       <div class="lp-hero__inner">
         <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span><span style="text-transform:none;letter-spacing:.08em">nanoI（ナノアイ）</span><span class="jp">— AI外観検査ソフトウェア</span></div>
@@ -744,27 +762,35 @@
         for (var k = 0; k < cues.length; k++) if (t >= cues[k][0]) i = k;
         show(i);
       });
-      chapters.forEach(function (li) { li.addEventListener("click", function () { v.currentTime = +li.getAttribute("data-t"); v.play(); }); });
-      btn.addEventListener("click", function () { if (v.paused) { v.play(); } else { v.pause(); } });
+      chapters.forEach(function (li) { li.addEventListener("click", function () { v.currentTime = +li.getAttribute("data-t"); delete v.dataset.userPaused; v.play(); }); });
+      btn.addEventListener("click", function () { if (v.paused) { delete v.dataset.userPaused; v.play(); } else { v.dataset.userPaused = "1"; v.pause(); } });
       v.addEventListener("play", function () { btn.textContent = "II"; btn.setAttribute("aria-label", "一時停止"); });
       v.addEventListener("pause", function () { btn.textContent = "▶"; btn.setAttribute("aria-label", "再生"); });
-      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) v.pause();
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) { v.dataset.userPaused = "1"; v.pause(); }
       show(0);
     })();
   </script>
   <script>
-    /* ヒーロー動画の高さ：ボタンの下端あたりまでにそろえる */
+    /* 動画の繰り返し再生：最後で止まったり、画面外で止められたまま戻らなかったりする端末向けに、先頭から再生し直す
+       （一時停止ボタンで止めた動画は data-user-paused が付くので、勝手に再生しない） */
     (function () {
-      var m = document.querySelector(".ni-hero-media"), st = document.querySelector(".ni-hero .lp-btns"), hero = document.querySelector(".ni-hero");
-      if (!m || !st || !hero) return;
-      function fit() {
-        if (window.innerWidth < 961) { m.style.removeProperty("--ni-media-h"); m.style.removeProperty("top"); return; }
-        var lbl = document.querySelector(".ni-hero .lp-hero__inner .label"), h0 = hero.getBoundingClientRect().top;
-        var top = lbl ? lbl.getBoundingClientRect().top - h0 : m.offsetTop, bottom = st.getBoundingClientRect().bottom - h0;
-        m.style.top = top + "px";
-        m.style.setProperty("--ni-media-h", Math.max(240, bottom - top) + "px");
+      var vids = [].slice.call(document.querySelectorAll("video[loop]"));
+      function resume(v) { if (v.dataset.userPaused) return; var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+      function restart(v) { if (v.dataset.userPaused) return; v.currentTime = 0; resume(v); }
+      vids.forEach(function (v) {
+        v.addEventListener("ended", function () { restart(v); });
+        v.addEventListener("pause", function () { if (v.duration && v.duration - v.currentTime < 0.3) restart(v); });
+      });
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) { if (e.isIntersecting && e.target.paused) resume(e.target); });
+        }, { threshold: 0.2 });
+        vids.forEach(function (v) { io.observe(v); });
       }
-      fit(); window.addEventListener("resize", fit); window.addEventListener("load", fit);
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) return;
+        vids.forEach(function (v) { var r = v.getBoundingClientRect(); if (v.paused && r.bottom > 0 && r.top < window.innerHeight) resume(v); });
+      });
     })();
   </script>
   <script type="module" src="/assets/js/linebreak-ja.js?v=20261012"></script>
