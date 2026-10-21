@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var sourceSrc = source ? (source.getAttribute("src") || "") : "";
     var basePath = sourceSrc.replace(/\.[^.\/]+$/, "");
     img.src = vid.getAttribute("poster");
-    img.alt = "SANI-CAM";
+    img.alt = "SANICAM";
     img.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:inherit;";
     img.addEventListener("error", function onFallbackError() {
       img.removeEventListener("error", onFallbackError);

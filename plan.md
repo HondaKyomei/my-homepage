@@ -47,7 +47,7 @@ index.html（トップ）
 | 変更前 | 変更後 |
 |---|---|
 | 熊検出AI → `virtual-security-gate-lp/bear.html` | nanoSTEP → `nanostep-lp/` |
-| SANI-CAM → `sanicam-lp/hand.html` | nanoSI → `nanosi-lp/` |
+| SANICAM → `sanicam-lp/hand.html` | nanoSI → `nanosi-lp/` |
 | バーチャルセキュリティゲート → `virtual-security-gate-lp/index.html` | nanoGUARD → `nanoguard-lp/` |
 
 ### 課題セクション（#problems）の更新

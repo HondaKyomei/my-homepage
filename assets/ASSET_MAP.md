@@ -10,9 +10,9 @@
 | `homepage-solution-food-ai-cooking-hygiene-steps.png` | image | `/index.html` | Top page food solution card: cooking / hygiene step management |
 | `homepage-solution-food-vsg-kitchen-monitoring.png` | image | `/index.html` | Top page food solution card: VSG kitchen monitoring |
 | `homepage-solution-food-ai-serving-inspection.png` | image | `/index.html` | Top page food solution card: serving / quality inspection |
-| `homepage-product-sanicam-video-poster.png` | image | `/index.html` | Top page SANI-CAM video poster |
-| `sanicam-demo-japan.mp4` | video | `/index.html`, `/solutions/index.html` | SANI-CAM Japan demo movie |
-| `sanicam-demo-vietnam.mp4` | video | `/solutions/index.html` | SANI-CAM Vietnam demo movie |
+| `homepage-product-sanicam-video-poster.png` | image | `/index.html` | Top page SANICAM video poster |
+| `sanicam-demo-japan.mp4` | video | `/index.html`, `/solutions/index.html` | SANICAM Japan demo movie |
+| `sanicam-demo-vietnam.mp4` | video | `/solutions/index.html` | SANICAM Vietnam demo movie |
 | `homepage-tech-knowledge-learning-concept.png` | image | `/index.html` | Top page tech block: knowledge learning concept |
 | `homepage-tech-high-precision-inspection-concept.png` | image | `/index.html` | Top page tech block: high-precision inspection concept |
 | `homepage-tech-edge-processing-concept.png` | image | `/index.html` | Top page tech block: edge processing concept |
@@ -20,7 +20,7 @@
 | `products-services-card-nanosi-system.png` | image | `/products-services/index.html` | Product/service list card: nanoSI |
 | `products-services-card-nanoguard-visual.png` | image | `/products-services/index.html` | Product/service list card: nanoGUARD |
 | `products-bear-detection-hero.png` | image | `/products-services/bear-detection-ai.html` | Bear detection AI page hero image |
-| `nanoguard-showcase-sanicam.png` | image | `/nanoguard-lp/index.html` | nanoGUARD LP showcase: SANI-CAM card |
+| `nanoguard-showcase-sanicam.png` | image | `/nanoguard-lp/index.html` | nanoGUARD LP showcase: SANICAM card |
 | `nanoguard-showcase-vsg.png` | image | `/nanoguard-lp/index.html` | nanoGUARD LP showcase: VSG card |
 | `nanoguard-showcase-bear-detection.png` | image | `/nanoguard-lp/index.html` | nanoGUARD LP showcase: bear detection AI card |
 | `unused-problem-visual-01.png` | image | not referenced | Reserved / currently unused |
