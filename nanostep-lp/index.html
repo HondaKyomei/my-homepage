@@ -190,8 +190,8 @@
     .ni-offer__kicker .en{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--cyan)}
     .ni-offer h3{margin-top:14px;font-weight:500;font-size:clamp(20px,2.2vw,25px);line-height:1.5;letter-spacing:.04em}
     .ni-offer h3 .name{font-family:var(--orb);font-weight:400;letter-spacing:.06em;color:var(--ink)}
-    .ni-offer > .ni-offer__body > p{margin-top:12px;font-size:14px;color:var(--ink-2);line-height:1.9}
-    .ni-offer > .ni-offer__body > p strong{color:var(--ink);font-weight:500}
+    .ni-offer .ni-offer__body > p{margin-top:12px;font-size:14px;color:var(--ink-2);line-height:1.9}
+    .ni-offer .ni-offer__body > p strong{color:var(--ink);font-weight:500}
     .ni-offer dl{margin:22px 0 0;display:grid;grid-template-columns:6.5em 1fr;gap:0}
     .ni-offer dt,.ni-offer dd{margin:0;padding:12px 0;border-top:1px solid var(--line);font-size:13.5px;line-height:1.85}
     .ni-offer dt{color:var(--ink-3);font-size:12.5px;letter-spacing:.06em}
@@ -293,6 +293,34 @@
       .ni-offer dt{padding-bottom:2px}
       .ni-offer dd{border-top:0;padding-top:0}
     }
+
+    /* スマホ：説明文は「詳しく」で開く（PCでは常に開いた状態・ボタンなし） */
+    .sp-only{display:none}
+    .mfold > summary{display:none}
+    @media (max-width:820px){
+      .pc-only{display:none!important}
+      .sp-only{display:inline}
+      .mfold > summary{display:inline-flex;align-items:center;gap:8px;margin-top:10px;cursor:pointer;list-style:none;font-size:12.5px;letter-spacing:.08em;color:var(--ink-2)}
+      .mfold > summary::-webkit-details-marker{display:none}
+      .mfold > summary::after{content:"+";font-family:var(--en);font-size:17px;line-height:1;color:var(--accent);transition:transform .3s}
+      .mfold[open] > summary::after{transform:rotate(45deg)}
+      .mfold[open] > summary{color:var(--ink)}
+      .ps-answers .mfold > summary::after{color:var(--accent)}
+      .ni-offer__more > summary{display:flex;justify-content:space-between;margin:0;padding:14px 22px;font-size:13px;color:var(--ink)}
+      .ni-offer__more[open] > summary{border-bottom:1px solid var(--line)}
+      .ps-problems h3,.ps-answers h3{margin-top:12px}
+      /* 解決策（答え）の見出しは大きく・太く */
+      /* お悩み →「詳しく」の中から、その答えへ飛ぶ */
+      /* スマホ：「導入方法」を見出しとして大きく */
+      .label .ni-offer-title{display:block;flex-basis:100%;margin-top:12px;font-family:var(--jp);font-weight:700;font-size:34px;letter-spacing:.08em;text-transform:none;color:var(--ink);line-height:1.3}
+      #offer h2{max-width:none;margin-top:10px;font-size:14.5px;font-weight:500;line-height:1.8;letter-spacing:.04em;color:var(--ink-2)}
+      #offer h2 br{display:none}
+      .ps-jump{display:inline-flex!important;align-items:center;gap:8px;margin-top:12px;padding:8px 14px;border:1px solid var(--accent);color:var(--accent);font-size:13px;letter-spacing:.06em;text-decoration:none}
+      .ps-jump::after{content:"↓";font-family:var(--en)}
+      .ps-answers li{scroll-margin-top:84px}
+      .ps-problems h3{font-size:22px;font-weight:700;line-height:1.5;letter-spacing:.04em;color:var(--ink)}
+      .ps-answers h3{font-size:22px;font-weight:700;line-height:1.5;letter-spacing:.04em;color:var(--ink)}
+    }
   </style>
 </head>
 <body>
@@ -308,7 +336,7 @@
         <span class="sr-only">メニューを開閉</span>
       </button>
       <nav id="site-nav" class="nav">
-        <a class="nav__link" href="../index.html#why-1">nanoFACTORYとは</a>
+        <a class="nav__link" href="../index.html#about-us">nanoFACTORYとは</a>
         <a class="nav__link" href="../fde/">FDE</a>
         <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link nav__link--products" href="../nanostep-lp/" aria-current="page">作業認識AI</a>
@@ -347,7 +375,7 @@
       <div class="lp-hero__inner">
         <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span><span style="text-transform:none;letter-spacing:.08em">nanoSTEP（ナノステップ）</span><span class="jp">— 作業解析AIソフトウェア</span></div>
         <h1 class="lp-h1">熟練者の手の動きを、<br>3Dのデータにする。</h1>
-        <p class="lp-lead">
+        <p class="lp-lead pc-only">
           nanoSTEPは、nanoFACTORYが開発する作業解析AIのソフトウェアです。作業台の上に<strong>カメラを1台</strong>置くだけで、手・工具・ワークの位置を<strong>3D</strong>で捉え、作業の区切りと時間を記録します。<br>
           熟練者と初心者の違いを見える化し、新人教育や技能の伝承に。グループ会社・<strong>本多プラス</strong>の作業解析サービス<strong>PLUSTEP</strong>では、改善提案までお届けします。
         </p>
@@ -370,9 +398,9 @@
       <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span><span class="ni-no">01</span>Problems &amp; Solution<span class="jp">— 困りごとと、その解決</span></div>
       <h2 class="ps-q">手作業の現場に残る、<br>3つの困りごと</h2>
       <ol class="ps-problems">
-        <li><span class="q">お悩み<b>1</b></span><h3>新人が育つまで、<br>ベテランが付きっきり</h3><p>教えるたびに熟練者の手が止まり、本来の仕事が進みません。</p></li>
-        <li><span class="q">お悩み<b>2</b></span><h3>技能が属人化して、<br>継承できない</h3><p>押さえ方やリズムはマニュアルに書けず、退職や異動で失われます。</p></li>
-        <li><span class="q">お悩み<b>3</b></span><h3>手順どおりか、<br>確かめる手段がない</h3><p>作業は人の目で見るしかなく、手順のずれや所要時間が記録に残りません。</p></li>
+        <li><span class="q">お悩み<b>1</b></span><h3><span class="pc-only">新人が育つまで、<br>ベテランが付きっきり</span><span class="sp-only">教育コスト</span></h3><details class="mfold"><summary>詳しく</summary><p><b class="sp-only" style="color:var(--ink);font-weight:500">新人が育つまで、ベテランが付きっきり。</b>教えるたびに熟練者の手が止まり、本来の仕事が進みません。</p><a class="ps-jump sp-only" href="#ans-1">お悩み1の解決策を見る</a></details></li>
+        <li><span class="q">お悩み<b>2</b></span><h3><span class="pc-only">技能が属人化して、<br>継承できない</span><span class="sp-only">技能の属人化・継承問題</span></h3><details class="mfold"><summary>詳しく</summary><p><b class="sp-only" style="color:var(--ink);font-weight:500">技能が属人化して、継承できない。</b>押さえ方やリズムはマニュアルに書けず、退職や異動で失われます。</p><a class="ps-jump sp-only" href="#ans-2">お悩み2の解決策を見る</a></details></li>
+        <li><span class="q">お悩み<b>3</b></span><h3><span class="pc-only">手順どおりか、<br>確かめる手段がない</span><span class="sp-only">作業の記録</span></h3><details class="mfold"><summary>詳しく</summary><p><b class="sp-only" style="color:var(--ink);font-weight:500">手順どおりか、確かめる手段がない。</b>作業は人の目で見るしかなく、手順のずれや所要時間が記録に残りません。</p><a class="ps-jump sp-only" href="#ans-3">お悩み3の解決策を見る</a></details></li>
       </ol>
 
       <div class="ps-turn" aria-hidden="true"><span></span><b>nanoSTEPなら</b><span></span></div>
@@ -395,9 +423,9 @@
       </figure>
 
       <ol class="ps-answers">
-        <li><span class="q">お悩み<b>1</b>への答え</span><h3>AIが、その場で手順を教える</h3><p>解析した作業を動画マニュアルにし、作業中は即時アドバイスAIが次の手順やアドバイスを表示。熟練者が付きっきりでなくても、新人が手順を覚えられます。</p><a href="#uses">できることを見る</a></li>
-        <li><span class="q">お悩み<b>2</b>への答え</span><h3>コツを、3Dの数字で残す</h3><p>手の高さ・押さえ方・リズムを熟練者と比べ、言葉にしにくい違いを見つけます。技能の伝承の材料になります。</p><a href="#tech">計測の仕組みを見る</a></li>
-        <li><span class="q">お悩み<b>3</b>への答え</span><h3>作業を毎日、自動で記録</h3><p>作業の区切りと所要時間をタイムラインに残します。手順のずれや、改善前後の変化をあとから振り返れます。</p><a href="#uses">作業ログを見る</a></li>
+        <li id="ans-1"><span class="q">お悩み<b>1</b>への答え</span><h3><span class="pc-only">AIが、その場で手順を教える</span><span class="sp-only">動画マニュアル・即時アドバイスAI など</span></h3><details class="mfold"><summary>詳しく</summary><p><b class="sp-only" style="color:var(--ink);font-weight:500">AIが、その場で手順を教える。</b>解析した作業を動画マニュアルにし、作業中は即時アドバイスAIが次の手順やアドバイスを表示。熟練者が付きっきりでなくても、新人が手順を覚えられます。</p></details><a href="#uses">できることを見る</a></li>
+        <li id="ans-2"><span class="q">お悩み<b>2</b>への答え</span><h3><span class="pc-only">コツを、3Dの数字で残す</span><span class="sp-only">熟練者比較・3D計測</span></h3><details class="mfold"><summary>詳しく</summary><p><b class="sp-only" style="color:var(--ink);font-weight:500">コツを、3Dの数字で残す。</b>手の高さ・押さえ方・リズムを熟練者と比べ、言葉にしにくい違いを見つけます。技能の伝承の材料になります。</p></details><a href="#tech">計測の仕組みを見る</a></li>
+        <li id="ans-3"><span class="q">お悩み<b>3</b>への答え</span><h3><span class="pc-only">作業を毎日、自動で記録</span><span class="sp-only">作業ログ・自動記録</span></h3><details class="mfold"><summary>詳しく</summary><p><b class="sp-only" style="color:var(--ink);font-weight:500">作業を毎日、自動で記録。</b>作業の区切りと所要時間をタイムラインに残します。手順のずれや、改善前後の変化をあとから振り返れます。</p></details><a href="#uses">作業ログを見る</a></li>
       </ol>
     </div>
   </section>
@@ -437,7 +465,7 @@
       <h2>nanoSTEPでできる、<br>4つのこと</h2>
       <p class="lead-text">解析した熟練者の作業データを、新人の教育に返します。見て覚える、やってみる、違いを直す、成長を確かめる。ベテランが付きっきりで教えていた部分を、4つの機能が受け持ちます。</p>
 
-      <ol class="ed-steps">
+      <ol class="ed-steps pc-only">
         <li><a href="#ed-1">
           <svg viewBox="0 0 44 44" aria-hidden="true"><rect x="5" y="9" width="34" height="24" rx="2"/><path class="a" d="M19 16v10l8-5z"/><path d="M5 38h34"/></svg>
           <span class="n">01</span><b>動画マニュアル</b><span class="d">熟練者の作業を、工程ごとの動画教材にする</span><span class="st">覚える</span></a></li>
@@ -515,13 +543,13 @@
   <!-- 04 提供の形は2つ -->
   <section id="offer" class="lp-section lp-section--white">
     <div class="container">
-      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span><span class="ni-no">04</span>How we deliver<span class="jp">— 提供の形は2つ</span></div>
+      <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span><span class="ni-no">04</span>How we deliver<span class="jp"><span class="pc-only">— 提供の形は2つ</span></span><span class="sp-only ni-offer-title">導入方法</span></div>
       <h2>ソフトだけでも、改善提案まででも。<br>現場に合わせて選べます</h2>
-      <p class="lead-text">自社で解析して使いたいならnanoSTEPのソフトを。解析の結果から改善策まで任せたいなら、nanoSTEPを使った、グループ会社である本多プラスの作業解析サービスPLUSTEPとして。どちらに進むかは、PoCの結果を見てから決めていただけます。</p>
+      <p class="lead-text pc-only">自社で解析して使いたいならnanoSTEPのソフトを。解析の結果から改善策まで任せたいなら、nanoSTEPを使った、グループ会社である本多プラスの作業解析サービスPLUSTEPとして。どちらに進むかは、PoCの結果を見てから決めていただけます。</p>
       <div class="ni-offers">
         <article class="ni-offer is-a">
           <div class="ni-offer__head"><span class="ab">A</span><div><b>ソフトだけ</b><small>nanoSTEPを、お客様の現場に入れる</small></div></div>
-          <div class="ni-offer__img"><img src="../assets/opt/nanostep-offer-software.jpg?v=2" width="1600" height="1457" loading="lazy" alt="作業する手元の横で、ノートパソコンに解析画面を表示している様子" style="object-position:50% 45%" /></div>
+          <details class="mfold ni-offer__more"><summary>詳しく見る</summary><div class="ni-offer__img"><img src="../assets/opt/nanostep-offer-software.jpg?v=2" width="1600" height="1457" loading="lazy" alt="作業する手元の横で、ノートパソコンに解析画面を表示している様子" style="object-position:50% 45%" /></div>
           <div class="ni-offer__body">
             <div class="ni-offer__kicker"><span class="en">A — SOFTWARE</span></div>
             <h3><span class="name">nanoSTEP</span> を、お客様の作業に合わせて</h3>
@@ -532,10 +560,11 @@
             </dl>
             <p class="ni-offer__foot"><b>対応：nanoFACTORY</b>　現場に入って開発するFDEで、作業に合わせた機能を追加することもできます。</p>
           </div>
+          </details>
         </article>
         <article class="ni-offer is-b">
-          <div class="ni-offer__head"><span class="ab">B</span><div><b>改善提案まで</b><small>本多プラスの作業解析サービスで</small></div></div>
-          <div class="ni-offer__img"><img src="../assets/opt/nanostep-offer-report.jpg" width="1600" height="1040" loading="lazy" alt="解析結果の要点と改善のご提案をまとめた作業改善提案書" style="object-position:50% 0" /></div>
+          <div class="ni-offer__head"><span class="ab">B</span><div><b><span class="pc-only">改善提案まで</span><span class="sp-only">エンジニアによるサポートも</span></b><small>本多プラスの作業解析サービスで</small></div></div>
+          <details class="mfold ni-offer__more"><summary>詳しく見る</summary><div class="ni-offer__img"><img src="../assets/opt/nanostep-offer-report.jpg" width="1600" height="1040" loading="lazy" alt="解析結果の要点と改善のご提案をまとめた作業改善提案書" style="object-position:50% 0" /></div>
           <div class="ni-offer__body">
             <div class="ni-offer__kicker"><span class="en" style="color:var(--accent)">B — SERVICE</span></div>
             <h3>作業解析サービス <span class="name">PLUSTEP</span> として</h3>
@@ -546,6 +575,7 @@
             </dl>
             <p class="ni-offer__foot"><b>対応：本多プラス × nanoFACTORY</b>　樹脂成形メーカーが自社工場で積み重ねてきた改善の経験をもとにご提案します。</p>
           </div>
+          </details>
         </article>
       </div>
 
@@ -675,7 +705,7 @@
       <div class="footer-grid">
         <div>
           <h3>About</h3>
-          <p>nanoFACTORY の技術の根底はロボット開発・フィジカルAI。製造業の現場で数々の課題を解決してきた経験から磨き上げたソフトウェアの販売と、AIエンジニアが現場に直接入り込む<strong>FDE(Forward Deployed Engineer)</strong>サービスが、私たちの事業です。</p>
+          <p>nanoFACTORY（ナノファクトリー）は、AI・GPU・ロボットの最先端研究に取り組んできたエンジニアが立ち上げた学生スタートアップです。特許を取得した独自技術を持ち、創業80年のプラスチック成形メーカー・<strong>本多プラス</strong>のグループ企業として、高い技術を製造業の現場で活かし、実証済みのソリューションを提供しています。</p>
         </div>
         <div>
           <h3>Contact</h3>
@@ -794,6 +824,15 @@
         if (document.hidden) return;
         vids.forEach(function (v) { var r = v.getBoundingClientRect(); if (v.paused && r.bottom > 0 && r.top < window.innerHeight) resume(v); });
       });
+    })();
+  </script>
+  <script>
+    /* スマホ（820px以下）では説明を閉じ、PCでは開いたままにする */
+    (function () {
+      var mq = window.matchMedia && window.matchMedia("(max-width:820px)");
+      function set() { var sp = mq && mq.matches; [].forEach.call(document.querySelectorAll("details.mfold"), function (d) { d.open = !sp; }); }
+      set();
+      if (mq) { if (mq.addEventListener) mq.addEventListener("change", set); else if (mq.addListener) mq.addListener(set); }
     })();
   </script>
   <script type="module" src="/assets/js/linebreak-ja.js?v=20261012"></script>

@@ -5,18 +5,58 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <meta
     name="description"
-    content="nanoFACTORYは、AIを今ある現場に合わせることで、導入の負荷とコストを抑えながら現場の変革を実現します。すぐに試せるパッケージソリューションと、AIエンジニアが現場に入り込むFDE(Forward Deployed Engineer)サービスを提供しています。"
+    content="nanoFACTORY（ナノファクトリー）は、AIを今ある現場に合わせることで、導入の負荷とコストを抑えながら現場の変革を実現します。すぐに試せるパッケージソリューションと、AIエンジニアが現場に入り込むFDE(Forward Deployed Engineer)サービスを提供しています。"
   />
   <meta
     name="keywords"
-    content="FDE,Forward Deployed Engineer,製造業 FDE,フォワードデプロイドエンジニア,現場常駐AIエンジニア,フィジカルAI,Physical AI,ロボット開発,作業認識AI,AI検査,AI監視カメラ,熊検出AI,SANICAM,nanoGUARD"
+    content="nanoFACTORY,ナノファクトリー,株式会社nanoFACTORY,FDE,Forward Deployed Engineer,製造業 FDE,フォワードデプロイドエンジニア,現場常駐AIエンジニア,フィジカルAI,Physical AI,ロボット開発,作業認識AI,AI検査,AI監視カメラ,熊検出AI,SANICAM,nanoGUARD"
   />
-  <title>nanoFACTORY</title>
+  <title>nanoFACTORY（ナノファクトリー）｜現場に合わせるAIとFDE</title>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","name":"株式会社nanoFACTORY","alternateName":["nanoFACTORY","ナノファクトリー","株式会社ナノファクトリー","nanoFACTORY Co."],"url":"https://nano-factory.net/","logo":"https://nano-factory.net/assets/site-logo-nanofactory.png","address":{"@type":"PostalAddress","postalCode":"107-0062","addressRegion":"東京都","addressLocality":"港区","streetAddress":"南青山5-11-14 H&M南青山イースト308","addressCountry":"JP"}}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Orbitron:wght@400;500&family=JetBrains+Mono:wght@400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" />
   <link rel="stylesheet" href="site.css?v=20260922a" />
   <link rel="icon" href="/assets/site-logo-nanofactory.png" type="image/png" sizes="512x512" />
+  <style>
+    /* スマホ（820px以下）：製品紹介は要点だけ、コア技術は開閉式。PCは従来どおり */
+    .sp-only{display:none}
+    .mfold > summary{display:none}
+    /* About セクション */
+    .about-nf__pts{list-style:none;margin:40px 0 32px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+    .about-nf__pts li{background:var(--paper);padding:30px 28px 28px;display:flex;flex-direction:column;gap:12px}
+    .about-nf__pts .en{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--accent)}
+    .about-nf__pts b{font-weight:700;font-size:clamp(20px,2vw,25px);line-height:1.5;letter-spacing:.04em;color:var(--ink)}
+    .about-nf__pts .d{font-size:13.5px;line-height:1.85;color:var(--ink-2)}
+    @media (max-width:820px){
+      .about-nf__pts{grid-template-columns:minmax(0,1fr);margin:28px 0 24px}
+      .about-nf__pts li{padding:22px 20px}
+      .about-nf__pts b br{display:none}
+    }
+    /* サービス名（作業認識AI／AI外観検査／AI監視カメラ）を大きく、番号の横に */
+    .sol__meta{align-items:center;gap:14px 18px}
+    .sol__tag{font-weight:700;font-size:clamp(19px,1.8vw,24px);letter-spacing:.06em;line-height:1.3}
+    a.sol__tag{border-bottom:2px solid var(--accent);padding-bottom:4px}
+    .sol__pts{margin:18px 0 0;padding:0;list-style:none}
+    .sol__pts li{position:relative;padding:9px 0 9px 20px;border-top:1px solid var(--line);font-size:14.5px;line-height:1.6;color:var(--ink)}
+    .sol__pts li:last-child{border-bottom:1px solid var(--line)}
+    .sol__pts li::before{content:"";position:absolute;left:2px;top:50%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%;background:var(--accent)}
+    @media (max-width:820px){
+      .pc-only{display:none!important}
+      .sp-only{display:inline}
+      ul.sp-only{display:block}
+      .sol__tag{font-size:23px}
+      .sol__pts li{font-size:16.5px;font-weight:500}
+      .sol__lead{display:block;margin-top:14px;font-weight:500;font-size:18px;line-height:1.6;letter-spacing:.04em;color:var(--ink)}
+      .mfold > summary{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding:16px 4px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);cursor:pointer;list-style:none;font-size:15px;letter-spacing:.08em;color:var(--ink)}
+      .mfold > summary::-webkit-details-marker{display:none}
+      .mfold > summary::after{content:"+";font-family:var(--en);font-size:22px;line-height:1;color:var(--accent);transition:transform .3s}
+      .mfold[open] > summary::after{transform:rotate(45deg)}
+      .mfold[open] > summary{margin-bottom:24px}
+    }
+  </style>
 </head>
 <body>
   <div class="sr-only">
@@ -34,7 +74,7 @@
         <span class="sr-only">メニューを開閉</span>
       </button>
       <nav id="site-nav" class="nav">
-        <a class="nav__link" href="#why-1" aria-current="page">nanoFACTORYとは</a>
+        <a class="nav__link" href="#about-us">nanoFACTORYとは</a>
         <a class="nav__link" href="fde/">FDE</a>
         <span class="nav__sep" aria-hidden="true"></span>
         <a class="nav__link nav__link--products" href="nanostep-lp/">作業認識AI</a>
@@ -93,15 +133,21 @@
       <article class="sol">
         <div class="sol__vis">
           <figure class="sol__img hud-frame">
-            <img src="assets/opt/nanostep-hand-recognition-m.jpg" alt="nanoSTEP 作業認識AIの画面" decoding="async" />
-            <figcaption class="sol__cap"><span class="sol__cam">CAM-01 · nanoSTEP</span><span class="sol__txt">作業者の手の動きをAIが認識</span></figcaption>
+            <div class="ss ss--images" data-slideshow data-interval="4200">
+              <div class="ss-stage">
+                <figure class="ss-slide is-active" data-dur="9000"><video muted playsinline loop preload="metadata" poster="assets/opt/nanostep-hero-3d-poster.jpg" aria-label="熟練者の手と研磨スティックの動きを、nanoSTEPが3Dの点群で捉えている画面"><source src="assets/nanostep-hero-3d.mp4" type="video/mp4"></video><figcaption class="sol__cap"><span class="sol__cam">CAM-01 · nanoSTEP 3D</span><span class="sol__txt">手と工具の動きを3Dで捉える</span></figcaption></figure>
+                <figure class="ss-slide"><img src="assets/opt/nanostep-hand-recognition-m.jpg" alt="nanoSTEP 作業認識AIの画面" decoding="async" /><figcaption class="sol__cap"><span class="sol__cam">CAM-01 · nanoSTEP</span><span class="sol__txt">作業者の手の動きをAIが認識</span></figcaption></figure>
+              </div>
+              <div class="ss-ui" aria-hidden="true"><span class="ss-count"><b>01</b> / 02</span><div class="ss-bar"><i></i><i></i></div></div>
+            </div>
           </figure>
         </div>
         <div class="sol__content">
           <div class="sol__meta"><span class="sol__num">01</span><a class="sol__tag" href="nanostep-lp/">作業認識AI</a></div>
-          <h3 class="sol__title">人手不足・人材流動化を、<br>「作業をデータ化するAIエージェント」で解く</h3>
-          <p class="sol__quote">「主力職人が定年で3人抜けた。引き継ぎはしたつもりだったが、その後クレームが増えた。誰の、どの工程が原因かすら分からない。」</p>
-          <p class="sol__body">独自AIエージェント "VF3.0" が手順書と現場をつなぎ、ノウハウのデータ化からフィジカルAIまで段階的に展開します。</p>
+          <h3 class="sol__title pc-only">人手不足・人材流動化を、<br>「作業をデータ化するAIエージェント」で解く</h3>
+          <p class="sol__quote pc-only">「主力職人が定年で3人抜けた。引き継ぎはしたつもりだったが、その後クレームが増えた。誰の、どの工程が原因かすら分からない。」</p>
+          <p class="sol__body pc-only">独自AIエージェント "VF3.0" が手順書と現場をつなぎ、ノウハウのデータ化からフィジカルAIまで段階的に展開します。</p>
+          <span class="sp-only sol__lead">技能の属人化を防ぐソリューション</span><ul class="sp-only sol__pts"><li>動画マニュアル</li><li>即時アドバイス（自動OJT）</li><li>作業ログ長期保存</li></ul>
           <a class="more" href="nanostep-lp/"><span class="more__arrow" aria-hidden="true">→</span><span>詳細を見る</span></a>
         </div>
       </article>
@@ -112,32 +158,39 @@
               <div class="ss-stage">
                 <figure class="ss-slide is-active"><img src="assets/opt/nanosi-gear-detection.jpg" alt="AI外観検査の判定画面" decoding="async" /><figcaption class="sol__cap"><span class="sol__cam">CAM-02 · nanoI</span><span class="sol__txt">傷・打痕・異物をAIが検出</span></figcaption></figure>
                 <figure class="ss-slide"><img src="assets/opt/nanosi-device-ng.jpg" alt="外観検査装置の検査ユニット" decoding="async" /><figcaption class="sol__cap"><span class="sol__cam">CAM-02 · nanoI</span><span class="sol__txt">外観検査装置の検査ユニット</span></figcaption></figure>
-                <figure class="ss-slide"><img src="assets/opt/nanosi-gear-grid.jpg" alt="外観検査結果の一覧" decoding="async" /><figcaption class="sol__cap"><span class="sol__cam">CAM-02 · nanoI</span><span class="sol__txt">検査結果を一覧で確認</span></figcaption></figure>
+                <figure class="ss-slide" data-dur="10000"><video muted playsinline loop preload="metadata" data-start="14" data-end="40" poster="assets/opt/nanoi-hero-drill-poster.jpg" aria-label="ドリルをカメラで囲んで撮像・検査し、ケースに梱包する様子（CG）"><source src="assets/nanoi-hero-drill.mp4#t=14,40" type="video/mp4"></video><figcaption class="sol__cap"><span class="sol__cam">CAM-02 · nanoI (CG)</span><span class="sol__txt">製品をカメラで囲んで撮像・検査</span></figcaption></figure>
               </div>
               <div class="ss-ui" aria-hidden="true"><span class="ss-count"><b>01</b> / 03</span><div class="ss-bar"><i></i><i></i><i></i></div></div>
             </div>
           </figure>
         </div>
         <div class="sol__content">
-          <div class="sol__meta"><span class="sol__num">02</span><a class="sol__tag" href="nanosi-lp/">AI検査</a></div>
-          <h3 class="sol__title">高い検査装置を入れたのに、<br>いつまでも人が必要なままだ</h3>
-          <p class="sol__quote">「検査装置は導入した。でも結局、サンプルデータの収集も、装置の設定変更も、判定が怪しいときの最終確認も、全部人がやっている。装置に人が付き添っている状態から抜け出せない。」</p>
-          <p class="sol__body">AIの自動学習とラインへの組み込み設計により、装置導入後に残る「人手が必要な作業」までまとめて自動化します。</p>
+          <div class="sol__meta"><span class="sol__num">02</span><a class="sol__tag" href="nanosi-lp/"><span class="pc-only">AI検査</span><span class="sp-only">AI外観検査</span></a></div>
+          <h3 class="sol__title pc-only">高い検査装置を入れたのに、<br>いつまでも人が必要なままだ</h3>
+          <p class="sol__quote pc-only">「検査装置は導入した。でも結局、サンプルデータの収集も、装置の設定変更も、判定が怪しいときの最終確認も、全部人がやっている。装置に人が付き添っている状態から抜け出せない。」</p>
+          <p class="sol__body pc-only">AIの自動学習とラインへの組み込み設計により、装置導入後に残る「人手が必要な作業」までまとめて自動化します。</p>
+          <span class="sp-only sol__lead">既存の生産ラインを変えずに簡単導入</span><ul class="sp-only sol__pts"><li>少数の学習サンプルで</li><li>低コストで専用モデル開発</li></ul>
           <a class="more" href="nanosi-lp/"><span class="more__arrow" aria-hidden="true">→</span><span>詳細を見る</span></a>
         </div>
       </article>
       <article class="sol">
         <div class="sol__vis">
           <figure class="sol__img hud-frame">
-            <img src="assets/opt/nanoguard-detection.jpg" alt="nanoGUARD AI監視カメラの検知画面" decoding="async" />
-            <figcaption class="sol__cap"><span class="sol__cam">CAM-03 · nanoGUARD</span><span class="sol__txt">作業エリアの人をAIが検知・判定</span></figcaption>
+            <div class="ss ss--images" data-slideshow data-interval="4200">
+              <div class="ss-stage">
+                <figure class="ss-slide is-active"><img src="assets/opt/nanoguard-detection.jpg" alt="nanoGUARD AI監視カメラの検知画面" decoding="async" /><figcaption class="sol__cap"><span class="sol__cam">CAM-03 · nanoGUARD</span><span class="sol__txt">作業エリアの人をAIが検知・判定</span></figcaption></figure>
+                <figure class="ss-slide"><img src="assets/opt/nanoguard-edge-side.webp" alt="nanoGUARD：工場内のエッジAI端末で映像を処理・録画し、インターネットと接続しない" decoding="async" /><figcaption class="sol__cap"><span class="sol__cam">CAM-03 · nanoGUARD EDGE</span><span class="sol__txt">AI処理も録画も構内で完結</span></figcaption></figure>
+              </div>
+              <div class="ss-ui" aria-hidden="true"><span class="ss-count"><b>01</b> / 02</span><div class="ss-bar"><i></i><i></i></div></div>
+            </div>
           </figure>
         </div>
         <div class="sol__content">
           <div class="sol__meta"><span class="sol__num">03</span><a class="sol__tag" href="nanoguard-lp/">AI監視カメラ</a></div>
-          <h3 class="sol__title">ルールは決めた。<br>それでも事故とトラブルが絶えない</h3>
-          <p class="sol__quote">「フォークリフトと作業員のニアミスが月に3件。ヒヤリハット報告書を書くたびに、次は本当の事故になると思う。」</p>
-          <p class="sol__body">AIが立入禁止区域への侵入を検知した瞬間、音声・映像でリアルタイム警告。「起きる前に止める」安全管理へ。</p>
+          <h3 class="sol__title pc-only">ルールは決めた。<br>それでも事故とトラブルが絶えない</h3>
+          <p class="sol__quote pc-only">「フォークリフトと作業員のニアミスが月に3件。ヒヤリハット報告書を書くたびに、次は本当の事故になると思う。」</p>
+          <p class="sol__body pc-only">AIが立入禁止区域への侵入を検知した瞬間、音声・映像でリアルタイム警告。「起きる前に止める」安全管理へ。</p>
+          <span class="sp-only sol__lead">24時間365日AIが監視します</span><ul class="sp-only sol__pts"><li>完全エッジ処理で情報流出ゼロに</li><li>監視内容のカスタマイズも</li></ul>
           <a class="more" href="nanoguard-lp/"><span class="more__arrow" aria-hidden="true">→</span><span>詳細を見る</span></a>
         </div>
       </article>
@@ -287,6 +340,7 @@
         </div>
         <p>nanoFACTORYの製品群は、3つの独自技術によって支えられています。</p>
       </div>
+      <details class="mfold mfold--tech"><summary>コア技術を見る</summary>
       <div class="tech-grid">
         <div class="tech-item">
           <div class="tech-item__num">01</div>
@@ -367,6 +421,26 @@
           </div>
         </div>
       </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- About：どんな会社か（研究・特許・本多プラスグループ） -->
+  <section id="about-us" class="sec about-nf">
+    <div class="container">
+      <div class="sec-head">
+        <div>
+          <div class="label"><span class="eyes" aria-hidden="true"><i></i><i></i></span>About<span class="jp">— nanoFACTORYについて</span></div>
+          <h2>最先端の研究を、<br>製造業の現場で使える形に。</h2>
+        </div>
+        <p class="pc-only">nanoFACTORY（ナノファクトリー）は、AI・GPU・ロボットの最先端研究に取り組んできたエンジニアが立ち上げた学生スタートアップです。特許を取得した独自技術を持ち、創業80年のプラスチック成形メーカー・本多プラスのグループ企業として、高い技術を製造業の現場で活かし、実証済みのソリューションを提供しています。</p>
+      </div>
+      <ol class="about-nf__pts">
+        <li><span class="en">01 — RESEARCH</span><b>AI・GPU・ロボットの<br>最先端研究から</b><span class="d">研究の第一線にいたエンジニアが立ち上げた学生スタートアップです。</span></li>
+        <li><span class="en">02 — PATENT</span><b>特許を取得した<br>独自技術</b><span class="d">研究から生まれた技術を、自社のソフトウェアとして形にしています。</span></li>
+        <li><span class="en">03 — GROUP</span><b>創業80年の<br>本多プラスグループ</b><span class="d">プラスチック成形メーカーの現場で使い、実証してから提供しています。</span></li>
+      </ol>
+      <a class="more" href="company/"><span class="more__arrow" aria-hidden="true">→</span><span>会社情報を見る</span></a>
     </div>
   </section>
 
@@ -391,7 +465,7 @@
       <div class="footer-grid">
         <div>
           <h3>About</h3>
-          <p>nanoFACTORY の技術の根底はロボット開発・フィジカルAI。製造業の現場で数々の課題を解決してきた経験から磨き上げたソフトウェアの販売と、AIエンジニアが現場に直接入り込む<strong>FDE(Forward Deployed Engineer)</strong>サービスが、私たちの事業です。</p>
+          <p>nanoFACTORY（ナノファクトリー）は、AI・GPU・ロボットの最先端研究に取り組んできたエンジニアが立ち上げた学生スタートアップです。特許を取得した独自技術を持ち、創業80年のプラスチック成形メーカー・<strong>本多プラス</strong>のグループ企業として、高い技術を製造業の現場で活かし、実証済みのソリューションを提供しています。</p>
         </div>
         <div>
           <h3>Contact</h3>
@@ -417,6 +491,25 @@
   <script src="script.js?v=20260921b"></script>
   <script src="site.js?v=20260921b"></script>
   <script src="mail.js?v=20260921b"></script>
+  <script>
+    /* スマホ（820px以下）では開閉式を閉じ、PCでは開いたままにする */
+    (function () {
+      var mq = window.matchMedia && window.matchMedia("(max-width:820px)");
+      function set() { var sp = mq && mq.matches; [].forEach.call(document.querySelectorAll("details.mfold"), function (d) { d.open = !sp; }); }
+      set();
+      if (mq) { if (mq.addEventListener) mq.addEventListener("change", set); else if (mq.addListener) mq.addListener(set); }
+    })();
+  </script>
+  <script>
+    /* data-start / data-end 付きの動画は、その範囲だけを繰り返す（ドリル動画は検査の場面だけ） */
+    (function () {
+      [].forEach.call(document.querySelectorAll("video[data-start]"), function (v) {
+        var st = +v.dataset.start, en = +v.dataset.end || Infinity;
+        function fix() { if (v.currentTime < st - 0.2 || v.currentTime >= en) { try { v.currentTime = st; } catch (e) {} } }
+        v.addEventListener("loadedmetadata", fix); v.addEventListener("play", fix); v.addEventListener("seeked", fix); v.addEventListener("timeupdate", fix);
+      });
+    })();
+  </script>
   <script type="module" src="/assets/js/linebreak-ja.js?v=20261012"></script>
 </body>
 </html>
