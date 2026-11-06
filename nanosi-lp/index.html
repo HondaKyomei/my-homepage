@@ -412,7 +412,7 @@
         var v = document.getElementById("ni-hero-video"), mq = window.matchMedia && window.matchMedia("(max-width:960px)");
         if (!v || !mq) return;
         var pc = { src: "../assets/nanoi-hero-drill.mp4", poster: "../assets/opt/nanoi-hero-drill-poster.jpg" },
-            sp = { src: "../assets/nanoi-hero-drill-sp.mp4", poster: "../assets/opt/nanoi-hero-drill-sp-poster.jpg" };
+            sp = { src: "../assets/nanoi-hero-drill-sp.mp4?v=2", poster: "../assets/opt/nanoi-hero-drill-sp-poster.jpg" };
         function pick() {
           var s = mq.matches ? sp : pc;
           if (v.getAttribute("src") === s.src) return;
