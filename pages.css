@@ -23,7 +23,7 @@
 .lp-section{padding-block:clamp(72px,10vw,128px)}
 .lp-section--white{background:var(--paper)}
 .lp-section--surface,.lp-section--tinted{background:var(--raised);border-block:1px solid var(--line)}
-.lp-section h2{margin-top:14px;font-weight:500;font-size:clamp(24px,3vw,36px);line-height:1.5;letter-spacing:.05em;text-wrap:balance}
+.lp-section h2,.lp-section h1.sec-h1{margin-top:14px;font-weight:500;font-size:clamp(24px,3vw,36px);line-height:1.5;letter-spacing:.05em;text-wrap:balance}
 .lead-text{color:var(--ink-2);max-width:44em;margin-top:16px;font-size:14.5px;line-height:1.9}
 
 /* main.section 直下の見出し（products-services 一覧） */
